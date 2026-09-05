@@ -1923,13 +1923,6 @@ html_template = f"""<!DOCTYPE html>
                 <button class="nav-btn" id="tab-milestones" onclick="switchView('milestones')">3-Year Milestones</button>
                 <button class="nav-btn" id="tab-tasks" onclick="switchView('tasks')">Task Guide</button>
             </nav>
-
-            <div class="header-actions">
-                <div class="sync-badge">
-                    <span class="status-dot"></span>
-                    <span id="header-sync-status">Live</span>
-                </div>
-            </div>
         </div>
     </header>
 
@@ -2307,8 +2300,11 @@ html_template = f"""<!DOCTYPE html>
             if (window.supabase) {{
                 try {{
                     supabaseClient = window.supabase.createClient(url, key);
-                    document.getElementById("header-sync-status").innerText = "Supabase Live";
-                    document.getElementById("header-sync-status").style.color = "var(--accent-secondary)";
+                    const syncEl = document.getElementById("header-sync-status");
+                    if (syncEl) {{
+                        syncEl.innerText = "Supabase";
+                        syncEl.style.color = "var(--accent-secondary)";
+                    }}
                     fetchLiveSupabaseData();
                 }} catch (e) {{
                     console.error("Supabase connection error:", e);
