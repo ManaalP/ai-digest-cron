@@ -56,8 +56,21 @@ def main():
     print(f"[main] Run started {datetime.now(timezone.utc).isoformat()}")
 
     db = get_db(database_url, db_path)
-    # Maintain strict 7-day retention in database
-    db.cleanup_older_than(days=7)
+
+    # Clean reset support
+    if "--reset" in sys.argv:
+        print("[main] --reset requested: Purging old database records...")
+        db.purge_all_articles()
+
+    # Configurable retention window (defaults to 1 day when --yesterday or --one-day-only is passed)
+    retention_days = int(env("RETENTION_DAYS", "1" if "--yesterday" in sys.argv or "--one-day-only" in sys.argv else "7"))
+    for arg in sys.argv:
+        if arg.startswith("--retention-days="):
+            try:
+                retention_days = int(arg.split("=", 1)[1])
+            except ValueError:
+                pass
+    db.cleanup_older_than(days=retention_days)
 
     # Check for LLM keys (optional: falls back to intelligent extractive ranking)
     summarizer = None
@@ -86,10 +99,20 @@ def main():
     if "--yesterday" in sys.argv:
         target_date = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
         print(f"[main] Target date set to completed previous day: {target_date}")
-    for arg in sys.argv:
-        if arg.startswith("--date="):
-            target_date = arg.split("=", 1)[1].strip()
-            print(f"[main] Target date explicitly set to: {target_date}")
+    elif "--today" in sys.argv:
+        target_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        print(f"[main] Target date set to today: {target_date}")
+    else:
+        for arg in sys.argv:
+            if arg.startswith("--date="):
+                target_date = arg.split("=", 1)[1].strip()
+                print(f"[main] Target date explicitly set to: {target_date}")
+                break
+
+    # If no target date specified, default strictly to today's date for 1-day isolation
+    if not target_date and "--all-recent" not in sys.argv:
+        target_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        print(f"[main] Defaulting strictly to current calendar day: {target_date}")
 
     # Structure into Highlights, Top 10, and 1-Liners (strict 24h window or target date)
     digest_data = rank_and_structure_digest(fresh_unseen, lookback_hours=lookback_hours, target_date=target_date)

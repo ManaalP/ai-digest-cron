@@ -17,6 +17,7 @@ published is timezone-aware UTC. Sources use RSS or public APIs (no login walls)
 
 import re
 import feedparser
+import calendar
 import requests
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
@@ -26,14 +27,34 @@ REDDIT_HEADERS = {"User-Agent": "linux:ai-news-digest:v1.2 (by /u/personal_ai_bo
 
 
 def _safe_parsed_date(entry):
+    """Accurately parse entry date into timezone-aware UTC datetime."""
+    # 1. feedparser parsed tuple (most reliable)
+    for key in ("published_parsed", "updated_parsed"):
+        tup = entry.get(key)
+        if tup:
+            try:
+                return datetime.fromtimestamp(calendar.timegm(tup), tz=timezone.utc)
+            except Exception:
+                pass
+
+    # 2. String parsing (Atom ISO 8601 or RFC 2822)
     for key in ("published", "updated"):
         val = entry.get(key)
         if val:
+            val_str = str(val).strip()
+            # Try ISO 8601
             try:
-                return parsedate_to_datetime(val).astimezone(timezone.utc)
-            except (TypeError, ValueError):
+                clean_iso = val_str.replace("Z", "+00:00")
+                return datetime.fromisoformat(clean_iso).astimezone(timezone.utc)
+            except Exception:
                 pass
-    return datetime.now(timezone.utc)
+            # Try RFC 2822
+            try:
+                return parsedate_to_datetime(val_str).astimezone(timezone.utc)
+            except Exception:
+                pass
+
+    return None
 
 
 def _extract_image(entry):
@@ -74,11 +95,14 @@ def _rss(source_name, feed_url, limit=20):
     try:
         feed = feedparser.parse(feed_url, request_headers=HEADERS)
         for entry in feed.entries[:limit]:
+            pub_date = _safe_parsed_date(entry)
+            if not pub_date:
+                continue
             items.append({
                 "source": source_name,
                 "title": entry.get("title", "").strip(),
                 "url": entry.get("link", ""),
-                "published": _safe_parsed_date(entry),
+                "published": pub_date,
                 "raw_text": (entry.get("summary") or entry.get("description") or "")[:3500],
                 "image_url": _extract_image(entry),
                 "community_score": 0,
@@ -140,11 +164,14 @@ def fetch_reddit_localllama(limit=20):
         resp.raise_for_status()
         feed = feedparser.parse(resp.text)
         for entry in feed.entries[:limit]:
+            pub_date = _safe_parsed_date(entry)
+            if not pub_date:
+                continue
             items.append({
                 "source": "r/LocalLLaMA (top today)",
                 "title": entry.get("title", "").strip(),
                 "url": entry.get("link", ""),
-                "published": _safe_parsed_date(entry),
+                "published": pub_date,
                 "raw_text": (entry.get("summary") or "")[:3500],
                 "image_url": _extract_image(entry),
                 "community_score": 15,
@@ -213,13 +240,24 @@ def fetch_hf_daily_papers(limit=25):
         for entry in data[:limit]:
             paper = entry.get("paper", {})
             paper_id = paper.get("id", "")
-            # Try to grab thumbnail or PDF thumbnail
+            # Accurate publication date from Hugging Face
+            pub_str = paper.get("publishedAt") or entry.get("publishedAt")
+            published_dt = None
+            if pub_str:
+                try:
+                    published_dt = datetime.fromisoformat(pub_str.replace("Z", "+00:00")).astimezone(timezone.utc)
+                except Exception:
+                    pass
+
+            if not published_dt:
+                continue
+
             image_url = f"https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/{paper_id}.png"
             items.append({
                 "source": "Hugging Face Daily Papers",
                 "title": paper.get("title", "").strip(),
                 "url": f"https://huggingface.co/papers/{paper_id}",
-                "published": datetime.now(timezone.utc),
+                "published": published_dt,
                 "raw_text": (paper.get("summary") or "")[:3500],
                 "image_url": image_url,
                 "community_score": paper.get("upvotes", 10),
@@ -242,11 +280,14 @@ def fetch_arxiv_ai(limit=15):
         resp.raise_for_status()
         feed = feedparser.parse(resp.text)
         for entry in feed.entries[:limit]:
+            pub_date = _safe_parsed_date(entry)
+            if not pub_date:
+                continue
             items.append({
                 "source": "arXiv (cs.AI)",
                 "title": entry.get("title", "").strip().replace("\n", " "),
                 "url": entry.get("link", ""),
-                "published": _safe_parsed_date(entry),
+                "published": pub_date,
                 "raw_text": (entry.get("summary") or "")[:3500],
                 "image_url": None,
                 "community_score": 5,
@@ -269,11 +310,14 @@ def fetch_arxiv_software_nlp(limit=15):
         resp.raise_for_status()
         feed = feedparser.parse(resp.text)
         for entry in feed.entries[:limit]:
+            pub_date = _safe_parsed_date(entry)
+            if not pub_date:
+                continue
             items.append({
                 "source": "arXiv (Software & Language AI)",
                 "title": entry.get("title", "").strip().replace("\n", " "),
                 "url": entry.get("link", ""),
-                "published": _safe_parsed_date(entry),
+                "published": pub_date,
                 "raw_text": (entry.get("summary") or "")[:3500],
                 "image_url": None,
                 "community_score": 5,

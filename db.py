@@ -146,6 +146,12 @@ class SQLiteDigestDB:
             )
             return cur.lastrowid
 
+    def purge_all_articles(self):
+        """Purge all articles for a clean database reset."""
+        with self._conn() as conn:
+            conn.execute("DELETE FROM articles;")
+            conn.commit()
+
     def get_articles_by_day(self, day_iso_str):
         """Retrieve all articles published on a specific YYYY-MM-DD."""
         with self._conn() as conn:
@@ -286,6 +292,24 @@ class PostgresDigestDB:
             row = cur.fetchone()
             conn.commit()
             return row[0] if row else None
+
+    def purge_all_articles(self):
+        """Purge all articles for a clean database reset."""
+        with self._conn() as conn, conn.cursor() as cur:
+            cur.execute("TRUNCATE TABLE articles RESTART IDENTITY CASCADE;")
+            conn.commit()
+        print("[db] Supabase: Truncated articles table.")
+
+    def get_articles_by_day(self, day_iso_str):
+        """Retrieve all articles published on a specific YYYY-MM-DD."""
+        with self._conn() as conn, conn.cursor() as cur:
+            cur.execute(
+                "SELECT * FROM articles WHERE published_date::text LIKE %s "
+                "ORDER BY is_groundbreaking DESC, dev_impact_score DESC",
+                (f"{day_iso_str}%",),
+            )
+            cols = [desc[0] for desc in cur.description]
+            return [dict(zip(cols, row)) for row in cur.fetchall()]
 
 
 def _best_match(entities, index, threshold):

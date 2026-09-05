@@ -27,8 +27,16 @@ run_sync() {
         return 1
     fi
 
-    # Run main.py targeting the completed previous day
-    "$SCRIPT_DIR/venv/bin/python" "$SCRIPT_DIR/main.py" --yesterday 2>&1 | tee -a "$LOG_FILE"
+    # Load environment variables if .env exists
+    if [ -f "$SCRIPT_DIR/.env" ]; then
+        set -a
+        # shellcheck disable=SC1091
+        source "$SCRIPT_DIR/.env"
+        set +a
+    fi
+
+    # Run main.py targeting the completed previous day and enforcing strict 1-day retention
+    "$SCRIPT_DIR/venv/bin/python" "$SCRIPT_DIR/main.py" --yesterday --retention-days=1 2>&1 | tee -a "$LOG_FILE"
     
     echo "✅ [$(date '+%Y-%m-%d %H:%M:%S')] Antigravity Sync Completed Successfully." | tee -a "$LOG_FILE"
 }

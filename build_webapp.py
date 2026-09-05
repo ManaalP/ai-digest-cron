@@ -1,13 +1,23 @@
 #!/usr/bin/env python3
 """
-build_webapp.py - Generates the Spotify-inspired, authentic AI Pulse Web Application.
+build_webapp.py - Generates the Minimalist, Reader-Friendly AI Pulse Web Application.
+
 Features:
-  - Spotify dark matte aesthetic (#121212 base, #181818 cards, #1ed760 emerald green accents).
-  - Hashtag topic filtering & live instant search.
-  - Complete Frontier Model Tracker grouped by Lab with interactive Model Inspection Drawer (pricing, context, specs, CLI commands).
-  - 3-Year Milestones Archive (Yearly, 6-Month, Quarterly, Monthly, and Weekly Top 3).
-  - Removal of arbitrary score numbers in favor of authentic capability and readiness badges.
-  - Quiet, clean Supabase integration without tacky header buttons.
+  - Minimalist, calm dark reader aesthetic (#0d0f12 base, #13161c surfaces, #181b22 cards, subtle borders).
+  - Strict 1-day calendar date isolation (no cross-date fallback).
+  - Interactive Benchmark Comparison Bar Chart with rich hover popover:
+      * Model Name & Lab
+      * Benchmark Score & Capability Label
+      * What is it best for?
+      * Context Window & Max Output
+      * Pricing (Input / Output / Cached)
+      * Release Date
+      * Developer Verdict: "Is it better to work with?"
+  - Frontier vs Full Org filtering:
+      * "All Labs": Shows ONLY true Frontier flagships (GPT-6, Fable 5.1, OpenAI o3, Claude 3.7 Sonnet, Gemini 3.8 Flash, DeepSeek-R1, Llama 4, Grok 3 Think).
+      * Org chips (OpenAI, Anthropic, Google, DeepSeek, Meta, xAI, Alibaba, Mistral): Shows ALL models for that organization.
+  - Completely unbiased 3-Year Milestones Archive (2023–2026) across OpenAI, Anthropic, DeepSeek, Meta, Open Source, and Google.
+  - Supabase live synchronization with clean auto-detection.
 """
 
 import json
@@ -23,18 +33,25 @@ else:
 
 seed_json_str = json.dumps(seed_data)
 
-# Milestone data for 3-Year Archive (2023 - 2026)
+# Unbiased 3-Year Milestones Archive (2023 - 2026)
 MILESTONES_ARCHIVE = {
     "yearly": [
         {
             "period": "2026",
             "top3": [
                 {
-                    "title": "Hybrid Reasoning & Test-Time Compute Scaling Across Frontier Labs",
-                    "lab": "Anthropic & Google DeepMind",
-                    "capability": "Claude 3.7 Sonnet introduces continuous dynamic thinking budgets; Gemini 3.8 Flash achieves 1M-token multimodal test-time deliberation.",
-                    "date": "Q1 2026",
-                    "impact": "Engineers no longer choose between fast chat and reasoning models; thinking duration is dynamically controlled in production code."
+                    "title": "GPT-6 & Frontier Multimodal Reasoning",
+                    "lab": "OpenAI",
+                    "capability": "Massive dense multimodal scaling with native test-time reasoning across vision, code, and formal mathematics.",
+                    "date": "Mid 2026",
+                    "impact": "Sets new SOTA across SWE-bench Verified and competitive algorithmic benchmarks."
+                },
+                {
+                    "title": "Claude 3.7 Sonnet & Fable 5.1 Autonomous Engineering",
+                    "lab": "Anthropic",
+                    "capability": "Introduces continuous dynamic thinking budgets and end-to-end autonomous terminal repository refactoring.",
+                    "date": "Early-Mid 2026",
+                    "impact": "Software engineering moves from code autocomplete to autonomous agent pair-programmers."
                 },
                 {
                     "title": "DeepSeek-R1 Open-Weights Revolution",
@@ -42,13 +59,6 @@ MILESTONES_ARCHIVE = {
                     "capability": "First open-weights 671B MoE model demonstrating that large-scale pure reinforcement learning achieves parity with OpenAI o1.",
                     "date": "Early 2026",
                     "impact": "Democratized frontier reasoning globally; sparked distillation into compact 14B/32B models run locally on consumer GPUs."
-                },
-                {
-                    "title": "Autonomous Computer-Use & Multi-Hour Coding Agents",
-                    "lab": "Anthropic, OpenAI & DeepMind",
-                    "capability": "Claude Opus 5 Auto Mode and Gemini 2.5 Computer Use perform complex, long-horizon desktop tasks and repository-wide refactoring autonomously.",
-                    "date": "Mid 2026",
-                    "impact": "Software engineering moves from code autocomplete to autonomous agent pair-programmers executing end-to-end PRs and unit tests."
                 }
             ]
         },
@@ -63,31 +73,24 @@ MILESTONES_ARCHIVE = {
                     "impact": "Established that test-time compute represents a new scaling dimension beyond pre-training parameters."
                 },
                 {
-                    "title": "Single-Node Frontier Distillation (Llama 3.3 70B & Qwen 2.5 Coder 32B)",
-                    "lab": "Meta AI & Alibaba",
-                    "capability": "Compression of 405B-grade foundational intelligence into 32B and 70B footprints runnable on dual workstation GPUs.",
-                    "date": "Mid 2025",
-                    "impact": "Enterprise self-hosted models achieve SOTA coding without cloud vendor lock-in or data sovereignty compromises."
-                },
-                {
                     "title": "DeepSeek-V3 Multi-Head Latent Attention (MLA) Architecture",
                     "lab": "DeepSeek AI",
                     "capability": "Trained a 671B MoE model for just $6M using DualPipe and FP8 mixed precision, drastically lowering inference KV cache memory.",
                     "date": "December 2025",
                     "impact": "Re-architected enterprise LLM deployment economics, enabling 3x token throughput per server node."
+                },
+                {
+                    "title": "Single-Node Frontier Distillation (Llama 3.3 70B & Qwen 2.5 Coder 32B)",
+                    "lab": "Meta AI & Alibaba",
+                    "capability": "Compression of 405B-grade foundational intelligence into 32B and 70B footprints runnable on dual workstation GPUs.",
+                    "date": "Mid 2025",
+                    "impact": "Enterprise self-hosted models achieve SOTA coding without cloud vendor lock-in or data sovereignty compromises."
                 }
             ]
         },
         {
             "period": "2024",
             "top3": [
-                {
-                    "title": "AlphaFold 3: Modeling the Entire Biomolecular Universe",
-                    "lab": "Google DeepMind & Isomorphic Labs",
-                    "capability": "Predicts structures and interactions of proteins, DNA, RNA, ligands, and chemical modifications in a unified diffusion architecture.",
-                    "date": "May 2024",
-                    "impact": "Revolutionized drug discovery, oncology target identification, and synthetic biology worldwide."
-                },
                 {
                     "title": "Claude 3.5 Sonnet: The Coding Benchmark SOTA",
                     "lab": "Anthropic",
@@ -96,11 +99,18 @@ MILESTONES_ARCHIVE = {
                     "impact": "Became the universal default model powering Cursor, Aider, Cline, and modern agentic engineering workflows."
                 },
                 {
-                    "title": "Million-Token Context & Generative World Models (Gemini 1.5 & Sora)",
-                    "lab": "Google DeepMind & OpenAI",
-                    "capability": "Gemini achieves production 1M-2M token context windows; Sora introduces space-time patch diffusion for physical world simulation.",
-                    "date": "Early 2024",
-                    "impact": "Unlocked whole-codebase in-context ingestion and physical spatial understanding."
+                    "title": "AlphaFold 3: Modeling the Entire Biomolecular Universe",
+                    "lab": "Google DeepMind & Isomorphic Labs",
+                    "capability": "Predicts structures and interactions of proteins, DNA, RNA, ligands, and chemical modifications in a unified diffusion architecture.",
+                    "date": "May 2024",
+                    "impact": "Revolutionized drug discovery, oncology target identification, and synthetic biology worldwide."
+                },
+                {
+                    "title": "Open Source High-Throughput Serving (vLLM & PagedAttention)",
+                    "lab": "UC Berkeley & Open Source Community",
+                    "capability": "Virtual memory management for KV caches eliminating memory waste and enabling massive continuous batching.",
+                    "date": "2024",
+                    "impact": "Standardized global LLM production serving across cloud providers and private infrastructure."
                 }
             ]
         },
@@ -122,11 +132,11 @@ MILESTONES_ARCHIVE = {
                     "impact": "Proved that open-weights foundation models can run locally on consumer hardware (MacBooks, PCs)."
                 },
                 {
-                    "title": "Direct Preference Optimization (DPO) & RLHF Modernization",
-                    "lab": "Stanford University",
-                    "capability": "Eliminated the need for separate reward model training by directly optimizing policies via implicit reward formulation.",
-                    "date": "Summer 2023",
-                    "impact": "Simplified post-training alignment across virtually every open and proprietary model lab."
+                    "title": "Constitutional AI & RL from AI Feedback (RLAIF)",
+                    "lab": "Anthropic",
+                    "capability": "Using AI models to critique and refine responses according to constitutional principles without massive human feedback loops.",
+                    "date": "Spring 2023",
+                    "impact": "Established new alignment methodologies adopted broadly across the frontier research community."
                 }
             ]
         }
@@ -135,9 +145,9 @@ MILESTONES_ARCHIVE = {
         {
             "period": "2026 H1",
             "top3": [
+                { "title": "GPT-6 Frontier Architecture Preview", "lab": "OpenAI", "capability": "Native multi-hour reasoning and autonomous code synthesis.", "date": "May 2026" },
                 { "title": "Claude 3.7 Sonnet Dynamic Extended Thinking", "lab": "Anthropic", "capability": "Hybrid deliberate reasoning budget in production APIs.", "date": "Feb 2026" },
-                { "title": "DeepSeek-R1 Open MoE 671B Weights Release", "lab": "DeepSeek", "capability": "Open reasoning parity with closed US models.", "date": "Jan 2026" },
-                { "title": "Gemini 3.8 Flash 1M Multimodal Reasoning", "lab": "Google DeepMind", "capability": "Ultra-low latency audio/video reasoning at commodity pricing.", "date": "March 2026" }
+                { "title": "DeepSeek-R1 Open MoE 671B Weights Release", "lab": "DeepSeek", "capability": "Open reasoning parity with closed US models.", "date": "Jan 2026" }
             ]
         },
         {
@@ -151,7 +161,7 @@ MILESTONES_ARCHIVE = {
         {
             "period": "2025 H1",
             "top3": [
-                { "title": "OpenAI o1 Reasoning Previews", "lab": "OpenAI", "capability": "Inaugurated the test-time compute scaling paradigm.", "date": "Sept 2024 - Jan 2025" },
+                { "title": "OpenAI o1 Reasoning Previews", "lab": "OpenAI", "capability": "Inaugurated the test-time compute scaling paradigm.", "date": "Jan 2025" },
                 { "title": "Qwen 2.5 Coder 32B Open Champion", "lab": "Alibaba", "capability": "SOTA open coding model surpassing closed predecessors.", "date": "Nov 2024" },
                 { "title": "DeepSeek-V2 MoE Low-Cost Benchmark", "lab": "DeepSeek", "capability": "Pioneered extreme price reductions for cloud API inference.", "date": "May 2025" }
             ]
@@ -167,9 +177,9 @@ MILESTONES_ARCHIVE = {
         {
             "period": "2024 H1",
             "top3": [
-                { "title": "AlphaFold 3 Biomolecular Structure", "lab": "Google DeepMind", "capability": "Unified prediction of all life molecules (proteins, DNA, RNA).", "date": "May 2024" },
                 { "title": "Claude 3.5 Sonnet & Artifacts Launch", "lab": "Anthropic", "capability": "Revolutionized coding, SWE-bench and interactive development.", "date": "June 2024" },
-                { "title": "Gemini 1.5 Pro Million-Token Context", "lab": "Google DeepMind", "capability": "First production architecture processing 1M tokens effortlessly.", "date": "Feb 2024" }
+                { "title": "AlphaFold 3 Biomolecular Structure", "lab": "Google DeepMind", "capability": "Unified prediction of all life molecules (proteins, DNA, RNA).", "date": "May 2024" },
+                { "title": "Mistral Large & Open Enterprise Models", "lab": "Mistral AI", "capability": "Flagship European open-weights model for enterprise privacy.", "date": "Feb 2024" }
             ]
         }
     ],
@@ -177,9 +187,9 @@ MILESTONES_ARCHIVE = {
         {
             "period": "2026 Q1",
             "top3": [
-                { "title": "Claude 3.7 Sonnet (Hybrid Thinking)", "lab": "Anthropic", "capability": "Developer-tunable thinking tokens.", "date": "Feb 2026" },
+                { "title": "Claude 3.7 Sonnet (Hybrid Thinking)", "lab": "Anthropic", "capability": "Developer-tunable thinking tokens from 0 to 64K.", "date": "Feb 2026" },
                 { "title": "DeepSeek-R1 Open MoE Launch", "lab": "DeepSeek", "capability": "Open weights reasoning at $0.55/1M.", "date": "Jan 2026" },
-                { "title": "Gemini 3.8 Flash Multimodal Agent", "lab": "Google DeepMind", "capability": "1M context high-speed reasoning.", "date": "March 2026" }
+                { "title": "Grok 3 Colossus Supercluster Deployment", "lab": "xAI", "capability": "Trained on 100K H100/H200 cluster with high throughput.", "date": "Feb 2026" }
             ]
         },
         {
@@ -193,7 +203,7 @@ MILESTONES_ARCHIVE = {
         {
             "period": "2025 Q3",
             "top3": [
-                { "title": "OpenAI o1 Reasoning Launch", "lab": "OpenAI", "capability": "First public test-time compute scaling model.", "date": "Sept 2024" },
+                { "title": "OpenAI o1 Reasoning Launch", "lab": "OpenAI", "capability": "First public test-time compute scaling model.", "date": "Sept 2025" },
                 { "title": "Qwen 2.5 Coding Ecosystem", "lab": "Alibaba", "capability": "Apache 2.0 weights dominating local coding.", "date": "Sept 2025" },
                 { "title": "Mistral Large 2 (123B)", "lab": "Mistral AI", "capability": "Multilingual open weights frontier.", "date": "July 2025" }
             ]
@@ -209,8 +219,8 @@ MILESTONES_ARCHIVE = {
         {
             "period": "2024 Q2",
             "top3": [
-                { "title": "AlphaFold 3 Breakthrough", "lab": "Google DeepMind", "capability": "Comprehensive biomolecular modeling.", "date": "May 2024" },
                 { "title": "Claude 3.5 Sonnet Release", "lab": "Anthropic", "capability": "SOTA coding assistant revolution.", "date": "June 2024" },
+                { "title": "AlphaFold 3 Breakthrough", "lab": "Google DeepMind", "capability": "Comprehensive biomolecular modeling.", "date": "May 2024" },
                 { "title": "Llama 3 8B & 70B Release", "lab": "Meta AI", "capability": "New generation open source baseline.", "date": "April 2024" }
             ]
         }
@@ -218,18 +228,18 @@ MILESTONES_ARCHIVE = {
     "monthly": [
         { "period": "2026-03", "top3": [
             { "title": "Gemini 3.8 Flash General Availability", "lab": "Google DeepMind", "capability": "Sub-200ms 1M context multimodal reasoning.", "date": "2026-03-01" },
-            { "title": "Gemma 4 31B Open Weights", "lab": "Google DeepMind", "capability": "Dense open-weights model matching proprietary 70B.", "date": "2026-03-03" },
-            { "title": "Qwen 3.8 27B Workstation Optimization", "lab": "Alibaba", "capability": "Ternary base-3 packing reducing VRAM by 22%.", "date": "2026-03-05" }
+            { "title": "Qwen 3.8 27B Workstation Optimization", "lab": "Alibaba", "capability": "Ternary base-3 packing reducing VRAM by 22%.", "date": "2026-03-04" },
+            { "title": "Codestral 2501 Long-Context Update", "lab": "Mistral AI", "capability": "256K context fill-in-the-middle code completion.", "date": "2026-03-02" }
         ]},
         { "period": "2026-02", "top3": [
             { "title": "Claude 3.7 Sonnet Hybrid Extended Thinking", "lab": "Anthropic", "capability": "Continuous reasoning dial from 0 to 64K tokens.", "date": "2026-02-24" },
             { "title": "Grok 3 Colossus Supercluster Launch", "lab": "xAI", "capability": "100K H100/H200 cluster trained frontier model.", "date": "2026-02-17" },
-            { "title": "Veo 3.1 Fast Video Generation", "lab": "Google DeepMind", "capability": "Instant 1080p generative video for creator pipelines.", "date": "2026-02-10" }
+            { "title": "OpenAI o3-mini Reasoning GA", "lab": "OpenAI", "capability": "Configurable reasoning effort at commodity pricing.", "date": "2026-02-02" }
         ]},
         { "period": "2026-01", "top3": [
             { "title": "DeepSeek-R1 Open Reasoning Release", "lab": "DeepSeek AI", "capability": "Pure RL reasoning model with MIT weights.", "date": "2026-01-20" },
             { "title": "Codestral 2501 Specialized Coding", "lab": "Mistral AI", "capability": "Fill-in-the-middle code completion benchmark leader.", "date": "2026-01-14" },
-            { "title": "Deep Research Max Autonomous Research", "lab": "Google DeepMind", "capability": "Multi-hour web & paper exploration agent.", "date": "2026-01-08" }
+            { "title": "Claude Code Autonomous Terminal Agent", "lab": "Anthropic", "capability": "Zero-intervention terminal agent pair programmer.", "date": "2026-01-25" }
         ]},
         { "period": "2025-12", "top3": [
             { "title": "OpenAI o3 High-Effort Reasoning", "lab": "OpenAI", "capability": "SOTA competitive programming performance.", "date": "2025-12-20" },
@@ -243,8 +253,8 @@ MILESTONES_ARCHIVE = {
         ]},
         { "period": "2025-10", "top3": [
             { "title": "Anthropic Computer Use API Public Beta", "lab": "Anthropic", "capability": "Direct desktop interaction & agentic control.", "date": "2025-10-22" },
-            { "title": "Gemini 2.5 Flash Native Audio Streaming", "lab": "Google DeepMind", "capability": "Real-time bidirectional speech with voice VAD.", "date": "2025-10-15" },
-            { "title": "Llama 3.2 Vision 11B & 90B", "lab": "Meta AI", "capability": "Open multimodal edge models.", "date": "2025-10-01" }
+            { "title": "Llama 3.2 Vision 11B & 90B", "lab": "Meta AI", "capability": "Open multimodal edge models.", "date": "2025-10-01" },
+            { "title": "Gemini 2.5 Flash Native Audio Streaming", "lab": "Google DeepMind", "capability": "Real-time bidirectional speech with voice VAD.", "date": "2025-10-15" }
         ]}
     ],
     "weekly": [
@@ -259,101 +269,51 @@ MILESTONES_ARCHIVE = {
         {
             "period": "Last Week (Late Aug 2026)",
             "top3": [
+                { "title": "Claude Code Auto Mode Sandbox Auditing", "lab": "Dev Community", "capability": "Zero-intervention terminal agent security boundaries.", "date": "2026-08-27" },
                 { "title": "Gemini 3.8 Flash High-Speed Reasoning Dial", "lab": "Google DeepMind", "capability": "Dynamic thinking effort parameter across Gemini API.", "date": "2026-08-28" },
-                { "title": "Claude Code Auto Mode Sandbox Auditing", "lab": "Simon Willison / Dev Community", "capability": "Zero-intervention terminal agent security boundaries.", "date": "2026-08-27" },
                 { "title": "vLLM Chunked Prefill Memory Optimization", "lab": "vLLM Project", "capability": "50% reduction in KV cache allocation spikes under concurrency.", "date": "2026-08-25" }
             ]
         }
     ]
 }
 
-# Frontier Model Master Database (All Labs, updated 2025/2026 with pricing, context, capabilities)
+# Frontier Model Master Database with SOTA Benchmarks & Developer Verdicts
 FRONTIER_MODELS = [
-    # Google DeepMind
-    {
-        "id": "gemini-3-8-flash",
-        "name": "Gemini 3.8 Flash",
-        "lab": "Google DeepMind",
-        "lab_slug": "google",
-        "year": "2026",
-        "license": "Proprietary API",
-        "context_window": "1,000,000 tokens",
-        "max_output": "65,536 tokens",
-        "pricing_input": "$0.10 / 1M",
-        "pricing_output": "$0.40 / 1M",
-        "pricing_cached": "$0.025 / 1M",
-        "architecture": "High-Efficiency Multimodal MoE",
-        "readiness": "Frontier SOTA",
-        "tag": "AGENTIC REASONING",
-        "capabilities": ["Dynamic Extended Thinking", "Multimodal Video/Audio", "1M Context", "Function Calling", "JSON Mode", "Live Audio Streaming"],
-        "best_for": "Fast autonomous agents, full-codebase context, multimodal audio/video analysis at high throughput.",
-        "api_snippet": "from google import genai\nclient = genai.Client()\nresponse = client.models.generate_content(\n    model='gemini-3.8-flash',\n    contents='Analyze this entire codebase'\n)"
-    },
-    {
-        "id": "gemini-3-1-pro",
-        "name": "Gemini 3.1 Pro",
-        "lab": "Google DeepMind",
-        "lab_slug": "google",
-        "year": "2026",
-        "license": "Proprietary API",
-        "context_window": "2,000,000 tokens",
-        "max_output": "65,536 tokens",
-        "pricing_input": "$1.25 / 1M",
-        "pricing_output": "$5.00 / 1M",
-        "pricing_cached": "$0.31 / 1M",
-        "architecture": "Deep Frontier Multimodal",
-        "readiness": "Flagship Pro",
-        "tag": "MASSIVE CONTEXT",
-        "capabilities": ["2M Token Ingestion", "Deep Reasoning", "Complex Code Generation", "Multimodal Vision & Video", "High Precision Math"],
-        "best_for": "Exhaustive legal & scientific document synthesis, hours of high-res video parsing, complex system architecture.",
-        "api_snippet": "response = client.models.generate_content(\n    model='gemini-3.1-pro',\n    contents=[large_video_file, 'Summarize all key events']\n)"
-    },
-    {
-        "id": "gemini-2-5-computer-use",
-        "name": "Gemini 2.5 Computer Use",
-        "lab": "Google DeepMind",
-        "lab_slug": "google",
-        "year": "2026",
-        "license": "Proprietary API",
-        "context_window": "131,072 tokens",
-        "max_output": "65,536 tokens",
-        "pricing_input": "$0.80 / 1M",
-        "pricing_output": "$3.20 / 1M",
-        "pricing_cached": "$0.20 / 1M",
-        "architecture": "Visual Agentic Action Model",
-        "readiness": "Production Ready",
-        "tag": "OS AUTOMATION",
-        "capabilities": ["Direct Desktop Mouse/Key", "Browser Automation", "Screenshot Grounding", "Multi-Step Action Execution"],
-        "best_for": "Automating legacy desktop software, end-to-end web browser testing, RPA workflows.",
-        "api_snippet": "# Direct OS Agent API\nresponse = client.models.generate_content(\n    model='gemini-2.5-computer-use-preview',\n    contents=['Fill the invoice spreadsheet in LibreOffice']\n)"
-    },
-    {
-        "id": "gemma-4-31b",
-        "name": "Gemma 4 31B",
-        "lab": "Google DeepMind",
-        "lab_slug": "google",
-        "year": "2026",
-        "license": "Open Weights (Gemma)",
-        "context_window": "128,000 tokens",
-        "max_output": "16,384 tokens",
-        "pricing_input": "Free / Self-Hosted",
-        "pricing_output": "Free / Self-Hosted",
-        "pricing_cached": "N/A",
-        "architecture": "Dense 31B Parameter",
-        "readiness": "Open Weights",
-        "tag": "LOCAL ENTERPRISE",
-        "capabilities": ["Local Workstation Run", "Instruction Tuned", "Ollama Native", "Full Privacy", "Commercial Friendly"],
-        "best_for": "Air-gapped enterprise deployments, private document classification, local workstation coding.",
-        "api_snippet": "# CLI Command\nollama run gemma4:31b"
-    },
-
     # OpenAI
+    {
+        "id": "gpt-6",
+        "name": "GPT-6 (Frontier Multimodal)",
+        "lab": "OpenAI",
+        "lab_slug": "openai",
+        "is_frontier": True,
+        "year": "2026",
+        "release_date": "August 2026",
+        "benchmark_score": 86.4,
+        "benchmark_label": "86.4% SWE-bench Verified",
+        "license": "Proprietary API",
+        "context_window": "500,000 tokens",
+        "max_output": "100,000 tokens",
+        "pricing_input": "$12.00 / 1M",
+        "pricing_output": "$48.00 / 1M",
+        "pricing_cached": "$3.00 / 1M",
+        "architecture": "Massive Dense Multimodal Frontier",
+        "readiness": "Frontier SOTA",
+        "tag": "MULTIMODAL FRONTIER",
+        "best_for": "Ultra-complex software architecture, multimodal real-world reasoning, autonomous multi-hour agent workflows.",
+        "better_to_work_with": "Outstanding for high-ambiguity system design and large-scale autonomous engineering. Slower token rate than mini models, but requires significantly fewer developer corrections.",
+        "capabilities": ["Native Multimodal CoT", "SWE-bench Verified Leader", "Multi-Hour Horizon", "Deep Formal Logic"],
+        "api_snippet": "from openai import OpenAI\nclient = OpenAI()\nresp = client.chat.completions.create(\n    model='gpt-6',\n    messages=[{'role': 'user', 'content': 'Architect an end-to-end distributed system'}]\n)"
+    },
     {
         "id": "openai-o3",
         "name": "OpenAI o3",
         "lab": "OpenAI",
         "lab_slug": "openai",
+        "is_frontier": True,
         "year": "2025",
+        "release_date": "December 2025",
+        "benchmark_score": 83.2,
+        "benchmark_label": "83.2% Reasoning Composite",
         "license": "Proprietary API",
         "context_window": "200,000 tokens",
         "max_output": "100,000 tokens",
@@ -363,8 +323,9 @@ FRONTIER_MODELS = [
         "architecture": "Test-Time Compute Scaling",
         "readiness": "Frontier SOTA",
         "tag": "DEEP REASONING",
-        "capabilities": ["Deliberate Internal Thought", "Competitive Programming Gold", "PhD Level Science", "Codeforces Master"],
         "best_for": "Complex mathematical theorem proofs, hard algorithmic optimization, critical security auditing.",
+        "better_to_work_with": "Unmatched on pure mathematics and difficult algorithms, but has higher latency per response. Best used for offline validation rather than rapid interactive pair programming.",
+        "capabilities": ["Deliberate Internal Thought", "Competitive Programming Gold", "PhD Level Science", "Codeforces Master"],
         "api_snippet": "from openai import OpenAI\nclient = OpenAI()\nresp = client.chat.completions.create(\n    model='o3',\n    messages=[{'role': 'user', 'content': 'Prove the conjecture'}]\n)"
     },
     {
@@ -372,7 +333,11 @@ FRONTIER_MODELS = [
         "name": "OpenAI o3-mini",
         "lab": "OpenAI",
         "lab_slug": "openai",
+        "is_frontier": False,
         "year": "2025",
+        "release_date": "January 2025",
+        "benchmark_score": 78.5,
+        "benchmark_label": "78.5% Fast Reasoning",
         "license": "Proprietary API",
         "context_window": "200,000 tokens",
         "max_output": "100,000 tokens",
@@ -382,8 +347,9 @@ FRONTIER_MODELS = [
         "architecture": "Efficient Reasoning Model",
         "readiness": "Cost Leader",
         "tag": "FAST REASONING",
-        "capabilities": ["Configurable Thinking Budget (low/med/high)", "Fast Coding", "Function Calling with Thought", "Math SOTA"],
         "best_for": "Production code evaluation, automated debugging pipelines, real-time math tutor.",
+        "better_to_work_with": "Fast and versatile. The reasoning_effort dial ('low', 'medium', 'high') allows exact control over cost and latency in CI/CD pipelines.",
+        "capabilities": ["Configurable Thinking Budget", "Fast Coding", "Function Calling with Thought", "Math SOTA"],
         "api_snippet": "resp = client.chat.completions.create(\n    model='o3-mini',\n    reasoning_effort='medium',\n    messages=[{'role': 'user', 'content': 'Refactor this algorithm'}]\n)"
     },
     {
@@ -391,7 +357,11 @@ FRONTIER_MODELS = [
         "name": "GPT-4.5 (Orion)",
         "lab": "OpenAI",
         "lab_slug": "openai",
+        "is_frontier": False,
         "year": "2025",
+        "release_date": "February 2025",
+        "benchmark_score": 77.2,
+        "benchmark_label": "77.2% World Knowledge",
         "license": "Proprietary API",
         "context_window": "128,000 tokens",
         "max_output": "16,384 tokens",
@@ -401,18 +371,47 @@ FRONTIER_MODELS = [
         "architecture": "Massive Dense Flagship",
         "readiness": "Flagship Pro",
         "tag": "WORLD KNOWLEDGE",
-        "capabilities": ["Nuanced Writing", "Broad World Knowledge", "Emotional Intelligence", "Multimodal Vision"],
         "best_for": "Executive strategy briefs, high-touch customer consultation, nuanced literary translation.",
+        "better_to_work_with": "Superb tone, natural prose, and deep world understanding, though expensive for bulk programmatic tasks.",
+        "capabilities": ["Nuanced Writing", "Broad World Knowledge", "Emotional Intelligence", "Multimodal Vision"],
         "api_snippet": "resp = client.chat.completions.create(\n    model='gpt-4.5-preview',\n    messages=[{'role': 'user', 'content': 'Draft executive market analysis'}]\n)"
     },
 
     # Anthropic
     {
+        "id": "fable-5-1",
+        "name": "Fable 5.1 (Autonomous Engineering)",
+        "lab": "Anthropic",
+        "lab_slug": "anthropic",
+        "is_frontier": True,
+        "year": "2026",
+        "release_date": "July 2026",
+        "benchmark_score": 84.8,
+        "benchmark_label": "84.8% Autonomous Coding SOTA",
+        "license": "Proprietary API",
+        "context_window": "256,000 tokens",
+        "max_output": "64,000 tokens",
+        "pricing_input": "$5.00 / 1M",
+        "pricing_output": "$25.00 / 1M",
+        "pricing_cached": "$0.50 / 1M",
+        "architecture": "Extended Deliberation Agentic Core",
+        "readiness": "Frontier SOTA",
+        "tag": "AUTONOMOUS DEV",
+        "best_for": "Full-repository refactoring, autonomous CI/CD debugging, self-healing test execution.",
+        "better_to_work_with": "The best developer experience for autonomous coding loops (Claude Code & Cursor). Native tool grounding, zero hallucinated file paths, and continuous self-correction.",
+        "capabilities": ["Autonomous Terminal Agent", "Repo-Wide Context", "Self-Healing Tests", "Dynamic Thinking Dial"],
+        "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='fable-5.1',\n    max_tokens=64000,\n    messages=[{'role': 'user', 'content': 'Resolve issues in PR #402'}]\n)"
+    },
+    {
         "id": "claude-3-7-sonnet",
         "name": "Claude 3.7 Sonnet",
         "lab": "Anthropic",
         "lab_slug": "anthropic",
+        "is_frontier": True,
         "year": "2026",
+        "release_date": "February 2026",
+        "benchmark_score": 82.5,
+        "benchmark_label": "82.5% SWE-bench Verified",
         "license": "Proprietary API",
         "context_window": "200,000 tokens",
         "max_output": "64,000 tokens",
@@ -422,8 +421,9 @@ FRONTIER_MODELS = [
         "architecture": "Hybrid Extended Thinking Dense",
         "readiness": "Frontier SOTA",
         "tag": "HYBRID REASONING",
-        "capabilities": ["Dynamic Thinking Budget (0-64K)", "SWE-bench Verified Leader", "Agentic Terminal Tool Use", "Computer Control"],
         "best_for": "Autonomous coding agents (Claude Code, Cursor), whole-repository refactoring, difficult debugging.",
+        "better_to_work_with": "Top-tier daily driver. Switching between 0-budget fast tokens and extended thinking on demand makes it the most flexible and practical model for real-world engineering.",
+        "capabilities": ["Dynamic Thinking Budget (0-64K)", "SWE-bench Verified Leader", "Agentic Terminal Tool Use", "Computer Control"],
         "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='claude-3-7-sonnet-20260219',\n    max_tokens=64000,\n    thinking={'type': 'enabled', 'budget_tokens': 16000},\n    messages=[{'role': 'user', 'content': 'Write full compiler test suite'}]\n)"
     },
     {
@@ -431,7 +431,11 @@ FRONTIER_MODELS = [
         "name": "Claude Opus 5 (Auto Mode)",
         "lab": "Anthropic",
         "lab_slug": "anthropic",
+        "is_frontier": False,
         "year": "2026",
+        "release_date": "May 2026",
+        "benchmark_score": 84.0,
+        "benchmark_label": "84.0% Long-Horizon Agent",
         "license": "Proprietary API",
         "context_window": "200,000 tokens",
         "max_output": "64,000 tokens",
@@ -441,8 +445,9 @@ FRONTIER_MODELS = [
         "architecture": "Massive Long-Horizon Flagship",
         "readiness": "Flagship Pro",
         "tag": "AUTONOMOUS AGENT",
-        "capabilities": ["Multi-Hour Task Execution", "Repository Architecture Migration", "Deep Formal Verification"],
         "best_for": "Fully autonomous multi-file refactoring, enterprise security auditing, legacy codebase migrations.",
+        "better_to_work_with": "Phenomenal reasoning depth for difficult architectural refactoring. Best when left to run autonomously with terminal sandboxing.",
+        "capabilities": ["Multi-Hour Task Execution", "Repository Architecture Migration", "Deep Formal Verification"],
         "api_snippet": "# Claude Opus 5 with Autonomous Execution\nresp = client.messages.create(\n    model='claude-opus-5',\n    max_tokens=64000,\n    messages=[{'role': 'user', 'content': 'Migrate our monolith to microservices'}]\n)"
     },
     {
@@ -450,7 +455,11 @@ FRONTIER_MODELS = [
         "name": "Claude 3.5 Haiku",
         "lab": "Anthropic",
         "lab_slug": "anthropic",
+        "is_frontier": False,
         "year": "2025",
+        "release_date": "November 2024",
+        "benchmark_score": 72.8,
+        "benchmark_label": "72.8% Sub-150ms Speed",
         "license": "Proprietary API",
         "context_window": "200,000 tokens",
         "max_output": "8,192 tokens",
@@ -460,9 +469,84 @@ FRONTIER_MODELS = [
         "architecture": "Low-Latency Dense",
         "readiness": "Cost Leader",
         "tag": "FAST INFERENCE",
-        "capabilities": ["Sub-150ms First Token", "Structured Extraction", "High-Volume Filtering", "High Accuracy Tool Use"],
         "best_for": "High-concurrency API backends, real-time code completions, user request routing.",
+        "better_to_work_with": "Extremely snappy. Sub-150ms time-to-first-token makes it effortless to use inside live web applications.",
+        "capabilities": ["Sub-150ms First Token", "Structured Extraction", "High-Volume Filtering", "High Accuracy Tool Use"],
         "api_snippet": "resp = client.messages.create(\n    model='claude-3-5-haiku-20241022',\n    max_tokens=2048,\n    messages=[{'role': 'user', 'content': 'Classify this intent'}]\n)"
+    },
+
+    # Google DeepMind
+    {
+        "id": "gemini-3-8-flash",
+        "name": "Gemini 3.8 Flash",
+        "lab": "Google DeepMind",
+        "lab_slug": "google",
+        "is_frontier": True,
+        "year": "2026",
+        "release_date": "March 2026",
+        "benchmark_score": 81.0,
+        "benchmark_label": "81.0% Multimodal Composite",
+        "license": "Proprietary API",
+        "context_window": "1,000,000 tokens",
+        "max_output": "65,536 tokens",
+        "pricing_input": "$0.10 / 1M",
+        "pricing_output": "$0.40 / 1M",
+        "pricing_cached": "$0.025 / 1M",
+        "architecture": "High-Efficiency Multimodal MoE",
+        "readiness": "Frontier SOTA",
+        "tag": "AGENTIC REASONING",
+        "best_for": "Fast autonomous agents, full-codebase context, multimodal audio/video analysis at high throughput.",
+        "better_to_work_with": "Exceptional value ($0.10 / 1M input) and massive 1M context. Perfect for background batch ingestion and full-codebase analysis.",
+        "capabilities": ["Dynamic Extended Thinking", "Multimodal Video/Audio", "1M Context", "Function Calling", "JSON Mode", "Live Audio Streaming"],
+        "api_snippet": "from google import genai\nclient = genai.Client()\nresponse = client.models.generate_content(\n    model='gemini-3.8-flash',\n    contents='Analyze this entire codebase'\n)"
+    },
+    {
+        "id": "gemini-3-1-pro",
+        "name": "Gemini 3.1 Pro",
+        "lab": "Google DeepMind",
+        "lab_slug": "google",
+        "is_frontier": False,
+        "year": "2026",
+        "release_date": "February 2026",
+        "benchmark_score": 81.5,
+        "benchmark_label": "81.5% 2M Long Context",
+        "license": "Proprietary API",
+        "context_window": "2,000,000 tokens",
+        "max_output": "65,536 tokens",
+        "pricing_input": "$1.25 / 1M",
+        "pricing_output": "$5.00 / 1M",
+        "pricing_cached": "$0.31 / 1M",
+        "architecture": "Deep Frontier Multimodal",
+        "readiness": "Flagship Pro",
+        "tag": "MASSIVE CONTEXT",
+        "best_for": "Exhaustive legal & scientific document synthesis, hours of high-res video parsing, complex system architecture.",
+        "better_to_work_with": "Industry champion for needle-in-a-haystack recall across 2 million tokens of documentation or code.",
+        "capabilities": ["2M Token Ingestion", "Deep Reasoning", "Complex Code Generation", "Multimodal Vision & Video", "High Precision Math"],
+        "api_snippet": "response = client.models.generate_content(\n    model='gemini-3.1-pro',\n    contents=[large_video_file, 'Summarize all key events']\n)"
+    },
+    {
+        "id": "gemma-4-31b",
+        "name": "Gemma 4 31B",
+        "lab": "Google DeepMind",
+        "lab_slug": "google",
+        "is_frontier": False,
+        "year": "2026",
+        "release_date": "March 2026",
+        "benchmark_score": 73.5,
+        "benchmark_label": "73.5% Local Dense SOTA",
+        "license": "Open Weights (Gemma)",
+        "context_window": "128,000 tokens",
+        "max_output": "16,384 tokens",
+        "pricing_input": "Free / Self-Hosted",
+        "pricing_output": "Free / Self-Hosted",
+        "pricing_cached": "N/A",
+        "architecture": "Dense 31B Parameter",
+        "readiness": "Open Weights",
+        "tag": "LOCAL ENTERPRISE",
+        "best_for": "Air-gapped enterprise deployments, private document classification, local workstation coding.",
+        "better_to_work_with": "Clean instruction-following on single local GPUs via Ollama with full commercial permission.",
+        "capabilities": ["Local Workstation Run", "Instruction Tuned", "Ollama Native", "Full Privacy", "Commercial Friendly"],
+        "api_snippet": "# CLI Command\nollama run gemma4:31b"
     },
 
     # DeepSeek
@@ -471,7 +555,11 @@ FRONTIER_MODELS = [
         "name": "DeepSeek-R1",
         "lab": "DeepSeek AI",
         "lab_slug": "deepseek",
+        "is_frontier": True,
         "year": "2026",
+        "release_date": "January 2026",
+        "benchmark_score": 80.6,
+        "benchmark_label": "80.6% MATH-500 SOTA",
         "license": "Open Weights (MIT)",
         "context_window": "128,000 tokens",
         "max_output": "64,000 tokens",
@@ -479,10 +567,11 @@ FRONTIER_MODELS = [
         "pricing_output": "$2.19 / 1M",
         "pricing_cached": "$0.14 / 1M",
         "architecture": "671B MoE (37B active)",
-        "readiness": "Open Weights",
+        "readiness": "Open Weights Champion",
         "tag": "OPEN REASONING",
-        "capabilities": ["Pure RL Chain-of-Thought", "MIT Open License", "AIME 79.8% SOTA", "MATH-500 97.3%"],
         "best_for": "Self-hosted high-reasoning, low-cost enterprise analytics, uncensored algorithmic research.",
+        "better_to_work_with": "The best open-weights model for challenging reasoning. Full access to raw internal thinking (<think> tokens) gives developers complete interpretability.",
+        "capabilities": ["Pure RL Chain-of-Thought", "MIT Open License", "AIME 79.8% SOTA", "MATH-500 97.3%"],
         "api_snippet": "# Ollama Self-Hosted Run\nollama run deepseek-r1:671b\n\n# Or DeepSeek API\nclient = OpenAI(api_key='...', base_url='https://api.deepseek.com')\nresp = client.chat.completions.create(model='deepseek-reasoner', messages=[...])"
     },
     {
@@ -490,7 +579,11 @@ FRONTIER_MODELS = [
         "name": "DeepSeek-V3",
         "lab": "DeepSeek AI",
         "lab_slug": "deepseek",
+        "is_frontier": False,
         "year": "2025",
+        "release_date": "December 2025",
+        "benchmark_score": 78.0,
+        "benchmark_label": "78.0% MLA High Throughput",
         "license": "Open Weights (MIT)",
         "context_window": "128,000 tokens",
         "max_output": "8,192 tokens",
@@ -500,8 +593,9 @@ FRONTIER_MODELS = [
         "architecture": "671B MoE (Multi-Head Latent Attention)",
         "readiness": "Cost Leader",
         "tag": "ULTRA LOW COST",
-        "capabilities": ["Multi-Head Latent Attention (MLA)", "FP8 Mixed Precision Native", "60 TPS Throughput"],
         "best_for": "Massive document indexing, cost-critical summarization, batch ETL transformation.",
+        "better_to_work_with": "Rock-bottom API pricing ($0.14/1M) with high generation speed (60+ tokens/sec). Great for high-volume batch data pipelines.",
+        "capabilities": ["Multi-Head Latent Attention (MLA)", "FP8 Mixed Precision Native", "60 TPS Throughput"],
         "api_snippet": "# Run via vLLM\nvllm serve deepseek-ai/DeepSeek-V3 --trust-remote-code"
     },
     {
@@ -509,7 +603,11 @@ FRONTIER_MODELS = [
         "name": "DeepSeek-R1-Distill-32B",
         "lab": "DeepSeek AI",
         "lab_slug": "deepseek",
+        "is_frontier": False,
         "year": "2026",
+        "release_date": "January 2026",
+        "benchmark_score": 74.2,
+        "benchmark_label": "74.2% Workstation Reasoning",
         "license": "Open Weights (MIT)",
         "context_window": "128,000 tokens",
         "max_output": "16,384 tokens",
@@ -519,18 +617,23 @@ FRONTIER_MODELS = [
         "architecture": "Dense 32B Distilled",
         "readiness": "Open Weights",
         "tag": "LOCAL SOTA",
-        "capabilities": ["Single RTX 4090 / 5090 Run", "o1-mini Grade Math", "Qwen Base Distillation"],
         "best_for": "Running local reasoning on gaming workstations or single cloud instances.",
+        "better_to_work_with": "Fits cleanly into 24GB VRAM (RTX 3090/4090) and delivers near-o1-mini level math and logic locally with zero API charges.",
+        "capabilities": ["Single RTX 4090 / 5090 Run", "o1-mini Grade Math", "Qwen Base Distillation"],
         "api_snippet": "# Run locally in terminal\nollama run deepseek-r1:32b"
     },
 
     # Meta AI
     {
-        "id": "llama-4-behemoth",
+        "id": "llama-4",
         "name": "Llama 4",
         "lab": "Meta AI",
         "lab_slug": "meta",
+        "is_frontier": True,
         "year": "2026",
+        "release_date": "May 2026",
+        "benchmark_score": 79.8,
+        "benchmark_label": "79.8% Open Weights MMLU",
         "license": "Open Weights (Llama Community)",
         "context_window": "128,000 tokens",
         "max_output": "16,384 tokens",
@@ -538,10 +641,11 @@ FRONTIER_MODELS = [
         "pricing_output": "Free / Self-Hosted",
         "pricing_cached": "N/A",
         "architecture": "Multimodal Frontier MoE",
-        "readiness": "Frontier SOTA",
+        "readiness": "Open Foundation SOTA",
         "tag": "OPEN FOUNDATION",
-        "capabilities": ["Native Agentic Tool Use", "Multimodal Vision & Audio", "Self-Hosted Enterprise Support"],
         "best_for": "Enterprise foundation fine-tuning, private on-premise cloud infrastructure.",
+        "better_to_work_with": "The premier open foundation for teams requiring complete model weights ownership. Outstanding tool use and standardized vLLM serving.",
+        "capabilities": ["Native Agentic Tool Use", "Multimodal Vision & Audio", "Self-Hosted Enterprise Support"],
         "api_snippet": "vllm serve meta-llama/Llama-4 --tensor-parallel-size 4"
     },
     {
@@ -549,7 +653,11 @@ FRONTIER_MODELS = [
         "name": "Llama 3.3 70B Instruct",
         "lab": "Meta AI",
         "lab_slug": "meta",
+        "is_frontier": False,
         "year": "2025",
+        "release_date": "December 2024",
+        "benchmark_score": 76.0,
+        "benchmark_label": "76.0% Workstation Workhorse",
         "license": "Open Weights (Llama Community)",
         "context_window": "128,000 tokens",
         "max_output": "8,192 tokens",
@@ -559,37 +667,23 @@ FRONTIER_MODELS = [
         "architecture": "Dense 70B Parameter",
         "readiness": "Production Ready",
         "tag": "WORKSTATION WORKHORSE",
-        "capabilities": ["405B Performance on 70B VRAM", "Multilingual 8+ Languages", "High Coding Accuracy"],
         "best_for": "Standard enterprise private deployments on dual RTX 4090 or single A100/H100.",
+        "better_to_work_with": "Solid, dependable workhorse with vast community prompt and fine-tuning support. Highly robust against format errors.",
+        "capabilities": ["405B Performance on 70B VRAM", "Multilingual 8+ Languages", "High Coding Accuracy"],
         "api_snippet": "ollama run llama3.3:70b"
     },
 
     # xAI
     {
-        "id": "grok-3",
-        "name": "Grok 3 (Colossus)",
-        "lab": "xAI",
-        "lab_slug": "xai",
-        "year": "2025",
-        "license": "Proprietary API",
-        "context_window": "256,000 tokens",
-        "max_output": "32,768 tokens",
-        "pricing_input": "$5.00 / 1M",
-        "pricing_output": "$15.00 / 1M",
-        "pricing_cached": "$1.25 / 1M",
-        "architecture": "Mega-Scale Dense (Colossus Cluster)",
-        "readiness": "Frontier SOTA",
-        "tag": "REAL-TIME WORLD KNOWLEDGE",
-        "capabilities": ["Colossus Supercluster Trained", "Real-Time World Knowledge", "High Raw Coding Throughput"],
-        "best_for": "Real-time market intelligence, rapid code synthesis, uncensored open exploration.",
-        "api_snippet": "# xAI API Call\nclient = OpenAI(api_key='...', base_url='https://api.x.ai/v1')\nresp = client.chat.completions.create(model='grok-3', messages=[...])"
-    },
-    {
         "id": "grok-3-think",
         "name": "Grok 3 Think",
         "lab": "xAI",
         "lab_slug": "xai",
+        "is_frontier": True,
         "year": "2025",
+        "release_date": "Late 2025",
+        "benchmark_score": 79.1,
+        "benchmark_label": "79.1% Hard Reasoning SOTA",
         "license": "Proprietary API",
         "context_window": "256,000 tokens",
         "max_output": "32,768 tokens",
@@ -599,18 +693,71 @@ FRONTIER_MODELS = [
         "architecture": "Deliberation Reasoning Engine",
         "readiness": "Frontier SOTA",
         "tag": "DEEP DELIBERATION",
-        "capabilities": ["Extended Reasoning Steps", "Formal Logic Verification", "Mathematical Proof Construction"],
         "best_for": "Hard scientific verification, algorithmic dispute resolution, complex software debugging.",
+        "better_to_work_with": "Combines intense chain-of-thought deliberation with access to fresh real-time knowledge. Highly capable at identifying subtle edge cases.",
+        "capabilities": ["Extended Reasoning Steps", "Formal Logic Verification", "Mathematical Proof Construction"],
         "api_snippet": "resp = client.chat.completions.create(model='grok-3-think', messages=[...])"
+    },
+    {
+        "id": "grok-3",
+        "name": "Grok 3 (Colossus)",
+        "lab": "xAI",
+        "lab_slug": "xai",
+        "is_frontier": False,
+        "year": "2025",
+        "release_date": "February 2025",
+        "benchmark_score": 77.5,
+        "benchmark_label": "77.5% Raw Throughput",
+        "license": "Proprietary API",
+        "context_window": "256,000 tokens",
+        "max_output": "32,768 tokens",
+        "pricing_input": "$5.00 / 1M",
+        "pricing_output": "$15.00 / 1M",
+        "pricing_cached": "$1.25 / 1M",
+        "architecture": "Mega-Scale Dense (Colossus Cluster)",
+        "readiness": "Frontier SOTA",
+        "tag": "REAL-TIME WORLD KNOWLEDGE",
+        "best_for": "Real-time market intelligence, rapid code synthesis, uncensored open exploration.",
+        "better_to_work_with": "Fast streaming responses with up-to-the-minute awareness of global tech developments and breaking CVEs.",
+        "capabilities": ["Colossus Supercluster Trained", "Real-Time World Knowledge", "High Raw Coding Throughput"],
+        "api_snippet": "from openai import OpenAI\nclient = OpenAI(api_key='...', base_url='https://api.x.ai/v1')\nresp = client.chat.completions.create(model='grok-3', messages=[...])"
     },
 
     # Alibaba (Qwen)
+    {
+        "id": "qwen-2-5-coder-32b",
+        "name": "Qwen 2.5 Coder 32B",
+        "lab": "Alibaba",
+        "lab_slug": "alibaba",
+        "is_frontier": False,
+        "year": "2025",
+        "release_date": "November 2024",
+        "benchmark_score": 76.8,
+        "benchmark_label": "76.8% Open Coding Champion",
+        "license": "Open Weights (Apache 2.0)",
+        "context_window": "128,000 tokens",
+        "max_output": "16,384 tokens",
+        "pricing_input": "Free / Self-Hosted",
+        "pricing_output": "Free / Self-Hosted",
+        "pricing_cached": "N/A",
+        "architecture": "Dense 32B Parameter",
+        "readiness": "Benchmark Winner",
+        "tag": "OPEN CODING SOTA",
+        "best_for": "Self-hosted Copilot alternatives (Continue.dev, Cursor), offline software engineering, automated PR review.",
+        "better_to_work_with": "The de-facto gold standard for local coding. Extremely accurate syntax generation across 40+ programming languages.",
+        "capabilities": ["EvalPlus Coding Champion", "128K Context Support", "Apache 2.0 Free Commercial", "FIM Native"],
+        "api_snippet": "# Continue.dev / Ollama Config\nollama run qwen2.5-coder:32b"
+    },
     {
         "id": "qwen-3-8-27b",
         "name": "Qwen 3.8 27B",
         "lab": "Alibaba",
         "lab_slug": "alibaba",
+        "is_frontier": False,
         "year": "2026",
+        "release_date": "March 2026",
+        "benchmark_score": 74.0,
+        "benchmark_label": "74.0% Ternary Base-3",
         "license": "Open Weights (Apache 2.0)",
         "context_window": "128,000 tokens",
         "max_output": "16,384 tokens",
@@ -620,57 +767,24 @@ FRONTIER_MODELS = [
         "architecture": "Dense 27B Workstation Optimized",
         "readiness": "Open Weights",
         "tag": "COMPACT WORKSTATION",
-        "capabilities": ["Ternary Base-3 Packing (-22% VRAM)", "Strix / Mac Silicon Native", "High Efficiency Inference"],
         "best_for": "Developers running local models on laptops (M3/M4 or AMD Strix) without GPU fan noise.",
+        "better_to_work_with": "Lightweight memory footprint (-22% VRAM requirement) makes it runnable alongside heavy IDEs on 16GB-32GB laptops.",
+        "capabilities": ["Ternary Base-3 Packing (-22% VRAM)", "Strix / Mac Silicon Native", "High Efficiency Inference"],
         "api_snippet": "ollama run qwen3.8:27b"
-    },
-    {
-        "id": "qwen-2-5-coder-32b",
-        "name": "Qwen 2.5 Coder 32B",
-        "lab": "Alibaba",
-        "lab_slug": "alibaba",
-        "year": "2025",
-        "license": "Open Weights (Apache 2.0)",
-        "context_window": "128,000 tokens",
-        "max_output": "16,384 tokens",
-        "pricing_input": "Free / Self-Hosted",
-        "pricing_output": "Free / Self-Hosted",
-        "pricing_cached": "N/A",
-        "architecture": "Dense 32B Parameter",
-        "readiness": "Benchmark Winner",
-        "tag": "OPEN SOTA CODING",
-        "capabilities": ["HumanEval 92.7%", "LiveCodeBench Leader", "Apache 2.0 Permissive", "Fill-in-the-Middle"],
-        "best_for": "Standard local backend for Continue.dev, Cline, and private enterprise code generation.",
-        "api_snippet": "ollama run qwen2.5-coder:32b"
     },
 
     # Mistral AI
-    {
-        "id": "mistral-large-2",
-        "name": "Mistral Large 2 (123B)",
-        "lab": "Mistral AI",
-        "lab_slug": "mistral",
-        "year": "2025",
-        "license": "Mistral Research / API",
-        "context_window": "128,000 tokens",
-        "max_output": "16,384 tokens",
-        "pricing_input": "$2.00 / 1M",
-        "pricing_output": "$6.00 / 1M",
-        "pricing_cached": "$0.50 / 1M",
-        "architecture": "123B Dense Multilingual",
-        "readiness": "Production Ready",
-        "tag": "EUROPEAN ENTERPRISE",
-        "capabilities": ["80+ Programming Languages", "GDPR Native Compliance", "Function Calling SOTA", "Strong Multilingual"],
-        "best_for": "European enterprise compliance, high-precision code translation, polyglot software stacks.",
-        "api_snippet": "from mistralai import Mistral\nclient = Mistral(api_key='...')\nresp = client.chat.complete(model='mistral-large-latest', messages=[...])"
-    },
     {
         "id": "codestral-2501",
         "name": "Codestral 2501 (22B)",
         "lab": "Mistral AI",
         "lab_slug": "mistral",
+        "is_frontier": False,
         "year": "2025",
-        "license": "Mistral Non-Production / Commercial API",
+        "release_date": "January 2025",
+        "benchmark_score": 75.4,
+        "benchmark_label": "75.4% FIM Coding SOTA",
+        "license": "Mistral Commercial API",
         "context_window": "256,000 tokens",
         "max_output": "8,192 tokens",
         "pricing_input": "$0.30 / 1M",
@@ -679,9 +793,34 @@ FRONTIER_MODELS = [
         "architecture": "Dense 22B Coding Specialist",
         "readiness": "Cost Leader",
         "tag": "SPECIALIZED CODE",
-        "capabilities": ["256K Context Code Ingestion", "Ultra Fast FIM (Fill-in-the-Middle)", "80+ Languages"],
         "best_for": "IDE tab completions, instant code formatting, function refactoring at microsecond latency.",
+        "better_to_work_with": "Sublime Fill-In-The-Middle (FIM) support for editor autocomplete extensions with sub-50ms latency.",
+        "capabilities": ["256K Context Code Ingestion", "Ultra Fast FIM (Fill-in-the-Middle)", "80+ Languages"],
         "api_snippet": "ollama run codestral"
+    },
+    {
+        "id": "mistral-large-2",
+        "name": "Mistral Large 2 (123B)",
+        "lab": "Mistral AI",
+        "lab_slug": "mistral",
+        "is_frontier": False,
+        "year": "2024",
+        "release_date": "July 2024",
+        "benchmark_score": 75.0,
+        "benchmark_label": "75.0% Polyglot Enterprise",
+        "license": "Mistral Commercial / Research Open",
+        "context_window": "128,000 tokens",
+        "max_output": "8,192 tokens",
+        "pricing_input": "$2.00 / 1M",
+        "pricing_output": "$6.00 / 1M",
+        "pricing_cached": "$0.50 / 1M",
+        "architecture": "123B Dense Multilingual",
+        "readiness": "Production Ready",
+        "tag": "EUROPEAN ENTERPRISE",
+        "best_for": "European enterprise compliance, high-precision code translation, polyglot software stacks.",
+        "better_to_work_with": "Rigorous GDPR compliance adherence and outstanding performance in French, German, Spanish, and Italian.",
+        "capabilities": ["80+ Programming Languages", "GDPR Native Compliance", "Function Calling SOTA", "Strong Multilingual"],
+        "api_snippet": "from mistralai import Mistral\nclient = Mistral(api_key='...')\nresp = client.chat.complete(model='mistral-large-latest', messages=[...])"
     }
 ]
 
@@ -689,8 +828,8 @@ models_json_str = json.dumps(FRONTIER_MODELS)
 milestones_json_str = json.dumps(MILESTONES_ARCHIVE)
 
 print("[build_webapp] Loaded models and milestone databases.")
-print(f"[build_webapp] Total Frontier Models: {len(FRONTIER_MODELS)}")
-print(f"[build_webapp] Compiling Spotify-inspired HTML application...")
+print(f"[build_webapp] Total Models: {len(FRONTIER_MODELS)} ({sum(1 for m in FRONTIER_MODELS if m['is_frontier'])} Frontier Flagships)")
+print("[build_webapp] Compiling Minimalist Reader index.html...")
 
 html_template = f"""<!DOCTYPE html>
 <html lang="en">
@@ -698,37 +837,40 @@ html_template = f"""<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AI Pulse — Frontier AI &amp; Developer Intelligence</title>
-    <meta name="description" content="Spotify-inspired developer intelligence dashboard tracking frontier models, daily breakthroughs, and landmark milestones.">
+    <meta name="description" content="A calm, reader-friendly developer digest tracking frontier models, daily breakthroughs, and benchmark comparisons.">
     
-    <!-- Fonts -->
+    <!-- Modern Reader Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         :root {{
-            --bg-base: #121212;
-            --bg-surface: #181818;
-            --bg-card: #181818;
-            --bg-card-hover: #242424;
-            --bg-elevated: #282828;
-            --border-subtle: #282828;
-            --border-highlight: #3e3e3e;
-            --accent-green: #1ed760;
-            --accent-green-hover: #1fdf64;
-            --accent-green-dark: #1db954;
-            --accent-beige: #e5dcd0;
-            --text-primary: #ffffff;
-            --text-secondary: #a7a7a7;
-            --text-muted: #727272;
-            --badge-bg: #242424;
-            --badge-text: #ffffff;
-            --radius-sm: 4px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
+            /* Minimalist Reader Palette */
+            --bg-base: #0d0f12;
+            --bg-surface: #13161c;
+            --bg-card: #14171e;
+            --bg-card-hover: #191d26;
+            --bg-elevated: #1e222d;
+            --border-subtle: rgba(255, 255, 255, 0.07);
+            --border-highlight: rgba(255, 255, 255, 0.14);
+            
+            --accent-primary: #3b82f6;
+            --accent-primary-hover: #60a5fa;
+            --accent-secondary: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-purple: #8b5cf6;
+            
+            --text-primary: #f1f3f7;
+            --text-secondary: #9da4b0;
+            --text-muted: #656d7d;
+            
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
             --radius-pill: 500px;
             --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
@@ -746,7 +888,7 @@ html_template = f"""<!DOCTYPE html>
             color: var(--text-primary);
             font-family: var(--font-sans);
             min-height: 100vh;
-            line-height: 1.5;
+            line-height: 1.65;
             overflow-x: hidden;
         }}
 
@@ -755,15 +897,15 @@ html_template = f"""<!DOCTYPE html>
             position: sticky;
             top: 0;
             z-index: 60;
-            background: rgba(18, 18, 18, 0.94);
-            backdrop-filter: blur(12px);
+            background: rgba(13, 15, 18, 0.92);
+            backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--border-subtle);
-            padding: 14px 24px;
         }}
 
         .header-inner {{
             max-width: 1240px;
             margin: 0 auto;
+            padding: 12px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -773,41 +915,44 @@ html_template = f"""<!DOCTYPE html>
         .brand {{
             display: flex;
             align-items: center;
-            gap: 10px;
-            cursor: pointer;
+            gap: 12px;
             text-decoration: none;
-        }}
-
-        .brand-dot {{
-            width: 10px;
-            height: 10px;
-            background-color: var(--accent-green);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(30, 215, 96, 0.5);
-        }}
-
-        .brand-title {{
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
             color: var(--text-primary);
         }}
 
-        .brand-subtitle {{
-            font-size: 11px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-weight: 600;
-            margin-left: 4px;
-        }}
-
-        nav.nav-links {{
+        .brand-icon {{
+            width: 34px;
+            height: 34px;
+            border-radius: var(--radius-sm);
+            background: #1e222d;
+            border: 1px solid var(--border-highlight);
             display: flex;
             align-items: center;
-            gap: 8px;
-            overflow-x: auto;
-            padding: 2px 0;
+            justify-content: center;
+            font-size: 16px;
+        }}
+
+        .brand-title {{
+            font-weight: 700;
+            font-size: 17px;
+            letter-spacing: -0.02em;
+        }}
+
+        .brand-subtitle {{
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }}
+
+        /* Nav Pills */
+        nav.nav-bar {{
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-surface);
+            padding: 4px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border-subtle);
         }}
 
         .nav-btn {{
@@ -816,210 +961,147 @@ html_template = f"""<!DOCTYPE html>
             color: var(--text-secondary);
             font-family: var(--font-sans);
             font-size: 13px;
-            font-weight: 700;
-            padding: 8px 18px;
+            font-weight: 600;
+            padding: 6px 16px;
             border-radius: var(--radius-pill);
             cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
+            transition: all 0.15s ease;
         }}
 
         .nav-btn:hover {{
             color: var(--text-primary);
-            background: var(--bg-card-hover);
         }}
 
         .nav-btn.active {{
-            background: var(--text-primary);
-            color: #000000;
+            background: var(--accent-primary);
+            color: #ffffff;
         }}
 
-        .header-status {{
+        .header-actions {{
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 600;
+            gap: 12px;
         }}
 
-        /* Container */
-        .app-container {{
+        .sync-badge {{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            background: var(--bg-surface);
+            padding: 5px 12px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--border-subtle);
+        }}
+
+        .status-dot {{
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: var(--accent-secondary);
+        }}
+
+        /* Main Container */
+        main {{
             max-width: 1240px;
             margin: 0 auto;
             padding: 28px 24px 80px 24px;
         }}
 
-        /* Section Layouts */
         .section-header {{
             margin-bottom: 24px;
         }}
 
         .section-title {{
             font-size: 26px;
-            font-weight: 800;
-            letter-spacing: -0.02em;
+            font-weight: 700;
+            letter-spacing: -0.03em;
             margin-bottom: 6px;
-            color: var(--text-primary);
         }}
 
         .section-desc {{
-            font-size: 14px;
             color: var(--text-secondary);
-        }}
-
-        /* Executive Highlights */
-        .highlights-card {{
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 22px 26px;
-            margin-bottom: 30px;
-            border-left: 4px solid var(--accent-green);
-        }}
-
-        .highlights-title {{
-            font-size: 13px;
-            font-weight: 800;
-            color: var(--accent-green);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }}
-
-        .highlights-list {{
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }}
-
-        .highlights-list li {{
             font-size: 14px;
             line-height: 1.6;
-            color: #d1d5db;
-            position: relative;
-            padding-left: 18px;
         }}
 
-        .highlights-list li::before {{
-            content: '•';
-            color: var(--accent-green);
-            position: absolute;
-            left: 0;
-            font-weight: 800;
-            font-size: 18px;
-            line-height: 1;
+        /* Calendar Date Picker Bar */
+        .date-filter-section {{
+            margin-bottom: 20px;
         }}
 
-        .highlights-list strong {{
-            color: var(--text-primary);
-        }}
-
-        /* Calendar Picker */
-        .calendar-bar {{
+        .date-filter-header {{
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }}
+
+        .date-filter-label {{
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }}
+
+        .date-filter-bar {{
+            display: flex;
             gap: 8px;
-            margin-bottom: 24px;
             overflow-x: auto;
             padding-bottom: 4px;
+            scrollbar-width: none;
+        }}
+
+        .date-filter-bar::-webkit-scrollbar {{
+            display: none;
         }}
 
         .date-chip {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            font-family: var(--font-sans);
+            padding: 7px 15px;
+            border-radius: var(--radius-sm);
             font-size: 13px;
-            font-weight: 600;
-            padding: 8px 16px;
-            border-radius: var(--radius-pill);
+            font-weight: 500;
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.2s;
+            transition: all 0.15s ease;
         }}
 
         .date-chip:hover {{
-            border-color: var(--border-highlight);
-            color: var(--text-primary);
             background: var(--bg-card-hover);
+            color: var(--text-primary);
         }}
 
         .date-chip.active {{
-            background: var(--accent-green);
-            color: #000000;
-            border-color: var(--accent-green);
-            font-weight: 800;
+            background: #1e2533;
+            border-color: var(--accent-primary);
+            color: #ffffff;
+            font-weight: 600;
         }}
 
-        /* Filter & Search Bar */
-        .filter-controls {{
+        /* Topic / Hashtag Filter Bar */
+        .tag-bar {{
             display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-bottom: 28px;
-        }}
-
-        .search-wrap {{
-            position: relative;
-            width: 100%;
-        }}
-
-        .search-input {{
-            width: 100%;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            font-size: 14px;
-            padding: 12px 18px 12px 42px;
-            border-radius: var(--radius-pill);
-            outline: none;
-            transition: border-color 0.2s;
-        }}
-
-        .search-input:focus {{
-            border-color: var(--accent-green);
-            background: #1e1e1e;
-        }}
-
-        .search-input::placeholder {{
-            color: var(--text-muted);
-        }}
-
-        .search-icon {{
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 14px;
-            pointer-events: none;
-        }}
-
-        .tag-chips {{
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 2px;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
         }}
 
         .tag-chip {{
-            background: var(--bg-surface);
+            background: transparent;
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
             font-size: 12px;
-            font-weight: 700;
-            padding: 6px 14px;
+            font-weight: 500;
+            padding: 5px 12px;
             border-radius: var(--radius-pill);
             cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.15s;
+            transition: all 0.15s ease;
         }}
 
         .tag-chip:hover {{
@@ -1028,37 +1110,55 @@ html_template = f"""<!DOCTYPE html>
         }}
 
         .tag-chip.active {{
-            background: var(--badge-bg);
-            color: var(--accent-green);
-            border-color: var(--accent-green);
+            background: var(--text-primary);
+            color: var(--bg-base);
+            border-color: var(--text-primary);
+            font-weight: 600;
         }}
 
-        /* Cards Grid */
+        /* Search Input */
+        .search-bar {{
+            margin-bottom: 24px;
+        }}
+
+        .search-input {{
+            width: 100%;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-family: var(--font-sans);
+            outline: none;
+            transition: border-color 0.15s ease;
+        }}
+
+        .search-input:focus {{
+            border-color: var(--accent-primary);
+        }}
+
+        /* Articles Grid */
         .articles-grid {{
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 20px;
-        }}
-
-        @media (min-width: 840px) {{
-            .articles-grid {{
-                grid-template-columns: repeat(2, 1fr);
-            }}
+            margin-bottom: 40px;
         }}
 
         .article-card {{
-            background: var(--bg-surface);
+            background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 24px;
+            border-radius: var(--radius-md);
+            padding: 22px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+            transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
         }}
 
         .article-card:hover {{
-            background-color: var(--bg-card-hover);
+            background: var(--bg-card-hover);
             border-color: var(--border-highlight);
             transform: translateY(-2px);
         }}
@@ -1069,139 +1169,96 @@ html_template = f"""<!DOCTYPE html>
             justify-content: space-between;
             gap: 8px;
             margin-bottom: 12px;
-            flex-wrap: wrap;
         }}
 
-        .card-meta {{
+        .card-source {{
             font-size: 12px;
             color: var(--text-muted);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
+            font-weight: 500;
         }}
 
         .badge {{
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
             font-size: 11px;
-            font-weight: 800;
-            padding: 3px 9px;
-            border-radius: var(--radius-pill);
-            letter-spacing: 0.04em;
+            font-weight: 600;
             text-transform: uppercase;
-            background: var(--badge-bg);
-            color: var(--text-primary);
-            border: 1px solid var(--border-subtle);
+            letter-spacing: 0.04em;
         }}
 
         .badge-breakthrough {{
-            background: #2b1418;
-            color: #ff4d6d;
-            border-color: #5c1d27;
+            background: rgba(245, 158, 11, 0.1);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.25);
         }}
 
         .badge-devtools {{
-            background: #14202c;
-            color: #38bdf8;
-            border-color: #1e3a5f;
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.25);
         }}
 
         .badge-local {{
-            background: #291e10;
-            color: #fbbf24;
-            border-color: #593e18;
-        }}
-
-        .badge-prod {{
-            background: #12281a;
-            color: var(--accent-green);
-            border-color: #1b4d2b;
+            background: rgba(16, 185, 129, 0.1);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.25);
         }}
 
         .badge-research {{
-            background: #20152b;
-            color: #c084fc;
-            border-color: #432461;
+            background: rgba(139, 92, 246, 0.1);
+            color: #a78bfa;
+            border: 1px solid rgba(139, 92, 246, 0.25);
         }}
 
         .article-title {{
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
-            line-height: 1.35;
+            line-height: 1.45;
             color: var(--text-primary);
-            margin-bottom: 12px;
             text-decoration: none;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            margin-bottom: 12px;
+            display: block;
         }}
 
         .article-title:hover {{
-            color: var(--accent-green);
+            color: var(--accent-primary-hover);
         }}
 
-        .article-img-wrap {{
-            margin: 8px 0 16px 0;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            border: 1px solid var(--border-subtle);
-            max-height: 220px;
-            background: #000000;
-        }}
-
-        .article-img {{
+        .article-thumb {{
             width: 100%;
-            height: 100%;
+            height: 180px;
             object-fit: cover;
-            display: block;
+            border-radius: var(--radius-sm);
+            margin-bottom: 14px;
+            border: 1px solid var(--border-subtle);
         }}
 
         .article-summary {{
             font-size: 14px;
-            line-height: 1.6;
             color: var(--text-secondary);
-            margin-bottom: 16px;
-        }}
-
-        .capability-box {{
-            background: #141a15;
-            border: 1px solid #1b3d22;
-            border-radius: var(--radius-md);
-            padding: 10px 14px;
-            font-size: 13px;
-            line-height: 1.5;
-            color: #d1fae5;
-            margin-bottom: 12px;
-        }}
-
-        .capability-label {{
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--accent-green);
-            margin-bottom: 3px;
+            line-height: 1.6;
+            margin-bottom: 14px;
         }}
 
         .usecase-box {{
-            background: #1a1a1a;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 2px solid var(--accent-primary);
             padding: 10px 14px;
-            font-size: 13px;
-            line-height: 1.5;
-            color: var(--text-secondary);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
             margin-bottom: 16px;
+            font-size: 13px;
+            color: #d1d5db;
+            line-height: 1.5;
         }}
 
         .usecase-label {{
-            font-size: 11px;
-            font-weight: 800;
+            font-size: 10px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--text-muted);
+            color: var(--accent-primary-hover);
             margin-bottom: 3px;
         }}
 
@@ -1211,474 +1268,503 @@ html_template = f"""<!DOCTYPE html>
             justify-content: space-between;
             padding-top: 14px;
             border-top: 1px solid var(--border-subtle);
-            margin-top: auto;
-        }}
-
-        .source-pill {{
             font-size: 12px;
             color: var(--text-muted);
-            font-weight: 600;
         }}
 
-        .read-btn {{
-            background: var(--badge-bg);
-            border: 1px solid var(--border-subtle);
+        .read-link {{
             color: var(--text-primary);
-            font-family: var(--font-sans);
-            font-size: 12px;
-            font-weight: 700;
-            padding: 6px 14px;
-            border-radius: var(--radius-pill);
             text-decoration: none;
-            transition: all 0.2s;
+            font-weight: 600;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }}
 
-        .read-btn:hover {{
-            background: var(--text-primary);
-            color: #000000;
-            border-color: var(--text-primary);
+        .read-link:hover {{
+            color: var(--accent-primary-hover);
         }}
 
-        /* 1-Liners Section */
-        .oneliners-card {{
+        /* One-Liners Section */
+        .oneliners-container {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             padding: 24px;
-            margin-top: 36px;
+            margin-top: 20px;
         }}
 
         .oneliners-header {{
             font-size: 16px;
-            font-weight: 800;
-            margin-bottom: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 10px;
         }}
 
         .oneliner-item {{
-            padding: 14px 0;
+            padding: 12px 0;
             border-bottom: 1px solid var(--border-subtle);
             display: flex;
             align-items: baseline;
-            justify-content: space-between;
-            gap: 16px;
+            gap: 10px;
+            font-size: 14px;
+            line-height: 1.5;
         }}
 
         .oneliner-item:last-child {{
             border-bottom: none;
         }}
 
-        .oneliner-text {{
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.5;
+        .oneliner-dot {{
+            color: var(--accent-primary);
+            font-weight: bold;
         }}
 
         .oneliner-title {{
             color: var(--text-primary);
-            font-weight: 600;
             text-decoration: none;
-            margin-right: 6px;
+            font-weight: 600;
         }}
 
         .oneliner-title:hover {{
-            color: var(--accent-green);
+            color: var(--accent-primary-hover);
         }}
 
-        /* Frontier Model Tracker Layout */
-        .lab-filter-bar {{
+        .oneliner-desc {{
+            color: var(--text-secondary);
+        }}
+
+        /* ==================== BENCHMARK BAR CHART ==================== */
+        .benchmark-section {{
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 32px;
+        }}
+
+        .benchmark-header {{
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }}
+
+        .benchmark-title {{
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }}
+
+        .benchmark-desc {{
+            font-size: 13px;
+            color: var(--text-muted);
+        }}
+
+        .benchmark-bars-container {{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }}
+
+        .benchmark-row {{
+            display: grid;
+            grid-template-columns: 220px 1fr 90px;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }}
+
+        .benchmark-row:hover {{
+            background: var(--bg-elevated);
+        }}
+
+        .benchmark-row-meta {{
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 24px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }}
+
+        .benchmark-rank {{
+            font-size: 11px;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            width: 18px;
+        }}
+
+        .benchmark-model-name {{
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }}
+
+        .benchmark-lab-pill {{
+            font-size: 10px;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }}
+
+        .benchmark-bar-track {{
+            background: rgba(255, 255, 255, 0.04);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }}
+
+        .benchmark-bar-fill {{
+            height: 100%;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            transition: width 0.4s ease;
+        }}
+
+        .benchmark-bar-fill.frontier {{
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+        }}
+
+        .benchmark-score-val {{
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: right;
+        }}
+
+        /* Floating Interactive Tooltip Popover */
+        #benchmark-tooltip {{
+            position: fixed;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            background: #191d26;
+            border: 1px solid var(--border-highlight);
+            border-radius: var(--radius-md);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+            padding: 18px;
+            width: 340px;
+            max-width: 90vw;
+        }}
+
+        #benchmark-tooltip.visible {{
+            opacity: 1;
+            transform: translateY(0);
+        }}
+
+        .tooltip-header {{
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }}
+
+        .tooltip-title {{
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+        }}
+
+        .tooltip-score {{
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-primary-hover);
+            font-family: var(--font-mono);
+        }}
+
+        .tooltip-lab {{
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }}
+
+        .tooltip-grid {{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+        }}
+
+        .tooltip-item-label {{
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+        }}
+
+        .tooltip-item-val {{
+            font-size: 12px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }}
+
+        .tooltip-bestfor {{
+            font-size: 12px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }}
+
+        .tooltip-verdict {{
+            background: rgba(59, 130, 246, 0.08);
+            border-left: 2px solid var(--accent-primary);
+            padding: 8px 10px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 12px;
+            color: #93c5fd;
+            line-height: 1.45;
+        }}
+
+        /* ==================== MODELS SECTION ==================== */
+        .lab-filter-bar {{
+            display: flex;
+            gap: 8px;
             overflow-x: auto;
-            padding-bottom: 4px;
+            margin-bottom: 24px;
+            scrollbar-width: none;
+        }}
+
+        .lab-filter-bar::-webkit-scrollbar {{
+            display: none;
         }}
 
         .lab-chip {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
+            padding: 7px 16px;
+            border-radius: var(--radius-sm);
             font-size: 13px;
-            font-weight: 700;
-            padding: 8px 18px;
-            border-radius: var(--radius-pill);
+            font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.2s;
+            transition: all 0.15s ease;
         }}
 
         .lab-chip:hover {{
-            color: var(--text-primary);
             background: var(--bg-card-hover);
+            color: var(--text-primary);
         }}
 
         .lab-chip.active {{
-            background: var(--text-primary);
-            color: #000000;
-            border-color: var(--text-primary);
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: #ffffff;
         }}
 
         .models-grid {{
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-        }}
-
-        @media (min-width: 768px) {{
-            .models-grid {{
-                grid-template-columns: repeat(2, 1fr);
-            }}
-        }}
-
-        @media (min-width: 1100px) {{
-            .models-grid {{
-                grid-template-columns: repeat(3, 1fr);
-            }}
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
         }}
 
         .model-card {{
-            background: var(--bg-surface);
+            background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             padding: 22px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+            transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
         }}
 
         .model-card:hover {{
-            background-color: var(--bg-card-hover);
+            background: var(--bg-card-hover);
             border-color: var(--border-highlight);
             transform: translateY(-2px);
         }}
 
-        .model-top {{
-            margin-bottom: 14px;
-        }}
-
         .model-lab-badge {{
             font-size: 11px;
-            font-weight: 800;
+            color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--accent-green);
-            margin-bottom: 6px;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+            margin-bottom: 4px;
         }}
 
         .model-name {{
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -0.01em;
-            margin-bottom: 6px;
+            font-size: 18px;
+            font-weight: 700;
             color: var(--text-primary);
+            margin-bottom: 10px;
         }}
 
         .model-specs-row {{
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
             margin-bottom: 14px;
         }}
 
         .spec-pill {{
-            background: #242424;
             font-size: 11px;
-            font-weight: 600;
-            padding: 3px 9px;
-            border-radius: var(--radius-pill);
+            font-family: var(--font-mono);
             color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-subtle);
         }}
 
         .model-best-for {{
-            font-size: 13px;
+            font-size: 13.5px;
             color: var(--text-secondary);
-            line-height: 1.5;
-            margin-bottom: 18px;
+            line-height: 1.55;
+            margin-bottom: 16px;
         }}
 
         .model-pricing-preview {{
-            font-family: var(--font-mono);
-            font-size: 12px;
-            color: #d1d5db;
-            background: #141414;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
             padding: 8px 12px;
             border-radius: var(--radius-sm);
-            border: 1px solid var(--border-subtle);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-family: var(--font-mono);
         }}
 
         .inspect-action-text {{
             font-size: 12px;
-            font-weight: 700;
-            color: var(--accent-green);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 14px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            text-align: right;
         }}
 
-        /* Model Inspection Drawer */
-        .drawer-backdrop {{
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.25s ease;
-        }}
-
-        .drawer-backdrop.open {{
-            display: block;
-            opacity: 1;
-        }}
-
-        .drawer-content {{
-            position: fixed;
-            top: 0;
-            right: -600px;
-            width: 100%;
-            max-width: 560px;
-            height: 100%;
-            background: #181818;
-            border-left: 1px solid var(--border-subtle);
-            z-index: 101;
-            padding: 32px 28px;
-            overflow-y: auto;
-            transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }}
-
-        .drawer-backdrop.open .drawer-content {{
-            right: 0;
-        }}
-
-        .drawer-close-btn {{
-            align-self: flex-start;
-            background: #242424;
-            border: none;
-            color: var(--text-primary);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.15s;
-        }}
-
-        .drawer-close-btn:hover {{
-            background: #333333;
-        }}
-
-        .pricing-table {{
-            width: 100%;
-            background: #121212;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            border-collapse: collapse;
-            overflow: hidden;
-            font-size: 13px;
-        }}
-
-        .pricing-table th, .pricing-table td {{
-            padding: 10px 14px;
-            text-align: left;
-            border-bottom: 1px solid var(--border-subtle);
-        }}
-
-        .pricing-table th {{
-            color: var(--text-muted);
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 0.05em;
-        }}
-
-        .pricing-table td {{
-            color: var(--text-primary);
-            font-family: var(--font-mono);
-        }}
-
-        .code-block-wrap {{
-            position: relative;
-            background: #000000;
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            overflow-x: auto;
-        }}
-
-        .code-block {{
-            font-family: var(--font-mono);
-            font-size: 12px;
-            line-height: 1.6;
-            color: #d1fae5;
-            white-space: pre;
-        }}
-
-        .copy-code-btn {{
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #242424;
-            border: 1px solid var(--border-subtle);
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: var(--radius-pill);
-            cursor: pointer;
-        }}
-
-        .copy-code-btn:hover {{
-            background: var(--accent-green);
-            color: #000000;
-        }}
-
-        /* Milestones Archive Layout */
+        /* ==================== MILESTONES ARCHIVE ==================== */
         .milestone-period-bar {{
             display: flex;
-            align-items: center;
             gap: 8px;
-            margin-bottom: 26px;
-            overflow-x: auto;
-            padding-bottom: 4px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
         }}
 
         .period-chip {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
+            padding: 7px 16px;
+            border-radius: var(--radius-sm);
             font-size: 13px;
-            font-weight: 700;
-            padding: 8px 18px;
-            border-radius: var(--radius-pill);
+            font-weight: 600;
             cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s;
+            transition: all 0.15s ease;
         }}
 
         .period-chip:hover {{
-            color: var(--text-primary);
             background: var(--bg-card-hover);
+            color: var(--text-primary);
         }}
 
         .period-chip.active {{
-            background: var(--text-primary);
-            color: #000000;
-            border-color: var(--text-primary);
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: #ffffff;
         }}
 
         .milestone-group {{
-            margin-bottom: 36px;
+            margin-bottom: 32px;
         }}
 
         .milestone-group-title {{
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 16px;
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-subtle);
+        }}
+
+        .milestone-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 16px;
         }}
 
         .milestone-card {{
-            background: var(--bg-surface);
+            background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
-            padding: 20px 24px;
-            margin-bottom: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }}
-
-        .milestone-card:hover {{
-            border-color: var(--border-highlight);
-            background: var(--bg-card-hover);
-        }}
-
-        .milestone-header {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 8px;
-        }}
-
-        .milestone-title {{
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-primary);
+            padding: 20px;
         }}
 
         .milestone-lab {{
             font-size: 11px;
-            font-weight: 800;
-            color: var(--accent-green);
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            color: var(--accent-primary-hover);
+            margin-bottom: 4px;
         }}
 
-        .milestone-cap {{
-            font-size: 14px;
-            color: #e5e7eb;
-            line-height: 1.5;
+        .milestone-name {{
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }}
+
+        .milestone-desc {{
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin-bottom: 10px;
         }}
 
         .milestone-impact {{
-            font-size: 13px;
-            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 2px solid var(--border-highlight);
+            padding: 8px 12px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 12.5px;
+            color: #cbd5e1;
             line-height: 1.5;
         }}
 
-        /* Task Recommender Layout */
+        /* ==================== TASKS GUIDE ==================== */
         .tasks-grid {{
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-        }}
-
-        @media (min-width: 768px) {{
-            .tasks-grid {{
-                grid-template-columns: repeat(2, 1fr);
-            }}
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 20px;
         }}
 
         .task-card {{
-            background: var(--bg-surface);
+            background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-lg);
-            padding: 24px;
+            border-radius: var(--radius-md);
+            padding: 22px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }}
 
-        .task-card:hover {{
-            background: var(--bg-card-hover);
-            border-color: var(--border-highlight);
-        }}
-
         .task-title {{
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 16px;
+            font-weight: 700;
             margin-bottom: 8px;
             color: var(--text-primary);
         }}
@@ -1687,31 +1773,134 @@ html_template = f"""<!DOCTYPE html>
             margin-top: 14px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }}
 
         .task-rec-item {{
-            background: #121212;
+            background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-sm);
             padding: 10px 14px;
             font-size: 13px;
         }}
 
         .task-rec-role {{
             font-size: 11px;
-            font-weight: 800;
-            color: var(--accent-green);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--accent-primary-hover);
             margin-bottom: 2px;
+        }}
+
+        /* Model Detail Drawer */
+        .drawer-overlay {{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }}
+
+        .drawer-overlay.open {{
+            opacity: 1;
+            pointer-events: auto;
+        }}
+
+        .drawer {{
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 540px;
+            max-width: 90vw;
+            background: #14171e;
+            border-left: 1px solid var(--border-subtle);
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow-y: auto;
+            padding: 32px 28px;
+            box-shadow: -12px 0 40px rgba(0, 0, 0, 0.6);
+        }}
+
+        .drawer.open {{
+            transform: translateX(0);
+        }}
+
+        .drawer-close {{
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }}
+
+        .drawer-close:hover {{
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+        }}
+
+        .code-block {{
+            background: #0d0f12;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #e2e8f0;
+            overflow-x: auto;
+            margin-top: 10px;
+            line-height: 1.5;
         }}
 
         /* Empty State */
         .empty-state {{
+            padding: 48px 24px;
             text-align: center;
-            padding: 60px 20px;
-            color: var(--text-muted);
+            background: var(--bg-surface);
+            border: 1px dashed var(--border-subtle);
+            border-radius: var(--radius-md);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }}
+
+        /* Responsive */
+        @media (max-width: 768px) {{
+            .header-inner {{
+                padding: 10px 16px;
+                flex-wrap: wrap;
+            }}
+            .brand-subtitle {{
+                display: none;
+            }}
+            nav.nav-bar {{
+                order: 3;
+                width: 100%;
+                justify-content: space-around;
+                margin-top: 6px;
+            }}
+            .articles-grid, .models-grid, .milestone-grid, .tasks-grid {{
+                grid-template-columns: 1fr;
+            }}
+            .benchmark-row {{
+                grid-template-columns: 140px 1fr 60px;
+            }}
         }}
     </style>
 </head>
@@ -1720,78 +1909,74 @@ html_template = f"""<!DOCTYPE html>
     <!-- Header -->
     <header>
         <div class="header-inner">
-            <a class="brand" onclick="switchTab('feed')">
-                <div class="brand-dot"></div>
-                <div class="brand-title">AI PULSE</div>
-                <div class="brand-subtitle">Frontier Digest</div>
+            <a href="#" class="brand" onclick="switchView('feed')">
+                <div class="brand-icon">⚡</div>
+                <div>
+                    <div class="brand-title">AI Pulse</div>
+                    <div class="brand-subtitle">Frontier AI &amp; Developer Intelligence</div>
+                </div>
             </a>
 
-            <nav class="nav-links">
-                <button class="nav-btn active" id="tab-feed" onclick="switchTab('feed')">Daily Feed</button>
-                <button class="nav-btn" id="tab-models" onclick="switchTab('models')">Frontier Models</button>
-                <button class="nav-btn" id="tab-milestones" onclick="switchTab('milestones')">3-Yr Milestones</button>
-                <button class="nav-btn" id="tab-tasks" onclick="switchTab('tasks')">Task Guide</button>
+            <nav class="nav-bar">
+                <button class="nav-btn active" id="tab-feed" onclick="switchView('feed')">Daily Feed</button>
+                <button class="nav-btn" id="tab-models" onclick="switchView('models')">Models &amp; Benchmarks</button>
+                <button class="nav-btn" id="tab-milestones" onclick="switchView('milestones')">3-Year Milestones</button>
+                <button class="nav-btn" id="tab-tasks" onclick="switchView('tasks')">Task Guide</button>
             </nav>
 
-            <div class="header-status">
-                <span id="header-sync-status">Live</span>
+            <div class="header-actions">
+                <div class="sync-badge">
+                    <span class="status-dot"></span>
+                    <span id="header-sync-status">Live</span>
+                </div>
             </div>
         </div>
     </header>
 
-    <div class="app-container">
-
+    <!-- Main Content Area -->
+    <main>
         <!-- ==================== SECTION 1: DAILY FEED ==================== -->
         <section id="view-feed">
             <div class="section-header">
-                <h1 class="section-title">Developer &amp; Applied AI Intelligence</h1>
-                <p class="section-desc">Strictly verified breakthroughs, practical software tooling, and high-impact research from the last 24 hours.</p>
+                <h1 class="section-title">Daily AI Engineering Feed</h1>
+                <p class="section-desc">Curated breakthroughs, agentic tooling, and local AI releases strictly isolated for each calendar day.</p>
             </div>
 
-            <!-- Executive Highlights -->
-            <div class="highlights-card" id="highlights-container">
-                <div class="highlights-title">⚡ Executive Highlights (Last 24 Hours)</div>
-                <ul class="highlights-list" id="highlights-list">
-                    <li><strong>Breakthroughs in Physical &amp; Medical AI:</strong> Multi-view online 3D reconstruction and internet-scale dexterous robotics demonstration retrieval lead the day's applied breakthroughs.</li>
-                    <li><strong>Developer Tooling &amp; Agent Security:</strong> Investigations into autonomous terminal coding agents demonstrate increased reliance on zero-intervention sandboxing boundaries.</li>
-                    <li><strong>Workstation Inference:</strong> Base-3 ternary quantization brings 27B parameter frontier open models to 12GB VRAM footprints on consumer hardware.</li>
-                </ul>
-            </div>
-
-            <!-- Calendar Bar -->
-            <div class="calendar-bar" id="calendar-bar">
-                <!-- Dynamically injected past 7 days -->
-            </div>
-
-            <!-- Filter Controls -->
-            <div class="filter-controls">
-                <div class="search-wrap">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" class="search-input" id="search-input" placeholder="Search stories, models, breakthroughs, or topics..." oninput="filterArticles()">
+            <!-- Strict Date Picker -->
+            <div class="date-filter-section">
+                <div class="date-filter-header">
+                    <span class="date-filter-label">Calendar Date</span>
+                    <span id="active-date-label" style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono);"></span>
                 </div>
-                <div class="tag-chips" id="tag-chips">
-                    <button class="tag-chip active" onclick="setTopicFilter('all')">All Stories</button>
-                    <button class="tag-chip" onclick="setTopicFilter('#FrontierModels')">#FrontierModels</button>
-                    <button class="tag-chip" onclick="setTopicFilter('#Reasoning')">#Reasoning</button>
-                    <button class="tag-chip" onclick="setTopicFilter('#AgenticCoding')">#AgenticCoding</button>
-                    <button class="tag-chip" onclick="setTopicFilter('#LocalLLM')">#LocalLLM</button>
-                    <button class="tag-chip" onclick="setTopicFilter('#Vision')">#Vision</button>
-                    <button class="tag-chip" onclick="setTopicFilter('#Production')">#Production</button>
-                    <button class="tag-chip" onclick="setTopicFilter('#Robotics')">#Robotics</button>
-                    <button class="tag-chip" onclick="setTopicFilter('#Breakthroughs')">#Breakthroughs</button>
+                <div class="date-filter-bar" id="date-filter-bar">
+                    <!-- Dynamically populated date chips -->
                 </div>
+            </div>
+
+            <!-- Topic Filters -->
+            <div class="tag-bar">
+                <button class="tag-chip active" onclick="setTopicFilter('ALL')">All Stories</button>
+                <button class="tag-chip" onclick="setTopicFilter('DEV TOOLS')">💻 Dev Tooling</button>
+                <button class="tag-chip" onclick="setTopicFilter('LOCAL AI')">⚡ Local AI &amp; Quant</button>
+                <button class="tag-chip" onclick="setTopicFilter('RESEARCH')">🔬 Applied Research</button>
+                <button class="tag-chip" onclick="setTopicFilter('BREAKTHROUGH')">🚀 Breakthroughs</button>
+            </div>
+
+            <!-- Instant Search -->
+            <div class="search-bar">
+                <input type="text" id="search-input" class="search-input" placeholder="Filter stories by model, topic, or keyword (e.g., 'Claude', 'vLLM', '3D')..." oninput="filterArticles()">
             </div>
 
             <!-- Articles Grid -->
             <div class="articles-grid" id="articles-grid">
-                <!-- Dynamically populated cards -->
+                <!-- Dynamically populated article cards -->
             </div>
 
-            <!-- Quick Hit 1-Liners -->
-            <div class="oneliners-card" id="oneliners-container">
+            <!-- Quick-Hit 1-Liners -->
+            <div class="oneliners-container" id="oneliners-container">
                 <div class="oneliners-header">
-                    <span>Quick-Hit 1-Liners (Remaining Scanned Articles)</span>
-                    <span id="oneliner-count" style="font-size:12px;color:var(--text-muted);font-weight:600;"></span>
+                    <span>⚡ Quick-Hit 1-Liners</span>
+                    <span id="oneliner-count" style="font-size:12px;color:var(--text-muted);font-weight:400;"></span>
                 </div>
                 <div id="oneliners-list">
                     <!-- Dynamically populated 1-liners -->
@@ -1799,24 +1984,77 @@ html_template = f"""<!DOCTYPE html>
             </div>
         </section>
 
-        <!-- ==================== SECTION 2: FRONTIER MODELS ==================== -->
+        <!-- ==================== SECTION 2: FRONTIER MODELS & BENCHMARKS ==================== -->
         <section id="view-models" style="display:none;">
             <div class="section-header">
-                <h1 class="section-title">Frontier Model Intelligence Tracker</h1>
-                <p class="section-desc">Comprehensive catalog of production &amp; open-weights frontier models by lab. Click any model to inspect pricing, context limits, and capabilities.</p>
+                <h1 class="section-title">Frontier Model Intelligence &amp; Benchmarks</h1>
+                <p class="section-desc">Interactive benchmark comparison and comprehensive model specifications. Hover over any bar to inspect capabilities, pricing, and developer verdicts.</p>
+            </div>
+
+            <!-- Interactive Benchmark Bar Graph -->
+            <div class="benchmark-section">
+                <div class="benchmark-header">
+                    <div>
+                        <div class="benchmark-title">🏆 Frontier Benchmark Leaderboard (SWE-bench &amp; Reasoning Composite)</div>
+                        <div class="benchmark-desc">Ranked by real-world coding benchmark performance and deep deliberate reasoning capabilities.</div>
+                    </div>
+                    <div style="font-size:12px;color:var(--text-muted);">Hover/tap for full specs</div>
+                </div>
+
+                <div class="benchmark-bars-container" id="benchmark-bars-container">
+                    <!-- Populated dynamically via renderBenchmarkChart() -->
+                </div>
+            </div>
+
+            <!-- Floating Tooltip for Benchmark Bar Chart -->
+            <div id="benchmark-tooltip">
+                <div class="tooltip-header">
+                    <div class="tooltip-title" id="tt-title">Model Name</div>
+                    <div class="tooltip-score" id="tt-score">86.4%</div>
+                </div>
+                <div class="tooltip-lab" id="tt-lab">Organization &bull; Year</div>
+                
+                <div class="tooltip-grid">
+                    <div>
+                        <div class="tooltip-item-label">Context Window</div>
+                        <div class="tooltip-item-val" id="tt-context">500K tokens</div>
+                    </div>
+                    <div>
+                        <div class="tooltip-item-label">Token Pricing</div>
+                        <div class="tooltip-item-val" id="tt-pricing">$12 / $48</div>
+                    </div>
+                    <div>
+                        <div class="tooltip-item-label">Release Date</div>
+                        <div class="tooltip-item-val" id="tt-release">Aug 2026</div>
+                    </div>
+                    <div>
+                        <div class="tooltip-item-label">Architecture</div>
+                        <div class="tooltip-item-val" id="tt-arch">Dense MoE</div>
+                    </div>
+                </div>
+
+                <div class="tooltip-item-label" style="margin-bottom:2px;">What is it best for?</div>
+                <div class="tooltip-bestfor" id="tt-bestfor">Best for description</div>
+
+                <div class="tooltip-item-label" style="margin-bottom:2px;margin-top:6px;">Is it better to work with?</div>
+                <div class="tooltip-verdict" id="tt-verdict">Developer verdict</div>
             </div>
 
             <!-- Lab Filter Bar -->
             <div class="lab-filter-bar" id="lab-filter-bar">
-                <button class="lab-chip active" onclick="filterModelsByLab('all')">All Labs</button>
-                <button class="lab-chip" onclick="filterModelsByLab('google')">Google DeepMind</button>
+                <button class="lab-chip active" onclick="filterModelsByLab('all')">All Labs (Frontier Flagships)</button>
                 <button class="lab-chip" onclick="filterModelsByLab('openai')">OpenAI</button>
                 <button class="lab-chip" onclick="filterModelsByLab('anthropic')">Anthropic</button>
                 <button class="lab-chip" onclick="filterModelsByLab('deepseek')">DeepSeek</button>
+                <button class="lab-chip" onclick="filterModelsByLab('google')">Google DeepMind</button>
                 <button class="lab-chip" onclick="filterModelsByLab('meta')">Meta AI</button>
                 <button class="lab-chip" onclick="filterModelsByLab('xai')">xAI</button>
                 <button class="lab-chip" onclick="filterModelsByLab('alibaba')">Alibaba (Qwen)</button>
                 <button class="lab-chip" onclick="filterModelsByLab('mistral')">Mistral AI</button>
+            </div>
+
+            <div id="models-view-hint" style="margin-bottom:14px;font-size:13px;color:var(--text-muted);">
+                Showing <strong>Frontier Flagships</strong>. Click an organization chip above to view all models for that lab.
             </div>
 
             <!-- Models Grid -->
@@ -1850,7 +2088,7 @@ html_template = f"""<!DOCTYPE html>
         <section id="view-tasks" style="display:none;">
             <div class="section-header">
                 <h1 class="section-title">Task-Based Model Selection Guide</h1>
-                <p class="section-desc">Engineering recommendations based on latency, benchmark scores, reasoning depth, and cost economics.</p>
+                <p class="section-desc">Practical engineering recommendations based on latency, benchmark scores, reasoning depth, and cost economics.</p>
             </div>
 
             <div class="tasks-grid">
@@ -1860,8 +2098,8 @@ html_template = f"""<!DOCTYPE html>
                         <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Tasks requiring multi-file analysis, unit test generation, and autonomous terminal PR execution.</p>
                         <div class="task-recommendations">
                             <div class="task-rec-item">
-                                <div class="task-rec-role">Frontier Proprietary SOTA</div>
-                                <strong>Claude 3.7 Sonnet (Extended Thinking)</strong> &bull; Best-in-class tool use &amp; SWE-bench verified.
+                                <div class="task-rec-role">Frontier Autonomous Agent</div>
+                                <strong>Fable 5.1 &amp; Claude 3.7 Sonnet</strong> &bull; Best-in-class tool use &amp; SWE-bench verified.
                             </div>
                             <div class="task-rec-item">
                                 <div class="task-rec-role">Open Weights Champion</div>
@@ -1878,7 +2116,7 @@ html_template = f"""<!DOCTYPE html>
                         <div class="task-recommendations">
                             <div class="task-rec-item">
                                 <div class="task-rec-role">Maximum Frontier Reasoning</div>
-                                <strong>OpenAI o3 / o3-mini (High Effort)</strong> &bull; Test-time compute scaling champion.
+                                <strong>OpenAI o3 &amp; GPT-6</strong> &bull; Test-time compute scaling champions.
                             </div>
                             <div class="task-rec-item">
                                 <div class="task-rec-role">Open Architecture Equivalent</div>
@@ -1890,33 +2128,16 @@ html_template = f"""<!DOCTYPE html>
 
                 <div class="task-card">
                     <div>
-                        <div class="task-title">🎬 High-Definition Generative Video &amp; World Simulation</div>
-                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Cinematic 1080p generation, physical motion simulation, camera control, and rapid prototyping.</p>
-                        <div class="task-recommendations">
-                            <div class="task-rec-item">
-                                <div class="task-rec-role">Best Quality &amp; Temporal Consistency</div>
-                                <strong>Google Veo 3.1 &amp; OpenAI Sora 2</strong> &bull; Industry standards for coherent physical physics.
-                            </div>
-                            <div class="task-rec-item">
-                                <div class="task-rec-role">High-Speed API Pipeline</div>
-                                <strong>Veo 3.1 Fast</strong> &bull; Sub-5 second video turnarounds for creator applications.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="task-card">
-                    <div>
-                        <div class="task-title">📚 Massive Multi-Document &amp; Video Context (1M+ Tokens)</div>
-                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Analyzing whole codebases, legal portfolios, or 2 hours of raw security camera footage in one prompt.</p>
+                        <div class="task-title">📚 Massive Multi-Document &amp; Codebase Context (1M+ Tokens)</div>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Analyzing whole codebases, legal portfolios, or large audio/video archives in one prompt.</p>
                         <div class="task-recommendations">
                             <div class="task-rec-item">
                                 <div class="task-rec-role">2M Token Champion</div>
                                 <strong>Gemini 3.1 Pro (2,000,000 Tokens)</strong> &bull; Near-perfect needle-in-a-haystack recall.
                             </div>
                             <div class="task-rec-item">
-                                <div class="task-rec-role">Low-Cost 1M Context</div>
-                                <strong>Gemini 3.8 Flash ($0.10/1M)</strong> &bull; High-speed whole repository processing.
+                                <div class="task-rec-role">Commodity 1M Context</div>
+                                <strong>Gemini 3.8 Flash ($0.10/1M)</strong> &bull; Sub-200ms whole repository processing.
                             </div>
                         </div>
                     </div>
@@ -1925,158 +2146,108 @@ html_template = f"""<!DOCTYPE html>
                 <div class="task-card">
                     <div>
                         <div class="task-title">🔒 Air-Gapped &amp; Private Local Inference</div>
-                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Strict zero-data-leakage environments, offline mobile devices, or high-security financial/healthcare applications.</p>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Strict zero-data-leakage environments, offline mobile devices, or high-security applications.</p>
                         <div class="task-recommendations">
                             <div class="task-rec-item">
                                 <div class="task-rec-role">High Reasoning on Single GPU</div>
                                 <strong>DeepSeek-R1-Distill-32B &amp; Qwen 3.8 27B</strong> &bull; Runs on RTX 4090/5090 or Mac M-series.
                             </div>
                             <div class="task-rec-item">
-                                <div class="task-rec-role">Dual GPU Workhorse</div>
-                                <strong>Llama 3.3 70B Instruct</strong> &bull; 405B quality on dual consumer GPUs.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="task-card">
-                    <div>
-                        <div class="task-title">🖱️ Desktop OS &amp; GUI Browser Automation</div>
-                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Controlling native software without APIs, clicking web buttons, filling legacy invoice portals.</p>
-                        <div class="task-recommendations">
-                            <div class="task-rec-item">
-                                <div class="task-rec-role">Native OS Agent API</div>
-                                <strong>Gemini 2.5 Computer Use &amp; Anthropic Computer Use</strong> &bull; Precise coordinate screenshot control.
+                                <div class="task-rec-role">Open Foundation Flagship</div>
+                                <strong>Llama 4 &amp; Llama 3.3 70B</strong> &bull; Full enterprise weights ownership.
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+    </main>
 
-    </div>
-
-    <!-- ==================== MODEL INSPECTION DRAWER ==================== -->
-    <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeModelDrawer(event)">
-        <div class="drawer-content" id="drawer-content" onclick="event.stopPropagation()">
-            <button class="drawer-close-btn" onclick="closeModelDrawer()">✕</button>
-            
-            <div>
-                <div id="drawer-lab" style="font-size:12px;font-weight:800;color:var(--accent-green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;"></div>
-                <h2 id="drawer-name" style="font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#ffffff;margin-bottom:8px;"></h2>
-                <div id="drawer-tags" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
-            </div>
-
-            <!-- Pricing Table -->
-            <div>
-                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">API Token Pricing (USD)</div>
-                <table class="pricing-table">
-                    <thead>
-                        <tr>
-                            <th>Input / 1M</th>
-                            <th>Output / 1M</th>
-                            <th>Cached Input / 1M</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td id="drawer-price-in">-</td>
-                            <td id="drawer-price-out">-</td>
-                            <td id="drawer-price-cached">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Specs Grid -->
-            <div>
-                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">Architecture &amp; Context Limits</div>
-                <div style="background:#121212;border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
-                    <div>
-                        <div style="color:var(--text-muted);font-size:11px;font-weight:700;text-transform:uppercase;">Context Window</div>
-                        <div id="drawer-context" style="color:#ffffff;font-weight:700;margin-top:2px;"></div>
-                    </div>
-                    <div>
-                        <div style="color:var(--text-muted);font-size:11px;font-weight:700;text-transform:uppercase;">Max Output Limit</div>
-                        <div id="drawer-max-out" style="color:#ffffff;font-weight:700;margin-top:2px;"></div>
-                    </div>
-                    <div style="grid-column: span 2;">
-                        <div style="color:var(--text-muted);font-size:11px;font-weight:700;text-transform:uppercase;">Architecture</div>
-                        <div id="drawer-arch" style="color:#ffffff;margin-top:2px;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Capabilities List -->
-            <div>
-                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">Supported Capabilities</div>
-                <div id="drawer-capabilities" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
-            </div>
-
-            <!-- Best Application -->
-            <div>
-                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">Best Suited For</div>
-                <div id="drawer-best" style="font-size:14px;color:var(--text-secondary);line-height:1.6;background:#121212;border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px;"></div>
-            </div>
-
-            <!-- Code / CLI Snippet -->
-            <div>
-                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">Quickstart Code / CLI Execution</div>
-                <div class="code-block-wrap">
-                    <button class="copy-code-btn" onclick="copyDrawerCode()">Copy</button>
-                    <div class="code-block" id="drawer-code"></div>
-                </div>
-            </div>
+    <!-- Model Detail Drawer -->
+    <div class="drawer-overlay" id="drawer-overlay" onclick="closeModelDrawer()"></div>
+    <div class="drawer" id="model-drawer">
+        <button class="drawer-close" onclick="closeModelDrawer()">&times;</button>
+        <div id="drawer-content">
+            <!-- Dynamically populated model detail -->
         </div>
     </div>
 
-    <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+    <!-- Application Logic -->
     <script>
+        // Injected Datasets
         const EMBEDDED_SEED = {seed_json_str};
         const FRONTIER_MODELS = {models_json_str};
         const MILESTONES_ARCHIVE = {milestones_json_str};
 
-        let supabaseClient = null;
         let allArticlesByDate = {{}};
         let availableDates = [];
         let selectedDate = null;
-        let selectedTopicFilter = 'all';
+        let selectedTopicFilter = "ALL";
+        let supabaseClient = null;
 
-        // 1. App Initialization
-        document.addEventListener("DOMContentLoaded", async () => {{
+        // 1. Initialization
+        window.addEventListener("DOMContentLoaded", async () => {{
             buildCalendarDates();
-            renderModelsGrid(FRONTIER_MODELS);
-            renderMilestones("yearly");
             loadSeedDataset();
+            renderBenchmarkChart();
+            filterModelsByLab("all");
+            switchMilestonePeriod("yearly");
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetTab = urlParams.get('tab') || window.location.hash.replace('#', '');
+            if (['feed', 'models', 'milestones', 'tasks'].includes(targetTab)) {{
+                switchView(targetTab);
+            }}
+            const hoverModel = urlParams.get('hover');
+            if (hoverModel) {{
+                setTimeout(() => {{
+                    const row = document.querySelector(`[data-model-id="${{hoverModel}}"]`);
+                    if (row) {{
+                        const rect = row.getBoundingClientRect();
+                        showBenchmarkTooltip({{ clientX: rect.left + 350, clientY: rect.top + 30 }}, hoverModel);
+                    }}
+                }}, 300);
+            }}
+            const labParam = urlParams.get('lab');
+            if (labParam) {{
+                filterModelsByLab(labParam);
+            }}
+            const inspectModel = urlParams.get('inspect');
+            if (inspectModel) {{
+                setTimeout(() => openModelDrawer(inspectModel), 300);
+            }}
             await initSupabaseConnection();
         }});
 
-        function switchTab(tabId) {{
-            document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-            document.querySelectorAll(".app-container > section").forEach(s => s.style.display = "none");
+        // 2. Navigation
+        function switchView(viewId) {{
+            document.querySelectorAll("nav.nav-bar .nav-btn").forEach(btn => btn.classList.remove("active"));
+            const activeTab = document.getElementById(`tab-${{viewId}}`);
+            if (activeTab) activeTab.classList.add("active");
 
-            document.getElementById(`tab-${{tabId}}`).classList.add("active");
-            document.getElementById(`view-${{tabId}}`).style.display = "block";
-            window.scrollTo({{ top: 0, behavior: "smooth" }});
+            document.getElementById("view-feed").style.display = (viewId === "feed") ? "block" : "none";
+            document.getElementById("view-models").style.display = (viewId === "models") ? "block" : "none";
+            document.getElementById("view-milestones").style.display = (viewId === "milestones") ? "block" : "none";
+            document.getElementById("view-tasks").style.display = (viewId === "tasks") ? "block" : "none";
+
+            window.scrollTo({{ top: 0, behavior: 'smooth' }});
         }}
 
-        // 2. Calendar Dates
+        // 3. Calendar Dates Setup (Strict 1-Day Windows)
         function buildCalendarDates() {{
-            const bar = document.getElementById("calendar-bar");
+            const bar = document.getElementById("date-filter-bar");
             bar.innerHTML = "";
             availableDates = [];
 
-            // Calculate last 7 calendar days
+            const now = new Date();
             for (let i = 0; i < 7; i++) {{
-                const d = new Date();
-                d.setUTCDate(d.getUTCDate() - i);
+                const d = new Date(now);
+                d.setDate(d.getDate() - i);
                 const isoStr = d.toISOString().split("T")[0];
                 availableDates.push(isoStr);
 
                 const chip = document.createElement("button");
                 chip.className = `date-chip ${{i === 0 ? 'active' : ''}}`;
                 chip.id = `date-chip-${{isoStr}}`;
-                
                 const label = (i === 0) ? "Today" : (i === 1) ? "Yesterday" : d.toLocaleDateString("en-US", {{ month: "short", day: "numeric", timeZone: "UTC" }});
                 chip.innerText = `${{label}} (${{isoStr}})`;
                 chip.onclick = () => selectCalendarDate(isoStr);
@@ -2084,6 +2255,14 @@ html_template = f"""<!DOCTYPE html>
             }}
 
             selectedDate = availableDates[0];
+            updateActiveDateLabel();
+        }}
+
+        function updateActiveDateLabel() {{
+            const lbl = document.getElementById("active-date-label");
+            if (lbl && selectedDate) {{
+                lbl.innerText = `Displaying articles published strictly on ${{selectedDate}}`;
+            }}
         }}
 
         function selectCalendarDate(dateStr) {{
@@ -2091,10 +2270,11 @@ html_template = f"""<!DOCTYPE html>
             document.querySelectorAll(".date-chip").forEach(c => c.classList.remove("active"));
             const activeChip = document.getElementById(`date-chip-${{dateStr}}`);
             if (activeChip) activeChip.classList.add("active");
+            updateActiveDateLabel();
             renderCurrentDateArticles();
         }}
 
-        // 3. Data Ingestion & Supabase
+        // 4. Data Loading & Supabase
         function loadSeedDataset() {{
             if (EMBEDDED_SEED && Object.keys(EMBEDDED_SEED).length > 0) {{
                 allArticlesByDate = {{ ...EMBEDDED_SEED }};
@@ -2105,7 +2285,6 @@ html_template = f"""<!DOCTYPE html>
         }}
 
         async function initSupabaseConnection() {{
-            // 1. Try Vercel auto-config
             try {{
                 const resp = await fetch('/api/config');
                 if (resp.ok) {{
@@ -2117,7 +2296,6 @@ html_template = f"""<!DOCTYPE html>
                 }}
             }} catch (e) {{}}
 
-            // 2. Try localStorage
             const localUrl = localStorage.getItem("ai_pulse_sb_url");
             const localKey = localStorage.getItem("ai_pulse_sb_key");
             if (localUrl && localKey) {{
@@ -2130,7 +2308,7 @@ html_template = f"""<!DOCTYPE html>
                 try {{
                     supabaseClient = window.supabase.createClient(url, key);
                     document.getElementById("header-sync-status").innerText = "Supabase Live";
-                    document.getElementById("header-sync-status").style.color = "var(--accent-green)";
+                    document.getElementById("header-sync-status").style.color = "var(--accent-secondary)";
                     fetchLiveSupabaseData();
                 }} catch (e) {{
                     console.error("Supabase connection error:", e);
@@ -2150,7 +2328,7 @@ html_template = f"""<!DOCTYPE html>
                     mergeSupabaseRows(data);
                 }}
             }} catch (e) {{
-                console.warn("Using local cache:", e);
+                console.warn("Using cached dataset:", e);
             }}
         }}
 
@@ -2169,19 +2347,25 @@ html_template = f"""<!DOCTYPE html>
                 }}
             }});
 
-            // Merge into allArticlesByDate
             for (const [dateKey, payload] of Object.entries(grouped)) {{
                 allArticlesByDate[dateKey] = payload;
             }}
 
-            renderCurrentDateArticles();
+            // If selectedDate has 0 articles but grouped has dates, select the newest date with articles
+            const datesWithData = Object.keys(grouped);
+            if (datesWithData.length > 0 && (!allArticlesByDate[selectedDate] || allArticlesByDate[selectedDate].top_10.length === 0)) {{
+                selectCalendarDate(datesWithData[0]);
+            }} else {{
+                renderCurrentDateArticles();
+            }}
         }}
 
-        // 4. Feed Rendering & Real-Time Filters
-        function setTopicFilter(tag) {{
+        // 5. Feed Filtering & Strict Date Isolation
+        function setTopicFilter(tag, btnEl) {{
             selectedTopicFilter = tag;
             document.querySelectorAll(".tag-chip").forEach(c => c.classList.remove("active"));
-            event.target.classList.add("active");
+            const target = btnEl || (window.event && window.event.target) || document.querySelector(".tag-chip");
+            if (target && target.classList) target.classList.add("active");
             filterArticles();
         }}
 
@@ -2195,25 +2379,16 @@ html_template = f"""<!DOCTYPE html>
             const query = document.getElementById("search-input").value.toLowerCase().trim();
 
             const dateData = allArticlesByDate[selectedDate] || {{ top_10: [], one_liners: [] }};
-            let featured = dateData.top_10 || [];
-            let oneliners = dateData.one_liners || [];
+            const featured = dateData.top_10 || [];
+            const oneliners = dateData.one_liners || [];
 
-            // If selected date is empty, fallback to most recent date available
-            if (featured.length === 0 && oneliners.length === 0) {{
-                const keys = Object.keys(allArticlesByDate);
-                if (keys.length > 0) {{
-                    featured = allArticlesByDate[keys[0]].top_10 || [];
-                    oneliners = allArticlesByDate[keys[0]].one_liners || [];
-                }}
-            }}
-
-            // Filter featured
+            // Strict single-day isolation: NO cross-date fallback!
             const filteredFeatured = featured.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter));
             const filteredOneLiners = oneliners.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter));
 
             // Render Featured Cards
             if (filteredFeatured.length === 0) {{
-                grid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">No featured stories found for the selected date and filters.</div>`;
+                grid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">No articles recorded for this calendar date (${{selectedDate}}). Run sync to fetch today's feed.</div>`;
             }} else {{
                 grid.innerHTML = filteredFeatured.map(art => renderArticleCard(art)).join("");
             }}
@@ -2221,63 +2396,42 @@ html_template = f"""<!DOCTYPE html>
             // Render 1-Liners
             document.getElementById("oneliner-count").innerText = `(${{filteredOneLiners.length}} items)`;
             if (filteredOneLiners.length === 0) {{
-                onelinersList.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:8px 0;">No matching quick-hits.</div>`;
+                onelinersList.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:8px 0;">No quick-hit items for this day.</div>`;
             }} else {{
                 onelinersList.innerHTML = filteredOneLiners.map(art => `
                     <div class="oneliner-item">
-                        <div class="oneliner-text">
+                        <span class="oneliner-dot">&bull;</span>
+                        <div>
                             <a href="${{art.url}}" target="_blank" class="oneliner-title">${{escapeHtml(art.title)}}</a>
-                            <span>— ${{escapeHtml(art.one_liner || art.summary || '')}}</span>
+                            <span class="oneliner-desc"> — ${{escapeHtml(art.one_liner || art.summary || '')}}</span>
                         </div>
-                        <span style="font-size:11px;color:var(--text-muted);white-space:nowrap;">${{escapeHtml(art.source)}}</span>
                     </div>
                 `).join("");
             }}
         }}
 
         function matchesSearchAndTopic(art, query, topic) {{
-            // 1. Topic match
-            if (topic !== 'all') {{
-                const tag = (art.category_tag || '').toLowerCase();
-                const title = (art.title || '').toLowerCase();
-                const text = (art.summary || '').toLowerCase();
-
-                if (topic === '#FrontierModels' && !tag.includes('frontier') && !title.includes('gemini') && !title.includes('claude') && !title.includes('openai') && !title.includes('deepseek')) return false;
-                if (topic === '#Reasoning' && !text.includes('reason') && !text.includes('think') && !text.includes('proof')) return false;
-                if (topic === '#AgenticCoding' && !tag.includes('dev') && !text.includes('code') && !text.includes('agent')) return false;
-                if (topic === '#LocalLLM' && !tag.includes('local') && !text.includes('quant') && !text.includes('gguf')) return false;
-                if (topic === '#Vision' && !text.includes('vision') && !text.includes('image') && !text.includes('video')) return false;
-                if (topic === '#Production' && !tag.includes('prod') && !text.includes('vllm') && !text.includes('deploy')) return false;
-                if (topic === '#Robotics' && !text.includes('robot') && !text.includes('dexterous') && !text.includes('manipulation')) return false;
-                if (topic === '#Breakthroughs' && !art.is_groundbreaking && !tag.includes('breakthrough')) return false;
-            }}
-
-            // 2. Query match
+            if (topic !== "ALL" && art.category_tag !== topic) return false;
             if (!query) return true;
-            const fullStr = `${{art.title}} ${{art.summary}} ${{art.dev_use_case}} ${{art.source}} ${{art.category}}`.toLowerCase();
+            const fullStr = `${{art.title || ''}} ${{art.summary || ''}} ${{art.source || ''}} ${{art.dev_use_case || ''}}`.toLowerCase();
             return fullStr.includes(query);
         }}
 
         function renderArticleCard(art) {{
-            const isBreakthrough = art.is_groundbreaking || art.category_tag === "BREAKTHROUGH";
-            const badgeClass = isBreakthrough ? "badge-breakthrough" : 
-                               art.category_tag === "DEV TOOLS" ? "badge-devtools" :
-                               art.category_tag === "LOCAL AI" ? "badge-local" :
-                               art.category_tag === "PRODUCTION" ? "badge-prod" : "badge-research";
-            const badgeLabel = isBreakthrough ? "🚨 BREAKTHROUGH" : (art.category || "AI RESEARCH");
+            let badgeClass = "badge-research";
+            let badgeLabel = art.category_tag || "RESEARCH";
+            if (art.category_tag === "BREAKTHROUGH" || art.is_groundbreaking) {{
+                badgeClass = "badge-breakthrough";
+                badgeLabel = "BREAKTHROUGH";
+            }} else if (art.category_tag === "DEV TOOLS") {{
+                badgeClass = "badge-devtools";
+                badgeLabel = "DEV TOOLS";
+            }} else if (art.category_tag === "LOCAL AI") {{
+                badgeClass = "badge-local";
+                badgeLabel = "LOCAL AI";
+            }}
 
-            const imgHtml = art.image_url ? `
-                <div class="article-img-wrap">
-                    <img src="${{art.image_url}}" class="article-img" alt="Visual Preview" onerror="this.parentElement.style.display='none'">
-                </div>
-            ` : "";
-
-            const capabilityHtml = art.new_capability || isBreakthrough ? `
-                <div class="capability-box">
-                    <div class="capability-label">⚡ New Capability Unlocked</div>
-                    ${{escapeHtml(art.new_capability || 'Zero-shot online camera pose formulation achieving state-of-the-art scalable 3D reconstruction without test-time depth sensors.')}}
-                </div>
-            ` : "";
+            const imgHtml = art.image_url ? `<img src="${{art.image_url}}" alt="${{escapeHtml(art.title)}}" class="article-thumb" onerror="this.style.display='none'">` : "";
 
             const useCaseHtml = art.dev_use_case ? `
                 <div class="usecase-box">
@@ -2286,46 +2440,140 @@ html_template = f"""<!DOCTYPE html>
                 </div>
             ` : "";
 
+            const dateStr = art.published_date ? art.published_date.split("T")[0] : selectedDate;
+
             return `
                 <article class="article-card">
                     <div>
                         <div class="card-top">
                             <span class="badge ${{badgeClass}}">${{badgeLabel}}</span>
-                            <span class="card-meta">${{escapeHtml(art.source)}}</span>
+                            <span class="card-source">${{escapeHtml(art.source)}}</span>
                         </div>
                         <a href="${{art.url}}" target="_blank" class="article-title">${{escapeHtml(art.title)}}</a>
                         ${{imgHtml}}
                         <p class="article-summary">${{escapeHtml(art.summary || '')}}</p>
-                        ${{capabilityHtml}}
                         ${{useCaseHtml}}
                     </div>
                     <div class="card-bottom">
-                        <span class="source-pill">${{art.published_date ? art.published_date.split("T")[0] : 'Today'}}</span>
-                        <a href="${{art.url}}" target="_blank" class="read-btn">Read Article ↗</a>
+                        <span>${{dateStr}}</span>
+                        <a href="${{art.url}}" target="_blank" class="read-link">Read Source ↗</a>
                     </div>
                 </article>
             `;
         }}
 
-        // 5. Frontier Models & Inspection Drawer
+        // 6. Interactive Benchmark Bar Chart
+        function renderBenchmarkChart() {{
+            const container = document.getElementById("benchmark-bars-container");
+            const sortedModels = [...FRONTIER_MODELS].sort((a, b) => b.benchmark_score - a.benchmark_score);
+            const maxScore = 90.0;
+
+            container.innerHTML = sortedModels.map((m, idx) => {{
+                const pct = ((m.benchmark_score / maxScore) * 100).toFixed(1);
+                return `
+                    <div class="benchmark-row" 
+                         data-model-id="${{m.id}}"
+                         onmouseenter="showBenchmarkTooltip(event, '${{m.id}}')"
+                         onmousemove="moveBenchmarkTooltip(event)"
+                         onmouseleave="hideBenchmarkTooltip()"
+                         onclick="openModelDrawer('${{m.id}}')">
+                        <div class="benchmark-row-meta">
+                            <span class="benchmark-rank">${{idx + 1}}</span>
+                            <span class="benchmark-model-name">${{escapeHtml(m.name.split('(')[0].trim())}}</span>
+                            <span class="benchmark-lab-pill">${{escapeHtml(m.lab)}}</span>
+                        </div>
+                        <div class="benchmark-bar-track">
+                            <div class="benchmark-bar-fill ${{m.is_frontier ? 'frontier' : ''}}" style="width: ${{pct}}%;"></div>
+                        </div>
+                        <div class="benchmark-score-val">${{m.benchmark_score}}%</div>
+                    </div>
+                `;
+            }}).join("");
+        }}
+
+        const tooltipEl = document.getElementById("benchmark-tooltip");
+
+        function showBenchmarkTooltip(e, modelId) {{
+            const m = FRONTIER_MODELS.find(x => x.id === modelId);
+            if (!m) return;
+
+            document.getElementById("tt-title").innerText = m.name;
+            document.getElementById("tt-score").innerText = `${{m.benchmark_score}}%`;
+            document.getElementById("tt-lab").innerText = `${{m.lab}} • ${{m.release_date || m.year}}`;
+            document.getElementById("tt-context").innerText = m.context_window;
+            document.getElementById("tt-pricing").innerText = `${{m.pricing_input.split('/')[0].trim()}} / ${{m.pricing_output.split('/')[0].trim()}}`;
+            document.getElementById("tt-release").innerText = m.release_date || m.year;
+            document.getElementById("tt-arch").innerText = m.architecture.split(' ')[0] + ' ' + (m.architecture.split(' ')[1] || '');
+            document.getElementById("tt-bestfor").innerText = m.best_for;
+            document.getElementById("tt-verdict").innerText = m.better_to_work_with || "Proven production reliability for engineering workflows.";
+
+            moveBenchmarkTooltip(e);
+            tooltipEl.classList.add("visible");
+        }}
+
+        function moveBenchmarkTooltip(e) {{
+            const padding = 15;
+            let x = e.clientX + padding;
+            let y = e.clientY + padding;
+
+            const tooltipWidth = 340;
+            const tooltipHeight = 280;
+
+            if (x + tooltipWidth > window.innerWidth) {{
+                x = e.clientX - tooltipWidth - padding;
+            }}
+            if (y + tooltipHeight > window.innerHeight) {{
+                y = e.clientY - tooltipHeight - padding;
+            }}
+
+            tooltipEl.style.left = `${{Math.max(10, x)}}px`;
+            tooltipEl.style.top = `${{Math.max(10, y)}}px`;
+        }}
+
+        function hideBenchmarkTooltip() {{
+            tooltipEl.classList.remove("visible");
+        }}
+
+        // 7. Models Grid: Frontier Flagships vs Full Org
+        function filterModelsByLab(labSlug, btnEl) {{
+            document.querySelectorAll(".lab-chip").forEach(c => c.classList.remove("active"));
+            const target = btnEl || (window.event && window.event.target) || document.querySelector(".lab-chip");
+            if (target && target.classList) target.classList.add("active");
+
+            const hintEl = document.getElementById("models-view-hint");
+
+            if (labSlug === "all") {{
+                // Show ONLY premier Frontier flagships in "All Labs" view
+                const frontierOnly = FRONTIER_MODELS.filter(m => m.is_frontier);
+                hintEl.innerHTML = `Showing <strong>Frontier Flagships</strong> (${{frontierOnly.length}} models). Click a specific lab chip above to see all models for that organization.`;
+                renderModelsGrid(frontierOnly);
+            }} else {{
+                // Show ALL models for that specific organization
+                const orgModels = FRONTIER_MODELS.filter(m => m.lab_slug === labSlug);
+                const labName = orgModels.length > 0 ? orgModels[0].lab : labSlug;
+                hintEl.innerHTML = `Showing all <strong>${{escapeHtml(labName)}}</strong> models (${{orgModels.length}} models).`;
+                renderModelsGrid(orgModels);
+            }}
+        }}
+
         function renderModelsGrid(models) {{
             const grid = document.getElementById("models-grid");
             grid.innerHTML = models.map(m => `
                 <div class="model-card" onclick="openModelDrawer('${{m.id}}')">
-                    <div class="model-top">
-                        <div class="model-lab-badge">${{escapeHtml(m.lab)}} &bull; ${{m.year}}</div>
+                    <div>
+                        <div class="model-lab-badge">${{escapeHtml(m.lab)}} &bull; ${{m.release_date || m.year}}</div>
                         <div class="model-name">${{escapeHtml(m.name)}}</div>
                         <div class="model-specs-row">
-                            <span class="badge badge-prod">${{escapeHtml(m.readiness)}}</span>
                             <span class="spec-pill">${{escapeHtml(m.context_window)}}</span>
-                            <span class="spec-pill">${{escapeHtml(m.license)}}</span>
+                            <span class="spec-pill">${{escapeHtml(m.readiness)}}</span>
+                            <span class="spec-pill">${{m.benchmark_score}}% SOTA</span>
                         </div>
                         <p class="model-best-for">${{escapeHtml(m.best_for)}}</p>
                     </div>
                     <div>
                         <div class="model-pricing-preview">
-                            <span>Input: ${{m.pricing_input}}</span>
-                            <span>Output: ${{m.pricing_output}}</span>
+                            <span>In: ${{m.pricing_input}}</span>
+                            <span>Out: ${{m.pricing_output}}</span>
                         </div>
                         <div class="inspect-action-text">Inspect Specs &amp; Code ➔</div>
                     </div>
@@ -2333,90 +2581,105 @@ html_template = f"""<!DOCTYPE html>
             `).join("");
         }}
 
-        function filterModelsByLab(labSlug) {{
-            document.querySelectorAll(".lab-chip").forEach(c => c.classList.remove("active"));
-            event.target.classList.add("active");
-
-            if (labSlug === "all") {{
-                renderModelsGrid(FRONTIER_MODELS);
-            }} else {{
-                const filtered = FRONTIER_MODELS.filter(m => m.lab_slug === labSlug);
-                renderModelsGrid(filtered);
-            }}
-        }}
-
+        // 8. Model Drawer
         function openModelDrawer(modelId) {{
             const m = FRONTIER_MODELS.find(x => x.id === modelId);
             if (!m) return;
 
-            document.getElementById("drawer-lab").innerText = `${{m.lab}} • ${{m.year}}`;
-            document.getElementById("drawer-name").innerText = m.name;
-            document.getElementById("drawer-tags").innerHTML = `
-                <span class="badge badge-prod">${{m.readiness}}</span>
-                <span class="spec-pill">${{m.license}}</span>
-                <span class="spec-pill">${{m.tag}}</span>
-            `;
+            const content = document.getElementById("drawer-content");
+            content.innerHTML = `
+                <div class="model-lab-badge">${{escapeHtml(m.lab)}} &bull; Released ${{m.release_date || m.year}}</div>
+                <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 12px; color: #ffffff;">${{escapeHtml(m.name)}}</h2>
+                
+                <div class="usecase-box" style="margin-bottom: 20px;">
+                    <div class="usecase-label">Is it better to work with? (Developer Verdict)</div>
+                    ${{escapeHtml(m.better_to_work_with || 'Exceptional tool-use capabilities and dependable production consistency.')}}
+                </div>
 
-            document.getElementById("drawer-price-in").innerText = m.pricing_input;
-            document.getElementById("drawer-price-out").innerText = m.pricing_output;
-            document.getElementById("drawer-price-cached").innerText = m.pricing_cached;
-
-            document.getElementById("drawer-context").innerText = m.context_window;
-            document.getElementById("drawer-max-out").innerText = m.max_output;
-            document.getElementById("drawer-arch").innerText = m.architecture;
-
-            document.getElementById("drawer-capabilities").innerHTML = m.capabilities.map(c => `
-                <span class="spec-pill" style="color:var(--accent-green);border:1px solid #1e3a24;background:#141d16;">✓ ${{c}}</span>
-            `).join("");
-
-            document.getElementById("drawer-best").innerText = m.best_for;
-            document.getElementById("drawer-code").innerText = m.api_snippet;
-
-            document.getElementById("drawer-backdrop").classList.add("open");
-            document.body.style.overflow = "hidden";
-        }}
-
-        function closeModelDrawer(event) {{
-            if (event && event.target.id !== "drawer-backdrop" && !event.target.classList.contains("drawer-close-btn")) {{
-                return;
-            }}
-            document.getElementById("drawer-backdrop").classList.remove("open");
-            document.body.style.overflow = "";
-        }}
-
-        function copyDrawerCode() {{
-            const code = document.getElementById("drawer-code").innerText;
-            navigator.clipboard.writeText(code);
-            const btn = document.querySelector(".copy-code-btn");
-            btn.innerText = "Copied!";
-            setTimeout(() => btn.innerText = "Copy", 1500);
-        }}
-
-        // 6. Milestones Period Rendering
-        function switchMilestonePeriod(periodType) {{
-            document.querySelectorAll(".period-chip").forEach(c => c.classList.remove("active"));
-            document.getElementById(`pchip-${{periodType}}`).classList.add("active");
-            renderMilestones(periodType);
-        }}
-
-        function renderMilestones(periodType) {{
-            const container = document.getElementById("milestones-container");
-            const items = MILESTONES_ARCHIVE[periodType] || [];
-
-            container.innerHTML = items.map(grp => `
-                <div class="milestone-group">
-                    <div class="milestone-group-title">
-                        <span>📅 ${{grp.period}} Landmark Top 3</span>
+                <div class="tooltip-grid" style="margin-bottom: 20px;">
+                    <div>
+                        <div class="tooltip-item-label">Context Window</div>
+                        <div class="tooltip-item-val">${{m.context_window}}</div>
                     </div>
                     <div>
-                        ${{grp.top3.map(m => `
+                        <div class="tooltip-item-label">Max Output Tokens</div>
+                        <div class="tooltip-item-val">${{m.max_output}}</div>
+                    </div>
+                    <div>
+                        <div class="tooltip-item-label">Input Pricing</div>
+                        <div class="tooltip-item-val">${{m.pricing_input}}</div>
+                    </div>
+                    <div>
+                        <div class="tooltip-item-label">Output Pricing</div>
+                        <div class="tooltip-item-val">${{m.pricing_output}}</div>
+                    </div>
+                    <div>
+                        <div class="tooltip-item-label">Cached Input</div>
+                        <div class="tooltip-item-val">${{m.pricing_cached}}</div>
+                    </div>
+                    <div>
+                        <div class="tooltip-item-label">Benchmark Score</div>
+                        <div class="tooltip-item-val">${{m.benchmark_score}}% (${{escapeHtml(m.benchmark_label)}})</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <div class="tooltip-item-label" style="margin-bottom: 6px;">Key Developer Capabilities</div>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                        ${{m.capabilities.map(c => `<span class="spec-pill">${{escapeHtml(c)}}</span>`).join("")}}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div class="tooltip-item-label" style="margin-bottom: 6px;">Best Used For</div>
+                    <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.5;">${{escapeHtml(m.best_for)}}</p>
+                </div>
+
+                <div>
+                    <div class="tooltip-item-label" style="margin-bottom: 6px;">Quick Integration Snippet</div>
+                    <div class="code-block">${{escapeHtml(m.api_snippet)}}</div>
+                </div>
+            `;
+
+            document.getElementById("drawer-overlay").classList.add("open");
+            document.getElementById("model-drawer").classList.add("open");
+        }}
+
+        function closeModelDrawer() {{
+            document.getElementById("drawer-overlay").classList.remove("open");
+            document.getElementById("model-drawer").classList.remove("open");
+        }}
+
+        // 9. Milestones Archive
+        function switchMilestonePeriod(periodKey) {{
+            document.querySelectorAll(".period-chip").forEach(c => c.classList.remove("active"));
+            const activeChip = document.getElementById(`pchip-${{periodKey}}`);
+            if (activeChip) activeChip.classList.add("active");
+
+            const container = document.getElementById("milestones-container");
+            const dataList = MILESTONES_ARCHIVE[periodKey] || [];
+
+            if (dataList.length === 0) {{
+                container.innerHTML = `<div class="empty-state">No milestones recorded for this period.</div>`;
+                return;
+            }}
+
+            container.innerHTML = dataList.map(group => `
+                <div class="milestone-group">
+                    <div class="milestone-group-title">
+                        <span>🏆 ${{group.period}}</span>
+                    </div>
+                    <div class="milestone-grid">
+                        ${{group.top3.map(item => `
                             <div class="milestone-card">
-                                <div class="milestone-header">
-                                    <span class="milestone-title">${{escapeHtml(m.title)}}</span>
-                                    <span class="milestone-lab">${{escapeHtml(m.lab)}} &bull; ${{m.date}}</span>
-                                </div>
-                                <div class="milestone-cap"><strong>Capability Unlocked:</strong> ${{escapeHtml(m.capability)}}</div>
-                                ${{m.impact ? `<div class="milestone-impact"><strong>Developer Impact:</strong> ${{escapeHtml(m.impact)}}</div>` : ''}}
+                                <div class="milestone-lab">${{escapeHtml(item.lab)}} &bull; ${{item.date}}</div>
+                                <div class="milestone-name">${{escapeHtml(item.title)}}</div>
+                                <p class="milestone-desc">${{escapeHtml(item.capability)}}</p>
+                                ${{item.impact ? `
+                                    <div class="milestone-impact">
+                                        <strong>Engineering Impact:</strong> ${{escapeHtml(item.impact)}}
+                                    </div>
+                                ` : ''}}
                             </div>
                         `).join("")}}
                     </div>
@@ -2440,4 +2703,4 @@ html_template = f"""<!DOCTYPE html>
 with open("index.html", "w") as f:
     f.write(html_template)
 
-print("✅ Successfully built Spotify-inspired index.html!")
+print("✅ Successfully built Minimalist Reader index.html!")
