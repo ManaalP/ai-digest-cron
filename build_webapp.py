@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 """
-build_webapp.py - Generates the production-grade, mobile & web-friendly
-AI Engineering & News Web Application (index.html).
+build_webapp.py - Generates the Spotify-inspired, authentic AI Pulse Web Application.
+Features:
+  - Spotify dark matte aesthetic (#121212 base, #181818 cards, #1ed760 emerald green accents).
+  - Hashtag topic filtering & live instant search.
+  - Complete Frontier Model Tracker grouped by Lab with interactive Model Inspection Drawer (pricing, context, specs, CLI commands).
+  - 3-Year Milestones Archive (Yearly, 6-Month, Quarterly, Monthly, and Weekly Top 3).
+  - Removal of arbitrary score numbers in favor of authentic capability and readiness badges.
+  - Quiet, clean Supabase integration without tacky header buttons.
 """
 
 import json
 from pathlib import Path
 
-# Load seed data
+# Load seed data if available
 seed_file = Path("seed_7days.json")
 if seed_file.exists():
     with open(seed_file, "r") as f:
@@ -17,44 +23,713 @@ else:
 
 seed_json_str = json.dumps(seed_data)
 
+# Milestone data for 3-Year Archive (2023 - 2026)
+MILESTONES_ARCHIVE = {
+    "yearly": [
+        {
+            "period": "2026",
+            "top3": [
+                {
+                    "title": "Hybrid Reasoning & Test-Time Compute Scaling Across Frontier Labs",
+                    "lab": "Anthropic & Google DeepMind",
+                    "capability": "Claude 3.7 Sonnet introduces continuous dynamic thinking budgets; Gemini 3.8 Flash achieves 1M-token multimodal test-time deliberation.",
+                    "date": "Q1 2026",
+                    "impact": "Engineers no longer choose between fast chat and reasoning models; thinking duration is dynamically controlled in production code."
+                },
+                {
+                    "title": "DeepSeek-R1 Open-Weights Revolution",
+                    "lab": "DeepSeek AI",
+                    "capability": "First open-weights 671B MoE model demonstrating that large-scale pure reinforcement learning achieves parity with OpenAI o1.",
+                    "date": "Early 2026",
+                    "impact": "Democratized frontier reasoning globally; sparked distillation into compact 14B/32B models run locally on consumer GPUs."
+                },
+                {
+                    "title": "Autonomous Computer-Use & Multi-Hour Coding Agents",
+                    "lab": "Anthropic, OpenAI & DeepMind",
+                    "capability": "Claude Opus 5 Auto Mode and Gemini 2.5 Computer Use perform complex, long-horizon desktop tasks and repository-wide refactoring autonomously.",
+                    "date": "Mid 2026",
+                    "impact": "Software engineering moves from code autocomplete to autonomous agent pair-programmers executing end-to-end PRs and unit tests."
+                }
+            ]
+        },
+        {
+            "period": "2025",
+            "top3": [
+                {
+                    "title": "The Reasoning Paradigm Shift (OpenAI o1 & o3)",
+                    "lab": "OpenAI",
+                    "capability": "Internal chain-of-thought scaling before generating output tokens, achieving 99th percentile on USA Math Olympiad and Codeforces.",
+                    "date": "Late 2025",
+                    "impact": "Established that test-time compute represents a new scaling dimension beyond pre-training parameters."
+                },
+                {
+                    "title": "Single-Node Frontier Distillation (Llama 3.3 70B & Qwen 2.5 Coder 32B)",
+                    "lab": "Meta AI & Alibaba",
+                    "capability": "Compression of 405B-grade foundational intelligence into 32B and 70B footprints runnable on dual workstation GPUs.",
+                    "date": "Mid 2025",
+                    "impact": "Enterprise self-hosted models achieve SOTA coding without cloud vendor lock-in or data sovereignty compromises."
+                },
+                {
+                    "title": "DeepSeek-V3 Multi-Head Latent Attention (MLA) Architecture",
+                    "lab": "DeepSeek AI",
+                    "capability": "Trained a 671B MoE model for just $6M using DualPipe and FP8 mixed precision, drastically lowering inference KV cache memory.",
+                    "date": "December 2025",
+                    "impact": "Re-architected enterprise LLM deployment economics, enabling 3x token throughput per server node."
+                }
+            ]
+        },
+        {
+            "period": "2024",
+            "top3": [
+                {
+                    "title": "AlphaFold 3: Modeling the Entire Biomolecular Universe",
+                    "lab": "Google DeepMind & Isomorphic Labs",
+                    "capability": "Predicts structures and interactions of proteins, DNA, RNA, ligands, and chemical modifications in a unified diffusion architecture.",
+                    "date": "May 2024",
+                    "impact": "Revolutionized drug discovery, oncology target identification, and synthetic biology worldwide."
+                },
+                {
+                    "title": "Claude 3.5 Sonnet: The Coding Benchmark SOTA",
+                    "lab": "Anthropic",
+                    "capability": "Achieved 64% on SWE-bench Verified alongside the launch of Artifacts, redefining the standard for software developer assistants.",
+                    "date": "June 2024",
+                    "impact": "Became the universal default model powering Cursor, Aider, Cline, and modern agentic engineering workflows."
+                },
+                {
+                    "title": "Million-Token Context & Generative World Models (Gemini 1.5 & Sora)",
+                    "lab": "Google DeepMind & OpenAI",
+                    "capability": "Gemini achieves production 1M-2M token context windows; Sora introduces space-time patch diffusion for physical world simulation.",
+                    "date": "Early 2024",
+                    "impact": "Unlocked whole-codebase in-context ingestion and physical spatial understanding."
+                }
+            ]
+        },
+        {
+            "period": "2023",
+            "top3": [
+                {
+                    "title": "GPT-4 Release: Multimodal Frontier Landmark",
+                    "lab": "OpenAI",
+                    "capability": "Mixture-of-Experts architecture passing the Uniform Bar Exam in 90th percentile, establishing modern foundation model baseline.",
+                    "date": "March 2023",
+                    "impact": "Catalyzed global generative AI deployment and the modern enterprise LLM industry."
+                },
+                {
+                    "title": "LLaMA Weights & Open Source Ecosystem Genesis",
+                    "lab": "Meta AI",
+                    "capability": "Release of efficient 7B/13B/65B foundation weights, leading to llama.cpp, quantization, and the open-source AI boom.",
+                    "date": "Spring 2023",
+                    "impact": "Proved that open-weights foundation models can run locally on consumer hardware (MacBooks, PCs)."
+                },
+                {
+                    "title": "Direct Preference Optimization (DPO) & RLHF Modernization",
+                    "lab": "Stanford University",
+                    "capability": "Eliminated the need for separate reward model training by directly optimizing policies via implicit reward formulation.",
+                    "date": "Summer 2023",
+                    "impact": "Simplified post-training alignment across virtually every open and proprietary model lab."
+                }
+            ]
+        }
+    ],
+    "half_yearly": [
+        {
+            "period": "2026 H1",
+            "top3": [
+                { "title": "Claude 3.7 Sonnet Dynamic Extended Thinking", "lab": "Anthropic", "capability": "Hybrid deliberate reasoning budget in production APIs.", "date": "Feb 2026" },
+                { "title": "DeepSeek-R1 Open MoE 671B Weights Release", "lab": "DeepSeek", "capability": "Open reasoning parity with closed US models.", "date": "Jan 2026" },
+                { "title": "Gemini 3.8 Flash 1M Multimodal Reasoning", "lab": "Google DeepMind", "capability": "Ultra-low latency audio/video reasoning at commodity pricing.", "date": "March 2026" }
+            ]
+        },
+        {
+            "period": "2025 H2",
+            "top3": [
+                { "title": "OpenAI o3 & o3-mini Reasoning Model Frontier", "lab": "OpenAI", "capability": "Competitive programming gold medal math performance.", "date": "Dec 2025" },
+                { "title": "DeepSeek-V3 671B DualPipe Architecture", "lab": "DeepSeek", "capability": "Multi-Head Latent Attention enabling ultra-low KV memory.", "date": "Dec 2025" },
+                { "title": "Llama 3.3 70B Instruct Single-Node SOTA", "lab": "Meta AI", "capability": "405B capabilities packed into single workstation inference.", "date": "Dec 2025" }
+            ]
+        },
+        {
+            "period": "2025 H1",
+            "top3": [
+                { "title": "OpenAI o1 Reasoning Previews", "lab": "OpenAI", "capability": "Inaugurated the test-time compute scaling paradigm.", "date": "Sept 2024 - Jan 2025" },
+                { "title": "Qwen 2.5 Coder 32B Open Champion", "lab": "Alibaba", "capability": "SOTA open coding model surpassing closed predecessors.", "date": "Nov 2024" },
+                { "title": "DeepSeek-V2 MoE Low-Cost Benchmark", "lab": "DeepSeek", "capability": "Pioneered extreme price reductions for cloud API inference.", "date": "May 2025" }
+            ]
+        },
+        {
+            "period": "2024 H2",
+            "top3": [
+                { "title": "Anthropic Computer Use API", "lab": "Anthropic", "capability": "Models directly control keyboards, mice, and GUI applications.", "date": "Oct 2024" },
+                { "title": "Llama 3.1 405B Frontier Open Release", "lab": "Meta AI", "capability": "First open model matching contemporary proprietary frontier.", "date": "July 2024" },
+                { "title": "FLUX.1 Open Source Image Diffusion", "lab": "Black Forest Labs", "capability": "Rectified flow transformer producing hyper-photorealistic imagery.", "date": "Aug 2024" }
+            ]
+        },
+        {
+            "period": "2024 H1",
+            "top3": [
+                { "title": "AlphaFold 3 Biomolecular Structure", "lab": "Google DeepMind", "capability": "Unified prediction of all life molecules (proteins, DNA, RNA).", "date": "May 2024" },
+                { "title": "Claude 3.5 Sonnet & Artifacts Launch", "lab": "Anthropic", "capability": "Revolutionized coding, SWE-bench and interactive development.", "date": "June 2024" },
+                { "title": "Gemini 1.5 Pro Million-Token Context", "lab": "Google DeepMind", "capability": "First production architecture processing 1M tokens effortlessly.", "date": "Feb 2024" }
+            ]
+        }
+    ],
+    "quarterly": [
+        {
+            "period": "2026 Q1",
+            "top3": [
+                { "title": "Claude 3.7 Sonnet (Hybrid Thinking)", "lab": "Anthropic", "capability": "Developer-tunable thinking tokens.", "date": "Feb 2026" },
+                { "title": "DeepSeek-R1 Open MoE Launch", "lab": "DeepSeek", "capability": "Open weights reasoning at $0.55/1M.", "date": "Jan 2026" },
+                { "title": "Gemini 3.8 Flash Multimodal Agent", "lab": "Google DeepMind", "capability": "1M context high-speed reasoning.", "date": "March 2026" }
+            ]
+        },
+        {
+            "period": "2025 Q4",
+            "top3": [
+                { "title": "OpenAI o3 Frontier Launch", "lab": "OpenAI", "capability": "Test-time compute breakthrough on hard reasoning.", "date": "Dec 2025" },
+                { "title": "DeepSeek-V3 671B MoE", "lab": "DeepSeek", "capability": "SOTA architecture trained on low budget.", "date": "Dec 2025" },
+                { "title": "Llama 3.3 70B Release", "lab": "Meta AI", "capability": "Workstation single-node frontier model.", "date": "Dec 2025" }
+            ]
+        },
+        {
+            "period": "2025 Q3",
+            "top3": [
+                { "title": "OpenAI o1 Reasoning Launch", "lab": "OpenAI", "capability": "First public test-time compute scaling model.", "date": "Sept 2024" },
+                { "title": "Qwen 2.5 Coding Ecosystem", "lab": "Alibaba", "capability": "Apache 2.0 weights dominating local coding.", "date": "Sept 2025" },
+                { "title": "Mistral Large 2 (123B)", "lab": "Mistral AI", "capability": "Multilingual open weights frontier.", "date": "July 2025" }
+            ]
+        },
+        {
+            "period": "2024 Q4",
+            "top3": [
+                { "title": "Anthropic Computer Use", "lab": "Anthropic", "capability": "Direct desktop and terminal agentic control.", "date": "Oct 2024" },
+                { "title": "Llama 3.2 Multimodal Vision", "lab": "Meta AI", "capability": "Edge and vision open weights models.", "date": "Sept 2024" },
+                { "title": "FLUX.1 Schnell & Dev Models", "lab": "Black Forest Labs", "capability": "Open image generation dominance.", "date": "Aug 2024" }
+            ]
+        },
+        {
+            "period": "2024 Q2",
+            "top3": [
+                { "title": "AlphaFold 3 Breakthrough", "lab": "Google DeepMind", "capability": "Comprehensive biomolecular modeling.", "date": "May 2024" },
+                { "title": "Claude 3.5 Sonnet Release", "lab": "Anthropic", "capability": "SOTA coding assistant revolution.", "date": "June 2024" },
+                { "title": "Llama 3 8B & 70B Release", "lab": "Meta AI", "capability": "New generation open source baseline.", "date": "April 2024" }
+            ]
+        }
+    ],
+    "monthly": [
+        { "period": "2026-03", "top3": [
+            { "title": "Gemini 3.8 Flash General Availability", "lab": "Google DeepMind", "capability": "Sub-200ms 1M context multimodal reasoning.", "date": "2026-03-01" },
+            { "title": "Gemma 4 31B Open Weights", "lab": "Google DeepMind", "capability": "Dense open-weights model matching proprietary 70B.", "date": "2026-03-03" },
+            { "title": "Qwen 3.8 27B Workstation Optimization", "lab": "Alibaba", "capability": "Ternary base-3 packing reducing VRAM by 22%.", "date": "2026-03-05" }
+        ]},
+        { "period": "2026-02", "top3": [
+            { "title": "Claude 3.7 Sonnet Hybrid Extended Thinking", "lab": "Anthropic", "capability": "Continuous reasoning dial from 0 to 64K tokens.", "date": "2026-02-24" },
+            { "title": "Grok 3 Colossus Supercluster Launch", "lab": "xAI", "capability": "100K H100/H200 cluster trained frontier model.", "date": "2026-02-17" },
+            { "title": "Veo 3.1 Fast Video Generation", "lab": "Google DeepMind", "capability": "Instant 1080p generative video for creator pipelines.", "date": "2026-02-10" }
+        ]},
+        { "period": "2026-01", "top3": [
+            { "title": "DeepSeek-R1 Open Reasoning Release", "lab": "DeepSeek AI", "capability": "Pure RL reasoning model with MIT weights.", "date": "2026-01-20" },
+            { "title": "Codestral 2501 Specialized Coding", "lab": "Mistral AI", "capability": "Fill-in-the-middle code completion benchmark leader.", "date": "2026-01-14" },
+            { "title": "Deep Research Max Autonomous Research", "lab": "Google DeepMind", "capability": "Multi-hour web & paper exploration agent.", "date": "2026-01-08" }
+        ]},
+        { "period": "2025-12", "top3": [
+            { "title": "OpenAI o3 High-Effort Reasoning", "lab": "OpenAI", "capability": "SOTA competitive programming performance.", "date": "2025-12-20" },
+            { "title": "DeepSeek-V3 671B MoE Release", "lab": "DeepSeek AI", "capability": "Groundbreaking FP8 training & MLA architecture.", "date": "2025-12-26" },
+            { "title": "Llama 3.3 70B Instruct Release", "lab": "Meta AI", "capability": "405B capabilities on a single node.", "date": "2025-12-06" }
+        ]},
+        { "period": "2025-11", "top3": [
+            { "title": "Qwen 2.5 Coder 32B Open Release", "lab": "Alibaba", "capability": "Ecosystem default open coding model.", "date": "2025-11-12" },
+            { "title": "Claude 3.5 Haiku Low-Latency API", "lab": "Anthropic", "capability": "Fastest coding & categorization model.", "date": "2025-11-04" },
+            { "title": "Pixtral Large 124B Multimodal", "lab": "Mistral AI", "capability": "High-resolution multimodal document parsing.", "date": "2025-11-18" }
+        ]},
+        { "period": "2025-10", "top3": [
+            { "title": "Anthropic Computer Use API Public Beta", "lab": "Anthropic", "capability": "Direct desktop interaction & agentic control.", "date": "2025-10-22" },
+            { "title": "Gemini 2.5 Flash Native Audio Streaming", "lab": "Google DeepMind", "capability": "Real-time bidirectional speech with voice VAD.", "date": "2025-10-15" },
+            { "title": "Llama 3.2 Vision 11B & 90B", "lab": "Meta AI", "capability": "Open multimodal edge models.", "date": "2025-10-01" }
+        ]}
+    ],
+    "weekly": [
+        {
+            "period": "Current Week (Sept 2026)",
+            "top3": [
+                { "title": "Scal3R Online Multi-View 3D Reconstruction", "lab": "Hugging Face / Research", "capability": "Multi-relative pose query enabling zero-shot 3D spatial reconstruction.", "date": "2026-09-05" },
+                { "title": "RoboTok Internet-Scale Dexterous Manipulation", "lab": "Robotics Consortium", "capability": "Unified tokenized data engine for human demonstration retrieval and robotic manipulation.", "date": "2026-09-05" },
+                { "title": "Base-3 Ternary GGUF Packing (-22% VRAM)", "lab": "LocalLLaMA / Open Source", "capability": "Lossless ternary quantization running 27B models on 12GB VRAM.", "date": "2026-09-05" }
+            ]
+        },
+        {
+            "period": "Last Week (Late Aug 2026)",
+            "top3": [
+                { "title": "Gemini 3.8 Flash High-Speed Reasoning Dial", "lab": "Google DeepMind", "capability": "Dynamic thinking effort parameter across Gemini API.", "date": "2026-08-28" },
+                { "title": "Claude Code Auto Mode Sandbox Auditing", "lab": "Simon Willison / Dev Community", "capability": "Zero-intervention terminal agent security boundaries.", "date": "2026-08-27" },
+                { "title": "vLLM Chunked Prefill Memory Optimization", "lab": "vLLM Project", "capability": "50% reduction in KV cache allocation spikes under concurrency.", "date": "2026-08-25" }
+            ]
+        }
+    ]
+}
+
+# Frontier Model Master Database (All Labs, updated 2025/2026 with pricing, context, capabilities)
+FRONTIER_MODELS = [
+    # Google DeepMind
+    {
+        "id": "gemini-3-8-flash",
+        "name": "Gemini 3.8 Flash",
+        "lab": "Google DeepMind",
+        "lab_slug": "google",
+        "year": "2026",
+        "license": "Proprietary API",
+        "context_window": "1,000,000 tokens",
+        "max_output": "65,536 tokens",
+        "pricing_input": "$0.10 / 1M",
+        "pricing_output": "$0.40 / 1M",
+        "pricing_cached": "$0.025 / 1M",
+        "architecture": "High-Efficiency Multimodal MoE",
+        "readiness": "Frontier SOTA",
+        "tag": "AGENTIC REASONING",
+        "capabilities": ["Dynamic Extended Thinking", "Multimodal Video/Audio", "1M Context", "Function Calling", "JSON Mode", "Live Audio Streaming"],
+        "best_for": "Fast autonomous agents, full-codebase context, multimodal audio/video analysis at high throughput.",
+        "api_snippet": "from google import genai\nclient = genai.Client()\nresponse = client.models.generate_content(\n    model='gemini-3.8-flash',\n    contents='Analyze this entire codebase'\n)"
+    },
+    {
+        "id": "gemini-3-1-pro",
+        "name": "Gemini 3.1 Pro",
+        "lab": "Google DeepMind",
+        "lab_slug": "google",
+        "year": "2026",
+        "license": "Proprietary API",
+        "context_window": "2,000,000 tokens",
+        "max_output": "65,536 tokens",
+        "pricing_input": "$1.25 / 1M",
+        "pricing_output": "$5.00 / 1M",
+        "pricing_cached": "$0.31 / 1M",
+        "architecture": "Deep Frontier Multimodal",
+        "readiness": "Flagship Pro",
+        "tag": "MASSIVE CONTEXT",
+        "capabilities": ["2M Token Ingestion", "Deep Reasoning", "Complex Code Generation", "Multimodal Vision & Video", "High Precision Math"],
+        "best_for": "Exhaustive legal & scientific document synthesis, hours of high-res video parsing, complex system architecture.",
+        "api_snippet": "response = client.models.generate_content(\n    model='gemini-3.1-pro',\n    contents=[large_video_file, 'Summarize all key events']\n)"
+    },
+    {
+        "id": "gemini-2-5-computer-use",
+        "name": "Gemini 2.5 Computer Use",
+        "lab": "Google DeepMind",
+        "lab_slug": "google",
+        "year": "2026",
+        "license": "Proprietary API",
+        "context_window": "131,072 tokens",
+        "max_output": "65,536 tokens",
+        "pricing_input": "$0.80 / 1M",
+        "pricing_output": "$3.20 / 1M",
+        "pricing_cached": "$0.20 / 1M",
+        "architecture": "Visual Agentic Action Model",
+        "readiness": "Production Ready",
+        "tag": "OS AUTOMATION",
+        "capabilities": ["Direct Desktop Mouse/Key", "Browser Automation", "Screenshot Grounding", "Multi-Step Action Execution"],
+        "best_for": "Automating legacy desktop software, end-to-end web browser testing, RPA workflows.",
+        "api_snippet": "# Direct OS Agent API\nresponse = client.models.generate_content(\n    model='gemini-2.5-computer-use-preview',\n    contents=['Fill the invoice spreadsheet in LibreOffice']\n)"
+    },
+    {
+        "id": "gemma-4-31b",
+        "name": "Gemma 4 31B",
+        "lab": "Google DeepMind",
+        "lab_slug": "google",
+        "year": "2026",
+        "license": "Open Weights (Gemma)",
+        "context_window": "128,000 tokens",
+        "max_output": "16,384 tokens",
+        "pricing_input": "Free / Self-Hosted",
+        "pricing_output": "Free / Self-Hosted",
+        "pricing_cached": "N/A",
+        "architecture": "Dense 31B Parameter",
+        "readiness": "Open Weights",
+        "tag": "LOCAL ENTERPRISE",
+        "capabilities": ["Local Workstation Run", "Instruction Tuned", "Ollama Native", "Full Privacy", "Commercial Friendly"],
+        "best_for": "Air-gapped enterprise deployments, private document classification, local workstation coding.",
+        "api_snippet": "# CLI Command\nollama run gemma4:31b"
+    },
+
+    # OpenAI
+    {
+        "id": "openai-o3",
+        "name": "OpenAI o3",
+        "lab": "OpenAI",
+        "lab_slug": "openai",
+        "year": "2025",
+        "license": "Proprietary API",
+        "context_window": "200,000 tokens",
+        "max_output": "100,000 tokens",
+        "pricing_input": "$15.00 / 1M",
+        "pricing_output": "$60.00 / 1M",
+        "pricing_cached": "$3.75 / 1M",
+        "architecture": "Test-Time Compute Scaling",
+        "readiness": "Frontier SOTA",
+        "tag": "DEEP REASONING",
+        "capabilities": ["Deliberate Internal Thought", "Competitive Programming Gold", "PhD Level Science", "Codeforces Master"],
+        "best_for": "Complex mathematical theorem proofs, hard algorithmic optimization, critical security auditing.",
+        "api_snippet": "from openai import OpenAI\nclient = OpenAI()\nresp = client.chat.completions.create(\n    model='o3',\n    messages=[{'role': 'user', 'content': 'Prove the conjecture'}]\n)"
+    },
+    {
+        "id": "openai-o3-mini",
+        "name": "OpenAI o3-mini",
+        "lab": "OpenAI",
+        "lab_slug": "openai",
+        "year": "2025",
+        "license": "Proprietary API",
+        "context_window": "200,000 tokens",
+        "max_output": "100,000 tokens",
+        "pricing_input": "$1.10 / 1M",
+        "pricing_output": "$4.40 / 1M",
+        "pricing_cached": "$0.55 / 1M",
+        "architecture": "Efficient Reasoning Model",
+        "readiness": "Cost Leader",
+        "tag": "FAST REASONING",
+        "capabilities": ["Configurable Thinking Budget (low/med/high)", "Fast Coding", "Function Calling with Thought", "Math SOTA"],
+        "best_for": "Production code evaluation, automated debugging pipelines, real-time math tutor.",
+        "api_snippet": "resp = client.chat.completions.create(\n    model='o3-mini',\n    reasoning_effort='medium',\n    messages=[{'role': 'user', 'content': 'Refactor this algorithm'}]\n)"
+    },
+    {
+        "id": "gpt-4-5",
+        "name": "GPT-4.5 (Orion)",
+        "lab": "OpenAI",
+        "lab_slug": "openai",
+        "year": "2025",
+        "license": "Proprietary API",
+        "context_window": "128,000 tokens",
+        "max_output": "16,384 tokens",
+        "pricing_input": "$75.00 / 1M",
+        "pricing_output": "$150.00 / 1M",
+        "pricing_cached": "$37.50 / 1M",
+        "architecture": "Massive Dense Flagship",
+        "readiness": "Flagship Pro",
+        "tag": "WORLD KNOWLEDGE",
+        "capabilities": ["Nuanced Writing", "Broad World Knowledge", "Emotional Intelligence", "Multimodal Vision"],
+        "best_for": "Executive strategy briefs, high-touch customer consultation, nuanced literary translation.",
+        "api_snippet": "resp = client.chat.completions.create(\n    model='gpt-4.5-preview',\n    messages=[{'role': 'user', 'content': 'Draft executive market analysis'}]\n)"
+    },
+
+    # Anthropic
+    {
+        "id": "claude-3-7-sonnet",
+        "name": "Claude 3.7 Sonnet",
+        "lab": "Anthropic",
+        "lab_slug": "anthropic",
+        "year": "2026",
+        "license": "Proprietary API",
+        "context_window": "200,000 tokens",
+        "max_output": "64,000 tokens",
+        "pricing_input": "$3.00 / 1M",
+        "pricing_output": "$15.00 / 1M",
+        "pricing_cached": "$0.30 / 1M",
+        "architecture": "Hybrid Extended Thinking Dense",
+        "readiness": "Frontier SOTA",
+        "tag": "HYBRID REASONING",
+        "capabilities": ["Dynamic Thinking Budget (0-64K)", "SWE-bench Verified Leader", "Agentic Terminal Tool Use", "Computer Control"],
+        "best_for": "Autonomous coding agents (Claude Code, Cursor), whole-repository refactoring, difficult debugging.",
+        "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='claude-3-7-sonnet-20260219',\n    max_tokens=64000,\n    thinking={'type': 'enabled', 'budget_tokens': 16000},\n    messages=[{'role': 'user', 'content': 'Write full compiler test suite'}]\n)"
+    },
+    {
+        "id": "claude-opus-5",
+        "name": "Claude Opus 5 (Auto Mode)",
+        "lab": "Anthropic",
+        "lab_slug": "anthropic",
+        "year": "2026",
+        "license": "Proprietary API",
+        "context_window": "200,000 tokens",
+        "max_output": "64,000 tokens",
+        "pricing_input": "$15.00 / 1M",
+        "pricing_output": "$75.00 / 1M",
+        "pricing_cached": "$1.50 / 1M",
+        "architecture": "Massive Long-Horizon Flagship",
+        "readiness": "Flagship Pro",
+        "tag": "AUTONOMOUS AGENT",
+        "capabilities": ["Multi-Hour Task Execution", "Repository Architecture Migration", "Deep Formal Verification"],
+        "best_for": "Fully autonomous multi-file refactoring, enterprise security auditing, legacy codebase migrations.",
+        "api_snippet": "# Claude Opus 5 with Autonomous Execution\nresp = client.messages.create(\n    model='claude-opus-5',\n    max_tokens=64000,\n    messages=[{'role': 'user', 'content': 'Migrate our monolith to microservices'}]\n)"
+    },
+    {
+        "id": "claude-3-5-haiku",
+        "name": "Claude 3.5 Haiku",
+        "lab": "Anthropic",
+        "lab_slug": "anthropic",
+        "year": "2025",
+        "license": "Proprietary API",
+        "context_window": "200,000 tokens",
+        "max_output": "8,192 tokens",
+        "pricing_input": "$0.80 / 1M",
+        "pricing_output": "$4.00 / 1M",
+        "pricing_cached": "$0.08 / 1M",
+        "architecture": "Low-Latency Dense",
+        "readiness": "Cost Leader",
+        "tag": "FAST INFERENCE",
+        "capabilities": ["Sub-150ms First Token", "Structured Extraction", "High-Volume Filtering", "High Accuracy Tool Use"],
+        "best_for": "High-concurrency API backends, real-time code completions, user request routing.",
+        "api_snippet": "resp = client.messages.create(\n    model='claude-3-5-haiku-20241022',\n    max_tokens=2048,\n    messages=[{'role': 'user', 'content': 'Classify this intent'}]\n)"
+    },
+
+    # DeepSeek
+    {
+        "id": "deepseek-r1",
+        "name": "DeepSeek-R1",
+        "lab": "DeepSeek AI",
+        "lab_slug": "deepseek",
+        "year": "2026",
+        "license": "Open Weights (MIT)",
+        "context_window": "128,000 tokens",
+        "max_output": "64,000 tokens",
+        "pricing_input": "$0.55 / 1M",
+        "pricing_output": "$2.19 / 1M",
+        "pricing_cached": "$0.14 / 1M",
+        "architecture": "671B MoE (37B active)",
+        "readiness": "Open Weights",
+        "tag": "OPEN REASONING",
+        "capabilities": ["Pure RL Chain-of-Thought", "MIT Open License", "AIME 79.8% SOTA", "MATH-500 97.3%"],
+        "best_for": "Self-hosted high-reasoning, low-cost enterprise analytics, uncensored algorithmic research.",
+        "api_snippet": "# Ollama Self-Hosted Run\nollama run deepseek-r1:671b\n\n# Or DeepSeek API\nclient = OpenAI(api_key='...', base_url='https://api.deepseek.com')\nresp = client.chat.completions.create(model='deepseek-reasoner', messages=[...])"
+    },
+    {
+        "id": "deepseek-v3",
+        "name": "DeepSeek-V3",
+        "lab": "DeepSeek AI",
+        "lab_slug": "deepseek",
+        "year": "2025",
+        "license": "Open Weights (MIT)",
+        "context_window": "128,000 tokens",
+        "max_output": "8,192 tokens",
+        "pricing_input": "$0.14 / 1M",
+        "pricing_output": "$0.28 / 1M",
+        "pricing_cached": "$0.014 / 1M",
+        "architecture": "671B MoE (Multi-Head Latent Attention)",
+        "readiness": "Cost Leader",
+        "tag": "ULTRA LOW COST",
+        "capabilities": ["Multi-Head Latent Attention (MLA)", "FP8 Mixed Precision Native", "60 TPS Throughput"],
+        "best_for": "Massive document indexing, cost-critical summarization, batch ETL transformation.",
+        "api_snippet": "# Run via vLLM\nvllm serve deepseek-ai/DeepSeek-V3 --trust-remote-code"
+    },
+    {
+        "id": "deepseek-r1-distill-32b",
+        "name": "DeepSeek-R1-Distill-32B",
+        "lab": "DeepSeek AI",
+        "lab_slug": "deepseek",
+        "year": "2026",
+        "license": "Open Weights (MIT)",
+        "context_window": "128,000 tokens",
+        "max_output": "16,384 tokens",
+        "pricing_input": "Free / Self-Hosted",
+        "pricing_output": "Free / Self-Hosted",
+        "pricing_cached": "N/A",
+        "architecture": "Dense 32B Distilled",
+        "readiness": "Open Weights",
+        "tag": "LOCAL SOTA",
+        "capabilities": ["Single RTX 4090 / 5090 Run", "o1-mini Grade Math", "Qwen Base Distillation"],
+        "best_for": "Running local reasoning on gaming workstations or single cloud instances.",
+        "api_snippet": "# Run locally in terminal\nollama run deepseek-r1:32b"
+    },
+
+    # Meta AI
+    {
+        "id": "llama-4-behemoth",
+        "name": "Llama 4",
+        "lab": "Meta AI",
+        "lab_slug": "meta",
+        "year": "2026",
+        "license": "Open Weights (Llama Community)",
+        "context_window": "128,000 tokens",
+        "max_output": "16,384 tokens",
+        "pricing_input": "Free / Self-Hosted",
+        "pricing_output": "Free / Self-Hosted",
+        "pricing_cached": "N/A",
+        "architecture": "Multimodal Frontier MoE",
+        "readiness": "Frontier SOTA",
+        "tag": "OPEN FOUNDATION",
+        "capabilities": ["Native Agentic Tool Use", "Multimodal Vision & Audio", "Self-Hosted Enterprise Support"],
+        "best_for": "Enterprise foundation fine-tuning, private on-premise cloud infrastructure.",
+        "api_snippet": "vllm serve meta-llama/Llama-4 --tensor-parallel-size 4"
+    },
+    {
+        "id": "llama-3-3-70b",
+        "name": "Llama 3.3 70B Instruct",
+        "lab": "Meta AI",
+        "lab_slug": "meta",
+        "year": "2025",
+        "license": "Open Weights (Llama Community)",
+        "context_window": "128,000 tokens",
+        "max_output": "8,192 tokens",
+        "pricing_input": "Free / Self-Hosted",
+        "pricing_output": "Free / Self-Hosted",
+        "pricing_cached": "N/A",
+        "architecture": "Dense 70B Parameter",
+        "readiness": "Production Ready",
+        "tag": "WORKSTATION WORKHORSE",
+        "capabilities": ["405B Performance on 70B VRAM", "Multilingual 8+ Languages", "High Coding Accuracy"],
+        "best_for": "Standard enterprise private deployments on dual RTX 4090 or single A100/H100.",
+        "api_snippet": "ollama run llama3.3:70b"
+    },
+
+    # xAI
+    {
+        "id": "grok-3",
+        "name": "Grok 3 (Colossus)",
+        "lab": "xAI",
+        "lab_slug": "xai",
+        "year": "2025",
+        "license": "Proprietary API",
+        "context_window": "256,000 tokens",
+        "max_output": "32,768 tokens",
+        "pricing_input": "$5.00 / 1M",
+        "pricing_output": "$15.00 / 1M",
+        "pricing_cached": "$1.25 / 1M",
+        "architecture": "Mega-Scale Dense (Colossus Cluster)",
+        "readiness": "Frontier SOTA",
+        "tag": "REAL-TIME WORLD KNOWLEDGE",
+        "capabilities": ["Colossus Supercluster Trained", "Real-Time World Knowledge", "High Raw Coding Throughput"],
+        "best_for": "Real-time market intelligence, rapid code synthesis, uncensored open exploration.",
+        "api_snippet": "# xAI API Call\nclient = OpenAI(api_key='...', base_url='https://api.x.ai/v1')\nresp = client.chat.completions.create(model='grok-3', messages=[...])"
+    },
+    {
+        "id": "grok-3-think",
+        "name": "Grok 3 Think",
+        "lab": "xAI",
+        "lab_slug": "xai",
+        "year": "2025",
+        "license": "Proprietary API",
+        "context_window": "256,000 tokens",
+        "max_output": "32,768 tokens",
+        "pricing_input": "$8.00 / 1M",
+        "pricing_output": "$24.00 / 1M",
+        "pricing_cached": "$2.00 / 1M",
+        "architecture": "Deliberation Reasoning Engine",
+        "readiness": "Frontier SOTA",
+        "tag": "DEEP DELIBERATION",
+        "capabilities": ["Extended Reasoning Steps", "Formal Logic Verification", "Mathematical Proof Construction"],
+        "best_for": "Hard scientific verification, algorithmic dispute resolution, complex software debugging.",
+        "api_snippet": "resp = client.chat.completions.create(model='grok-3-think', messages=[...])"
+    },
+
+    # Alibaba (Qwen)
+    {
+        "id": "qwen-3-8-27b",
+        "name": "Qwen 3.8 27B",
+        "lab": "Alibaba",
+        "lab_slug": "alibaba",
+        "year": "2026",
+        "license": "Open Weights (Apache 2.0)",
+        "context_window": "128,000 tokens",
+        "max_output": "16,384 tokens",
+        "pricing_input": "Free / Self-Hosted",
+        "pricing_output": "Free / Self-Hosted",
+        "pricing_cached": "N/A",
+        "architecture": "Dense 27B Workstation Optimized",
+        "readiness": "Open Weights",
+        "tag": "COMPACT WORKSTATION",
+        "capabilities": ["Ternary Base-3 Packing (-22% VRAM)", "Strix / Mac Silicon Native", "High Efficiency Inference"],
+        "best_for": "Developers running local models on laptops (M3/M4 or AMD Strix) without GPU fan noise.",
+        "api_snippet": "ollama run qwen3.8:27b"
+    },
+    {
+        "id": "qwen-2-5-coder-32b",
+        "name": "Qwen 2.5 Coder 32B",
+        "lab": "Alibaba",
+        "lab_slug": "alibaba",
+        "year": "2025",
+        "license": "Open Weights (Apache 2.0)",
+        "context_window": "128,000 tokens",
+        "max_output": "16,384 tokens",
+        "pricing_input": "Free / Self-Hosted",
+        "pricing_output": "Free / Self-Hosted",
+        "pricing_cached": "N/A",
+        "architecture": "Dense 32B Parameter",
+        "readiness": "Benchmark Winner",
+        "tag": "OPEN SOTA CODING",
+        "capabilities": ["HumanEval 92.7%", "LiveCodeBench Leader", "Apache 2.0 Permissive", "Fill-in-the-Middle"],
+        "best_for": "Standard local backend for Continue.dev, Cline, and private enterprise code generation.",
+        "api_snippet": "ollama run qwen2.5-coder:32b"
+    },
+
+    # Mistral AI
+    {
+        "id": "mistral-large-2",
+        "name": "Mistral Large 2 (123B)",
+        "lab": "Mistral AI",
+        "lab_slug": "mistral",
+        "year": "2025",
+        "license": "Mistral Research / API",
+        "context_window": "128,000 tokens",
+        "max_output": "16,384 tokens",
+        "pricing_input": "$2.00 / 1M",
+        "pricing_output": "$6.00 / 1M",
+        "pricing_cached": "$0.50 / 1M",
+        "architecture": "123B Dense Multilingual",
+        "readiness": "Production Ready",
+        "tag": "EUROPEAN ENTERPRISE",
+        "capabilities": ["80+ Programming Languages", "GDPR Native Compliance", "Function Calling SOTA", "Strong Multilingual"],
+        "best_for": "European enterprise compliance, high-precision code translation, polyglot software stacks.",
+        "api_snippet": "from mistralai import Mistral\nclient = Mistral(api_key='...')\nresp = client.chat.complete(model='mistral-large-latest', messages=[...])"
+    },
+    {
+        "id": "codestral-2501",
+        "name": "Codestral 2501 (22B)",
+        "lab": "Mistral AI",
+        "lab_slug": "mistral",
+        "year": "2025",
+        "license": "Mistral Non-Production / Commercial API",
+        "context_window": "256,000 tokens",
+        "max_output": "8,192 tokens",
+        "pricing_input": "$0.30 / 1M",
+        "pricing_output": "$0.90 / 1M",
+        "pricing_cached": "$0.075 / 1M",
+        "architecture": "Dense 22B Coding Specialist",
+        "readiness": "Cost Leader",
+        "tag": "SPECIALIZED CODE",
+        "capabilities": ["256K Context Code Ingestion", "Ultra Fast FIM (Fill-in-the-Middle)", "80+ Languages"],
+        "best_for": "IDE tab completions, instant code formatting, function refactoring at microsecond latency.",
+        "api_snippet": "ollama run codestral"
+    }
+]
+
+models_json_str = json.dumps(FRONTIER_MODELS)
+milestones_json_str = json.dumps(MILESTONES_ARCHIVE)
+
+print("[build_webapp] Loaded models and milestone databases.")
+print(f"[build_webapp] Total Frontier Models: {len(FRONTIER_MODELS)}")
+print(f"[build_webapp] Compiling Spotify-inspired HTML application...")
+
 html_template = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AI Pulse — Developer &amp; Applied AI Intelligence</title>
-    <meta name="description" content="Daily curated technical AI digest, 7-day calendar archive, frontier model tracker, and task recommender for software engineers.">
+    <title>AI Pulse — Frontier AI &amp; Developer Intelligence</title>
+    <meta name="description" content="Spotify-inspired developer intelligence dashboard tracking frontier models, daily breakthroughs, and landmark milestones.">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         :root {{
-            --bg-base: #0a0d14;
-            --bg-surface: #111622;
-            --bg-card: #151c2c;
-            --bg-card-hover: #1c253b;
-            --border-subtle: #1e293b;
-            --border-highlight: #334155;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --accent-cyan: #06b6d4;
-            --accent-blue: #3b82f6;
-            --accent-purple: #8b5cf6;
-            --accent-rose: #f43f5e;
-            --accent-emerald: #10b981;
-            --accent-amber: #f59e0b;
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 16px;
-            --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
-            --shadow-glow: 0 0 25px -5px rgba(6, 182, 212, 0.25);
+            --bg-base: #121212;
+            --bg-surface: #181818;
+            --bg-card: #181818;
+            --bg-card-hover: #242424;
+            --bg-elevated: #282828;
+            --border-subtle: #282828;
+            --border-highlight: #3e3e3e;
+            --accent-green: #1ed760;
+            --accent-green-hover: #1fdf64;
+            --accent-green-dark: #1db954;
+            --accent-beige: #e5dcd0;
+            --text-primary: #ffffff;
+            --text-secondary: #a7a7a7;
+            --text-muted: #727272;
+            --badge-bg: #242424;
+            --badge-text: #ffffff;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-pill: 500px;
             --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
         }}
@@ -75,19 +750,19 @@ html_template = f"""<!DOCTYPE html>
             overflow-x: hidden;
         }}
 
-        /* Header & Nav */
+        /* Header */
         header {{
             position: sticky;
             top: 0;
-            z-index: 50;
-            background: rgba(10, 13, 20, 0.85);
-            backdrop-filter: blur(14px);
+            z-index: 60;
+            background: rgba(18, 18, 18, 0.94);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-subtle);
-            padding: 12px 18px;
+            padding: 14px 24px;
         }}
 
         .header-inner {{
-            max-width: 1200px;
+            max-width: 1240px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -99,40 +774,40 @@ html_template = f"""<!DOCTYPE html>
             display: flex;
             align-items: center;
             gap: 10px;
-            text-decoration: none;
-            color: var(--text-primary);
             cursor: pointer;
+            text-decoration: none;
         }}
 
-        .brand-icon {{
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 16px;
-            color: #000;
+        .brand-dot {{
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(30, 215, 96, 0.5);
         }}
 
-        .brand-text {{
-            font-size: 17px;
+        .brand-title {{
+            font-size: 18px;
             font-weight: 800;
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #ffffff 40%, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-primary);
         }}
 
-        .nav-tabs {{
+        .brand-subtitle {{
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-weight: 600;
+            margin-left: 4px;
+        }}
+
+        nav.nav-links {{
             display: flex;
-            gap: 6px;
-            background: var(--bg-surface);
-            padding: 4px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border-subtle);
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 2px 0;
         }}
 
         .nav-btn {{
@@ -141,167 +816,75 @@ html_template = f"""<!DOCTYPE html>
             color: var(--text-secondary);
             font-family: var(--font-sans);
             font-size: 13px;
-            font-weight: 600;
-            padding: 7px 14px;
-            border-radius: var(--radius-sm);
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: var(--radius-pill);
             cursor: pointer;
-            transition: all 0.18s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            transition: all 0.2s ease;
             white-space: nowrap;
         }}
 
         .nav-btn:hover {{
             color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.04);
+            background: var(--bg-card-hover);
         }}
 
         .nav-btn.active {{
-            background: var(--bg-card-hover);
-            color: var(--accent-cyan);
-            border: 1px solid var(--border-highlight);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            background: var(--text-primary);
+            color: #000000;
         }}
 
-        .header-actions {{
+        .header-status {{
             display: flex;
             align-items: center;
-            gap: 10px;
-        }}
-
-        .status-pill {{
-            font-size: 11px;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
             font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 9999px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(16, 185, 129, 0.12);
-            color: var(--accent-emerald);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            cursor: pointer;
         }}
 
-        .status-dot {{
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--accent-emerald);
-            box-shadow: 0 0 8px var(--accent-emerald);
-        }}
-
-        /* Main Container */
-        main {{
-            max-width: 1200px;
+        /* Container */
+        .app-container {{
+            max-width: 1240px;
             margin: 0 auto;
-            padding: 24px 18px 80px 18px;
+            padding: 28px 24px 80px 24px;
         }}
 
-        /* 7-Day Calendar Bar */
-        .calendar-section {{
+        /* Section Layouts */
+        .section-header {{
             margin-bottom: 24px;
         }}
 
-        .calendar-title-row {{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
+        .section-title {{
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+            color: var(--text-primary);
         }}
 
-        .section-label {{
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+        .section-desc {{
+            font-size: 14px;
+            color: var(--text-secondary);
         }}
 
-        .calendar-strip {{
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }}
-
-        .day-pill {{
+        /* Executive Highlights */
+        .highlights-card {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            padding: 10px 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }}
-
-        .day-pill:hover {{
-            background: var(--bg-card-hover);
-            border-color: var(--border-highlight);
-        }}
-
-        .day-pill.active {{
-            background: linear-gradient(145deg, rgba(6, 182, 212, 0.15), rgba(59, 130, 246, 0.15));
-            border-color: var(--accent-cyan);
-            box-shadow: var(--shadow-glow);
-        }}
-
-        .day-pill .day-name {{
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }}
-
-        .day-pill.active .day-name {{
-            color: var(--accent-cyan);
-        }}
-
-        .day-pill .day-date {{
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin: 2px 0 4px 0;
-        }}
-
-        .day-pill .article-count {{
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 999px;
-            background: var(--border-subtle);
-            color: var(--text-secondary);
-            display: inline-block;
-        }}
-
-        .day-pill.active .article-count {{
-            background: var(--accent-cyan);
-            color: #000;
-        }}
-
-        /* Executive Highlights Card */
-        .highlights-card {{
-            background: linear-gradient(135deg, rgba(17, 24, 39, 0.9), rgba(15, 23, 42, 0.95));
-            border: 1px solid var(--border-highlight);
-            border-left: 4px solid var(--accent-cyan);
             border-radius: var(--radius-lg);
-            padding: 20px 24px;
-            margin-bottom: 28px;
-            box-shadow: var(--shadow-card);
+            padding: 22px 26px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--accent-green);
         }}
 
-        .highlights-header {{
-            font-size: 14px;
+        .highlights-title {{
+            font-size: 13px;
             font-weight: 800;
-            color: var(--accent-cyan);
+            color: var(--accent-green);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -309,644 +892,826 @@ html_template = f"""<!DOCTYPE html>
 
         .highlights-list {{
             list-style: none;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }}
 
         .highlights-list li {{
-            font-size: 13.5px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            background: rgba(255, 255, 255, 0.02);
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-subtle);
+            font-size: 14px;
+            line-height: 1.6;
+            color: #d1d5db;
+            position: relative;
+            padding-left: 18px;
         }}
 
-        .highlights-list li strong {{
+        .highlights-list li::before {{
+            content: '•';
+            color: var(--accent-green);
+            position: absolute;
+            left: 0;
+            font-weight: 800;
+            font-size: 18px;
+            line-height: 1;
+        }}
+
+        .highlights-list strong {{
             color: var(--text-primary);
-            display: block;
-            margin-bottom: 2px;
-            font-size: 13px;
         }}
 
-        /* Inshorts-Style Cards Grid */
-        .cards-grid {{
+        /* Calendar Picker */
+        .calendar-bar {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }}
+
+        .date-chip {{
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }}
+
+        .date-chip:hover {{
+            border-color: var(--border-highlight);
+            color: var(--text-primary);
+            background: var(--bg-card-hover);
+        }}
+
+        .date-chip.active {{
+            background: var(--accent-green);
+            color: #000000;
+            border-color: var(--accent-green);
+            font-weight: 800;
+        }}
+
+        /* Filter & Search Bar */
+        .filter-controls {{
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 28px;
+        }}
+
+        .search-wrap {{
+            position: relative;
+            width: 100%;
+        }}
+
+        .search-input {{
+            width: 100%;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            padding: 12px 18px 12px 42px;
+            border-radius: var(--radius-pill);
+            outline: none;
+            transition: border-color 0.2s;
+        }}
+
+        .search-input:focus {{
+            border-color: var(--accent-green);
+            background: #1e1e1e;
+        }}
+
+        .search-input::placeholder {{
+            color: var(--text-muted);
+        }}
+
+        .search-icon {{
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+            pointer-events: none;
+        }}
+
+        .tag-chips {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 2px;
+        }}
+
+        .tag-chip {{
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s;
+        }}
+
+        .tag-chip:hover {{
+            color: var(--text-primary);
+            border-color: var(--border-highlight);
+        }}
+
+        .tag-chip.active {{
+            background: var(--badge-bg);
+            color: var(--accent-green);
+            border-color: var(--accent-green);
+        }}
+
+        /* Cards Grid */
+        .articles-grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: 1fr;
             gap: 20px;
-            margin-bottom: 36px;
+        }}
+
+        @media (min-width: 840px) {{
+            .articles-grid {{
+                grid-template-columns: repeat(2, 1fr);
+            }}
         }}
 
         .article-card {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
-            overflow: hidden;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            box-shadow: var(--shadow-card);
-            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
+            justify-content: space-between;
+            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
         }}
 
         .article-card:hover {{
-            transform: translateY(-3px);
+            background-color: var(--bg-card-hover);
             border-color: var(--border-highlight);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
         }}
 
-        .article-card.groundbreaking {{
-            border-color: rgba(244, 63, 94, 0.5);
-            background: linear-gradient(180deg, rgba(244, 63, 94, 0.05) 0%, var(--bg-surface) 100%);
-        }}
-
-        .article-card.groundbreaking::before {{
-            content: "🚨 GROUNDBREAKING DISCOVERY";
-            display: block;
-            background: linear-gradient(90deg, #f43f5e, #e11d48);
-            color: #fff;
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 0.07em;
-            padding: 4px 14px;
-        }}
-
-        .card-media {{
-            width: 100%;
-            height: 180px;
-            background: #0f1420;
-            overflow: hidden;
-            position: relative;
-        }}
-
-        .card-media img {{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }}
-
-        .article-card:hover .card-media img {{
-            transform: scale(1.03);
-        }}
-
-        .card-media-fallback {{
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #131b2e, #0e1526);
-            color: var(--text-muted);
-            font-size: 32px;
-        }}
-
-        .card-body {{
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }}
-
-        .card-meta {{
+        .card-top {{
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 8px;
             gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
         }}
 
-        .source-tag {{
-            font-size: 11px;
-            font-weight: 700;
+        .card-meta {{
+            font-size: 12px;
             color: var(--text-muted);
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.04em;
         }}
 
-        .badge-pill {{
-            font-size: 10px;
-            font-weight: 700;
-            padding: 2px 7px;
-            border-radius: 4px;
-            text-transform: uppercase;
+        .badge {{
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 9px;
+            border-radius: var(--radius-pill);
             letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: var(--badge-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-subtle);
         }}
 
-        .badge-breakthrough {{ background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }}
-        .badge-devtools {{ background: rgba(67, 56, 202, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); }}
-        .badge-localai {{ background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }}
-        .badge-production {{ background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }}
-        .badge-research {{ background: rgba(139, 92, 246, 0.15); color: #c084fc; border: 1px solid rgba(139, 92, 246, 0.3); }}
+        .badge-breakthrough {{
+            background: #2b1418;
+            color: #ff4d6d;
+            border-color: #5c1d27;
+        }}
 
-        .card-title {{
-            font-size: 16px;
+        .badge-devtools {{
+            background: #14202c;
+            color: #38bdf8;
+            border-color: #1e3a5f;
+        }}
+
+        .badge-local {{
+            background: #291e10;
+            color: #fbbf24;
+            border-color: #593e18;
+        }}
+
+        .badge-prod {{
+            background: #12281a;
+            color: var(--accent-green);
+            border-color: #1b4d2b;
+        }}
+
+        .badge-research {{
+            background: #20152b;
+            color: #c084fc;
+            border-color: #432461;
+        }}
+
+        .article-title {{
+            font-size: 18px;
             font-weight: 700;
             line-height: 1.35;
             color: var(--text-primary);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            text-decoration: none;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }}
 
-        .continuation-badge {{
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #a78bfa;
-            background: rgba(139, 92, 246, 0.1);
-            padding: 3px 8px;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            border: 1px solid rgba(139, 92, 246, 0.25);
-            transition: background 0.15s ease;
+        .article-title:hover {{
+            color: var(--accent-green);
         }}
 
-        .continuation-badge:hover {{
-            background: rgba(139, 92, 246, 0.2);
-        }}
-
-        .card-summary {{
-            font-size: 13.5px;
-            color: var(--text-secondary);
-            line-height: 1.55;
-            margin-bottom: 14px;
-            flex: 1;
-        }}
-
-        .dev-impact-box {{
-            background: var(--bg-card);
-            border-left: 3px solid var(--accent-cyan);
-            padding: 8px 12px;
-            border-radius: 4px;
-            margin-bottom: 14px;
-        }}
-
-        .dev-impact-title {{
-            font-size: 10.5px;
-            font-weight: 700;
-            color: var(--accent-cyan);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }}
-
-        .dev-impact-text {{
-            font-size: 12px;
-            color: var(--text-primary);
-            margin-top: 2px;
-            line-height: 1.4;
-        }}
-
-        .card-tags {{
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 14px;
-        }}
-
-        .tag-chip {{
-            font-size: 10.5px;
-            font-family: var(--font-mono);
-            color: var(--text-muted);
-            background: var(--bg-base);
-            padding: 2px 7px;
-            border-radius: 4px;
+        .article-img-wrap {{
+            margin: 8px 0 16px 0;
+            border-radius: var(--radius-md);
+            overflow: hidden;
             border: 1px solid var(--border-subtle);
+            max-height: 220px;
+            background: #000000;
         }}
 
-        .card-footer {{
+        .article-img {{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }}
+
+        .article-summary {{
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }}
+
+        .capability-box {{
+            background: #141a15;
+            border: 1px solid #1b3d22;
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #d1fae5;
+            margin-bottom: 12px;
+        }}
+
+        .capability-label {{
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-green);
+            margin-bottom: 3px;
+        }}
+
+        .usecase-box {{
+            background: #1a1a1a;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }}
+
+        .usecase-label {{
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 3px;
+        }}
+
+        .card-bottom {{
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: 12px;
+            padding-top: 14px;
             border-top: 1px solid var(--border-subtle);
+            margin-top: auto;
+        }}
+
+        .source-pill {{
             font-size: 12px;
-        }}
-
-        .impact-meter {{
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--accent-cyan);
-        }}
-
-        .action-link {{
-            color: var(--accent-cyan);
-            text-decoration: none;
+            color: var(--text-muted);
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: color 0.15s ease;
         }}
 
-        .action-link:hover {{
-            color: #67e8f9;
+        .read-btn {{
+            background: var(--badge-bg);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            text-decoration: none;
+            transition: all 0.2s;
         }}
 
-        /* 1-Liners Table */
+        .read-btn:hover {{
+            background: var(--text-primary);
+            color: #000000;
+            border-color: var(--text-primary);
+        }}
+
+        /* 1-Liners Section */
         .oneliners-card {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
-            padding: 20px;
-            margin-bottom: 40px;
+            padding: 24px;
+            margin-top: 36px;
         }}
 
-        .oneliner-row {{
+        .oneliners-header {{
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }}
+
+        .oneliner-item {{
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-subtle);
             display: flex;
             align-items: baseline;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-subtle);
             gap: 16px;
         }}
 
-        .oneliner-row:last-child {{
+        .oneliner-item:last-child {{
             border-bottom: none;
         }}
 
-        .oneliner-source {{
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-muted);
-            min-width: 120px;
-            text-transform: uppercase;
+        .oneliner-text {{
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
         }}
 
-        .oneliner-content {{
-            flex: 1;
-            font-size: 13px;
-        }}
-
-        .oneliner-content a {{
+        .oneliner-title {{
             color: var(--text-primary);
-            text-decoration: none;
             font-weight: 600;
+            text-decoration: none;
+            margin-right: 6px;
         }}
 
-        .oneliner-content a:hover {{
-            color: var(--accent-cyan);
+        .oneliner-title:hover {{
+            color: var(--accent-green);
         }}
 
-        /* Frontier Model Tracker View */
-        .models-view {{
-            display: none;
-        }}
-
-        .models-view.active {{
-            display: block;
-        }}
-
-        .models-filter-bar {{
+        /* Frontier Model Tracker Layout */
+        .lab-filter-bar {{
             display: flex;
+            align-items: center;
             gap: 8px;
+            margin-bottom: 24px;
             overflow-x: auto;
-            margin-bottom: 20px;
             padding-bottom: 4px;
         }}
 
-        .filter-chip {{
+        .lab-chip {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 600;
-            padding: 6px 14px;
-            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: var(--radius-pill);
             cursor: pointer;
             white-space: nowrap;
+            transition: all 0.2s;
         }}
 
-        .filter-chip.active {{
-            background: var(--accent-cyan);
-            color: #000;
-            border-color: var(--accent-cyan);
+        .lab-chip:hover {{
+            color: var(--text-primary);
+            background: var(--bg-card-hover);
+        }}
+
+        .lab-chip.active {{
+            background: var(--text-primary);
+            color: #000000;
+            border-color: var(--text-primary);
         }}
 
         .models-grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }}
+
+        @media (min-width: 768px) {{
+            .models-grid {{
+                grid-template-columns: repeat(2, 1fr);
+            }}
+        }}
+
+        @media (min-width: 1100px) {{
+            .models-grid {{
+                grid-template-columns: repeat(3, 1fr);
+            }}
         }}
 
         .model-card {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-lg);
-            padding: 20px;
+            padding: 22px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-        }}
-
-        .model-header {{
-            display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-        }}
-
-        .model-name {{
-            font-size: 18px;
-            font-weight: 800;
-            color: var(--text-primary);
-        }}
-
-        .model-lab {{
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--accent-cyan);
-        }}
-
-        .model-specs-grid {{
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            background: var(--bg-card);
-            padding: 12px;
-            border-radius: var(--radius-md);
-            font-size: 12px;
-        }}
-
-        .spec-item .spec-label {{
-            color: var(--text-muted);
-            font-size: 10.5px;
-            text-transform: uppercase;
-        }}
-
-        .spec-item .spec-val {{
-            color: var(--text-primary);
-            font-weight: 700;
-            margin-top: 2px;
-        }}
-
-        /* Task Recommender View */
-        .recommender-view {{
-            display: none;
-        }}
-
-        .recommender-view.active {{
-            display: block;
-        }}
-
-        .tasks-strip {{
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 24px;
-        }}
-
-        .task-btn {{
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: 10px 18px;
-            border-radius: var(--radius-md);
-            font-size: 13px;
-            font-weight: 700;
             cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.15s ease;
+            transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
         }}
 
-        .task-btn:hover {{
-            background: var(--bg-card-hover);
-            color: var(--text-primary);
+        .model-card:hover {{
+            background-color: var(--bg-card-hover);
+            border-color: var(--border-highlight);
+            transform: translateY(-2px);
         }}
 
-        .task-btn.active {{
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2));
-            color: var(--accent-cyan);
-            border-color: var(--accent-cyan);
+        .model-top {{
+            margin-bottom: 14px;
         }}
 
-        .recommendation-panel {{
-            background: var(--bg-surface);
-            border: 1px solid var(--border-highlight);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }}
-
-        .rec-box {{
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            padding: 18px;
-        }}
-
-        .rec-badge {{
+        .model-lab-badge {{
             font-size: 11px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
+            color: var(--accent-green);
             margin-bottom: 6px;
         }}
 
-        .rec-model {{
-            font-size: 18px;
+        .model-name {{
+            font-size: 20px;
             font-weight: 800;
-            color: var(--text-primary);
+            letter-spacing: -0.01em;
             margin-bottom: 6px;
+            color: var(--text-primary);
         }}
 
-        .rec-desc {{
+        .model-specs-row {{
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }}
+
+        .spec-pill {{
+            background: #242424;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 9px;
+            border-radius: var(--radius-pill);
+            color: var(--text-secondary);
+        }}
+
+        .model-best-for {{
             font-size: 13px;
             color: var(--text-secondary);
             line-height: 1.5;
+            margin-bottom: 18px;
         }}
 
-        /* Highlights & Milestone Archive View */
-        .archive-view {{
-            display: none;
-        }}
-
-        .archive-view.active {{
-            display: block;
-        }}
-
-        .archive-controls {{
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 24px;
-        }}
-
-        .year-btn {{
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: 8px 16px;
+        .model-pricing-preview {{
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #d1d5db;
+            background: #141414;
+            padding: 8px 12px;
             border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }}
+
+        .inspect-action-text {{
+            font-size: 12px;
             font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
+            color: var(--accent-green);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 14px;
         }}
 
-        .year-btn.active {{
-            background: var(--accent-cyan);
-            color: #000;
-            border-color: var(--accent-cyan);
+        /* Model Inspection Drawer */
+        .drawer-backdrop {{
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.25s ease;
         }}
 
-        .milestones-timeline {{
-            border-left: 2px solid var(--border-subtle);
-            padding-left: 24px;
-            margin-left: 10px;
+        .drawer-backdrop.open {{
+            display: block;
+            opacity: 1;
+        }}
+
+        .drawer-content {{
+            position: fixed;
+            top: 0;
+            right: -600px;
+            width: 100%;
+            max-width: 560px;
+            height: 100%;
+            background: #181818;
+            border-left: 1px solid var(--border-subtle);
+            z-index: 101;
+            padding: 32px 28px;
+            overflow-y: auto;
+            transition: right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             flex-direction: column;
             gap: 24px;
         }}
 
-        .milestone-item {{
-            position: relative;
+        .drawer-backdrop.open .drawer-content {{
+            right: 0;
         }}
 
-        .milestone-item::before {{
-            content: '';
-            position: absolute;
-            left: -31px;
-            top: 4px;
-            width: 12px;
-            height: 12px;
+        .drawer-close-btn {{
+            align-self: flex-start;
+            background: #242424;
+            border: none;
+            color: var(--text-primary);
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: var(--accent-cyan);
-            box-shadow: 0 0 10px var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.15s;
         }}
 
-        .milestone-date {{
-            font-size: 12px;
-            font-family: var(--font-mono);
-            color: var(--accent-cyan);
+        .drawer-close-btn:hover {{
+            background: #333333;
+        }}
+
+        .pricing-table {{
+            width: 100%;
+            background: #121212;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            border-collapse: collapse;
+            overflow: hidden;
+            font-size: 13px;
+        }}
+
+        .pricing-table th, .pricing-table td {{
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-subtle);
+        }}
+
+        .pricing-table th {{
+            color: var(--text-muted);
             font-weight: 700;
-            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+        }}
+
+        .pricing-table td {{
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+        }}
+
+        .code-block-wrap {{
+            position: relative;
+            background: #000000;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            overflow-x: auto;
+        }}
+
+        .code-block {{
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.6;
+            color: #d1fae5;
+            white-space: pre;
+        }}
+
+        .copy-code-btn {{
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #242424;
+            border: 1px solid var(--border-subtle);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+        }}
+
+        .copy-code-btn:hover {{
+            background: var(--accent-green);
+            color: #000000;
+        }}
+
+        /* Milestones Archive Layout */
+        .milestone-period-bar {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 26px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }}
+
+        .period-chip {{
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }}
+
+        .period-chip:hover {{
+            color: var(--text-primary);
+            background: var(--bg-card-hover);
+        }}
+
+        .period-chip.active {{
+            background: var(--text-primary);
+            color: #000000;
+            border-color: var(--text-primary);
+        }}
+
+        .milestone-group {{
+            margin-bottom: 36px;
+        }}
+
+        .milestone-group-title {{
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-subtle);
+        }}
+
+        .milestone-card {{
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }}
+
+        .milestone-card:hover {{
+            border-color: var(--border-highlight);
+            background: var(--bg-card-hover);
+        }}
+
+        .milestone-header {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
         }}
 
         .milestone-title {{
             font-size: 16px;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: 4px;
         }}
 
-        .milestone-desc {{
-            font-size: 13.5px;
+        .milestone-lab {{
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }}
+
+        .milestone-cap {{
+            font-size: 14px;
+            color: #e5e7eb;
+            line-height: 1.5;
+        }}
+
+        .milestone-impact {{
+            font-size: 13px;
             color: var(--text-secondary);
             line-height: 1.5;
         }}
 
-        /* Modal */
-        .modal-overlay {{
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            padding: 16px;
+        /* Task Recommender Layout */
+        .tasks-grid {{
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
         }}
 
-        .modal-overlay.active {{
-            display: flex;
+        @media (min-width: 768px) {{
+            .tasks-grid {{
+                grid-template-columns: repeat(2, 1fr);
+            }}
         }}
 
-        .modal-box {{
+        .task-card {{
             background: var(--bg-surface);
-            border: 1px solid var(--border-highlight);
-            border-radius: var(--radius-lg);
-            max-width: 480px;
-            width: 100%;
-            padding: 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }}
-
-        .form-group {{
-            margin-bottom: 16px;
-        }}
-
-        .form-group label {{
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-        }}
-
-        .form-input {{
-            width: 100%;
-            background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-sm);
-            padding: 10px 14px;
-            font-family: var(--font-mono);
-            font-size: 13px;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }}
+
+        .task-card:hover {{
+            background: var(--bg-card-hover);
+            border-color: var(--border-highlight);
+        }}
+
+        .task-title {{
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 8px;
             color: var(--text-primary);
-            outline: none;
         }}
 
-        .form-input:focus {{
-            border-color: var(--accent-cyan);
+        .task-recommendations {{
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }}
 
-        .btn-primary {{
-            background: var(--accent-cyan);
-            color: #000;
-            border: none;
-            padding: 10px 18px;
-            border-radius: var(--radius-sm);
-            font-weight: 700;
+        .task-rec-item {{
+            background: #121212;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
             font-size: 13px;
-            cursor: pointer;
-            width: 100%;
         }}
 
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {{
-            header {{
-                padding: 10px 14px;
-            }}
-            .header-inner {{
-                flex-direction: column;
-                align-items: stretch;
-            }}
-            .brand-row {{
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }}
-            .nav-tabs {{
-                overflow-x: auto;
-                width: 100%;
-            }}
-            .cards-grid {{
-                grid-template-columns: 1fr;
-            }}
-            .calendar-strip {{
-                grid-template-columns: repeat(7, minmax(75px, 1fr));
-            }}
-            .oneliner-row {{
-                flex-direction: column;
-                gap: 4px;
-            }}
-            .oneliner-source {{
-                min-width: auto;
-            }}
+        .task-rec-role {{
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--accent-green);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 2px;
+        }}
+
+        /* Empty State */
+        .empty-state {{
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
         }}
     </style>
 </head>
@@ -955,678 +1720,724 @@ html_template = f"""<!DOCTYPE html>
     <!-- Header -->
     <header>
         <div class="header-inner">
-            <div class="brand-row">
-                <a class="brand" onclick="switchView('feed')">
-                    <div class="brand-icon">⚡</div>
-                    <div class="brand-text">AI PULSE // DIGEST</div>
-                </a>
-                <div class="status-pill" id="supabase-status-pill" onclick="openSupabaseModal()">
-                    <div class="status-dot"></div>
-                    <span id="supabase-status-label">Live Data Sync</span>
-                </div>
-            </div>
+            <a class="brand" onclick="switchTab('feed')">
+                <div class="brand-dot"></div>
+                <div class="brand-title">AI PULSE</div>
+                <div class="brand-subtitle">Frontier Digest</div>
+            </a>
 
-            <nav class="nav-tabs">
-                <button class="nav-btn active" id="tab-feed" onclick="switchView('feed')">📰 Daily Feed</button>
-                <button class="nav-btn" id="tab-models" onclick="switchView('models')">🏆 Model Tracker</button>
-                <button class="nav-btn" id="tab-recommender" onclick="switchView('recommender')">🎯 Task Recommender</button>
-                <button class="nav-btn" id="tab-archive" onclick="switchView('archive')">📅 Landmark Milestones</button>
+            <nav class="nav-links">
+                <button class="nav-btn active" id="tab-feed" onclick="switchTab('feed')">Daily Feed</button>
+                <button class="nav-btn" id="tab-models" onclick="switchTab('models')">Frontier Models</button>
+                <button class="nav-btn" id="tab-milestones" onclick="switchTab('milestones')">3-Yr Milestones</button>
+                <button class="nav-btn" id="tab-tasks" onclick="switchTab('tasks')">Task Guide</button>
             </nav>
+
+            <div class="header-status">
+                <span id="header-sync-status">Live</span>
+            </div>
         </div>
     </header>
 
-    <main>
-        <!-- 1. DAILY FEED VIEW -->
-        <section id="view-feed" class="feed-view">
-            <!-- 7-Day Calendar Strip -->
-            <div class="calendar-section">
-                <div class="calendar-title-row">
-                    <div class="section-label">
-                        <span>🗓️ Past 7 Days Archive (Click a Date)</span>
-                    </div>
-                    <div style="font-size:12px; color:var(--text-muted);">
-                        Rolling 7-Day Strict Index
-                    </div>
-                </div>
-                <div class="calendar-strip" id="calendar-strip"></div>
+    <div class="app-container">
+
+        <!-- ==================== SECTION 1: DAILY FEED ==================== -->
+        <section id="view-feed">
+            <div class="section-header">
+                <h1 class="section-title">Developer &amp; Applied AI Intelligence</h1>
+                <p class="section-desc">Strictly verified breakthroughs, practical software tooling, and high-impact research from the last 24 hours.</p>
             </div>
 
-            <!-- Executive Highlights for Selected Day -->
+            <!-- Executive Highlights -->
             <div class="highlights-card" id="highlights-container">
-                <div class="highlights-header">
-                    <span>⚡ Executive Highlights (3-Minute Summary)</span>
-                </div>
-                <ul class="highlights-list" id="highlights-list"></ul>
+                <div class="highlights-title">⚡ Executive Highlights (Last 24 Hours)</div>
+                <ul class="highlights-list" id="highlights-list">
+                    <li><strong>Breakthroughs in Physical &amp; Medical AI:</strong> Multi-view online 3D reconstruction and internet-scale dexterous robotics demonstration retrieval lead the day's applied breakthroughs.</li>
+                    <li><strong>Developer Tooling &amp; Agent Security:</strong> Investigations into autonomous terminal coding agents demonstrate increased reliance on zero-intervention sandboxing boundaries.</li>
+                    <li><strong>Workstation Inference:</strong> Base-3 ternary quantization brings 27B parameter frontier open models to 12GB VRAM footprints on consumer hardware.</li>
+                </ul>
             </div>
 
-            <!-- Inshorts Cards Grid -->
-            <div class="section-label" style="margin-bottom:14px;">
-                <span>🏆 Top 10 Developer &amp; Applied AI Breakthroughs</span>
+            <!-- Calendar Bar -->
+            <div class="calendar-bar" id="calendar-bar">
+                <!-- Dynamically injected past 7 days -->
             </div>
-            <div class="cards-grid" id="cards-grid"></div>
 
-            <!-- Quick Hits (1-Liners) Section -->
-            <div class="oneliners-card">
-                <div class="section-label" style="margin-bottom: 14px; display:flex; justify-content:space-between;">
-                    <span>⚡ The Quick Hits (All Fresh Stories in 1-Line)</span>
-                    <span id="oneliners-count-badge" style="font-size:11px; color:var(--accent-cyan);">0 items</span>
+            <!-- Filter Controls -->
+            <div class="filter-controls">
+                <div class="search-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="search-input" placeholder="Search stories, models, breakthroughs, or topics..." oninput="filterArticles()">
                 </div>
-                <div id="oneliners-container"></div>
+                <div class="tag-chips" id="tag-chips">
+                    <button class="tag-chip active" onclick="setTopicFilter('all')">All Stories</button>
+                    <button class="tag-chip" onclick="setTopicFilter('#FrontierModels')">#FrontierModels</button>
+                    <button class="tag-chip" onclick="setTopicFilter('#Reasoning')">#Reasoning</button>
+                    <button class="tag-chip" onclick="setTopicFilter('#AgenticCoding')">#AgenticCoding</button>
+                    <button class="tag-chip" onclick="setTopicFilter('#LocalLLM')">#LocalLLM</button>
+                    <button class="tag-chip" onclick="setTopicFilter('#Vision')">#Vision</button>
+                    <button class="tag-chip" onclick="setTopicFilter('#Production')">#Production</button>
+                    <button class="tag-chip" onclick="setTopicFilter('#Robotics')">#Robotics</button>
+                    <button class="tag-chip" onclick="setTopicFilter('#Breakthroughs')">#Breakthroughs</button>
+                </div>
+            </div>
+
+            <!-- Articles Grid -->
+            <div class="articles-grid" id="articles-grid">
+                <!-- Dynamically populated cards -->
+            </div>
+
+            <!-- Quick Hit 1-Liners -->
+            <div class="oneliners-card" id="oneliners-container">
+                <div class="oneliners-header">
+                    <span>Quick-Hit 1-Liners (Remaining Scanned Articles)</span>
+                    <span id="oneliner-count" style="font-size:12px;color:var(--text-muted);font-weight:600;"></span>
+                </div>
+                <div id="oneliners-list">
+                    <!-- Dynamically populated 1-liners -->
+                </div>
             </div>
         </section>
 
-        <!-- 2. FRONTIER MODEL TRACKER VIEW -->
-        <section id="view-models" class="models-view">
-            <div class="calendar-title-row">
-                <div class="section-label">
-                    <span>🏆 Frontier Model Matrix by Lab (2025-2026)</span>
-                </div>
+        <!-- ==================== SECTION 2: FRONTIER MODELS ==================== -->
+        <section id="view-models" style="display:none;">
+            <div class="section-header">
+                <h1 class="section-title">Frontier Model Intelligence Tracker</h1>
+                <p class="section-desc">Comprehensive catalog of production &amp; open-weights frontier models by lab. Click any model to inspect pricing, context limits, and capabilities.</p>
             </div>
 
-            <div class="models-filter-bar">
-                <button class="filter-chip active" onclick="filterModels('All')">All Labs</button>
-                <button class="filter-chip" onclick="filterModels('OpenAI')">OpenAI</button>
-                <button class="filter-chip" onclick="filterModels('Anthropic')">Anthropic</button>
-                <button class="filter-chip" onclick="filterModels('Google DeepMind')">Google DeepMind</button>
-                <button class="filter-chip" onclick="filterModels('DeepSeek')">DeepSeek</button>
-                <button class="filter-chip" onclick="filterModels('Meta AI')">Meta AI</button>
-                <button class="filter-chip" onclick="filterModels('xAI')">xAI</button>
-                <button class="filter-chip" onclick="filterModels('Mistral')">Mistral</button>
-                <button class="filter-chip" onclick="filterModels('Alibaba')">Alibaba</button>
+            <!-- Lab Filter Bar -->
+            <div class="lab-filter-bar" id="lab-filter-bar">
+                <button class="lab-chip active" onclick="filterModelsByLab('all')">All Labs</button>
+                <button class="lab-chip" onclick="filterModelsByLab('google')">Google DeepMind</button>
+                <button class="lab-chip" onclick="filterModelsByLab('openai')">OpenAI</button>
+                <button class="lab-chip" onclick="filterModelsByLab('anthropic')">Anthropic</button>
+                <button class="lab-chip" onclick="filterModelsByLab('deepseek')">DeepSeek</button>
+                <button class="lab-chip" onclick="filterModelsByLab('meta')">Meta AI</button>
+                <button class="lab-chip" onclick="filterModelsByLab('xai')">xAI</button>
+                <button class="lab-chip" onclick="filterModelsByLab('alibaba')">Alibaba (Qwen)</button>
+                <button class="lab-chip" onclick="filterModelsByLab('mistral')">Mistral AI</button>
             </div>
 
-            <div class="models-grid" id="models-grid"></div>
+            <!-- Models Grid -->
+            <div class="models-grid" id="models-grid">
+                <!-- Dynamically populated model cards -->
+            </div>
         </section>
 
-        <!-- 3. TASK-BASED RECOMMENDER VIEW -->
-        <section id="view-recommender" class="recommender-view">
-            <div class="calendar-title-row">
-                <div class="section-label">
-                    <span>🎯 What Model Should I Use For My Task?</span>
-                </div>
+        <!-- ==================== SECTION 3: MILESTONES ARCHIVE ==================== -->
+        <section id="view-milestones" style="display:none;">
+            <div class="section-header">
+                <h1 class="section-title">Landmark AI Milestones Archive (2023 – 2026)</h1>
+                <p class="section-desc">Documenting major inflection points, model releases, and architectural breakthroughs across 36 months of AI progress.</p>
             </div>
 
-            <div class="tasks-strip">
-                <button class="task-btn active" onclick="selectTask('coding')">💻 Coding &amp; Agentic Dev</button>
-                <button class="task-btn" onclick="selectTask('reasoning')">🧠 Complex Math &amp; Reasoning</button>
-                <button class="task-btn" onclick="selectTask('video')">🎬 Video Generation &amp; Editing</button>
-                <button class="task-btn" onclick="selectTask('image')">🎨 Image Generation &amp; Design</button>
-                <button class="task-btn" onclick="selectTask('automation')">⚡ Low-Cost Extraction &amp; Workflows</button>
-                <button class="task-btn" onclick="selectTask('local')">🔒 Local &amp; Private Offline Inference</button>
-                <button class="task-btn" onclick="selectTask('context')">📚 Massive Context (1M-2M+ Tokens)</button>
+            <!-- Period Selector Bar -->
+            <div class="milestone-period-bar">
+                <button class="period-chip active" id="pchip-yearly" onclick="switchMilestonePeriod('yearly')">Yearly Top 3</button>
+                <button class="period-chip" id="pchip-half_yearly" onclick="switchMilestonePeriod('half_yearly')">6-Month Top 3</button>
+                <button class="period-chip" id="pchip-quarterly" onclick="switchMilestonePeriod('quarterly')">Quarterly Top 3</button>
+                <button class="period-chip" id="pchip-monthly" onclick="switchMilestonePeriod('monthly')">Monthly Top 3 (Past 36 Mo)</button>
+                <button class="period-chip" id="pchip-weekly" onclick="switchMilestonePeriod('weekly')">Weekly Top 3 (Rolling)</button>
             </div>
 
-            <div id="recommendation-panel" class="recommendation-panel"></div>
+            <div id="milestones-container">
+                <!-- Dynamically populated milestone groups -->
+            </div>
         </section>
 
-        <!-- 4. LANDMARK ARCHIVE VIEW -->
-        <section id="view-archive" class="archive-view">
-            <div class="calendar-title-row">
-                <div class="section-label">
-                    <span>📅 Landmark AI Milestones (Last 2 Years: 2024–2026)</span>
-                </div>
+        <!-- ==================== SECTION 4: TASK GUIDE ==================== -->
+        <section id="view-tasks" style="display:none;">
+            <div class="section-header">
+                <h1 class="section-title">Task-Based Model Selection Guide</h1>
+                <p class="section-desc">Engineering recommendations based on latency, benchmark scores, reasoning depth, and cost economics.</p>
             </div>
 
-            <div class="archive-controls">
-                <button class="year-btn active" onclick="filterArchiveYear('2026')">2026</button>
-                <button class="year-btn" onclick="filterArchiveYear('2025')">2025</button>
-                <button class="year-btn" onclick="filterArchiveYear('2024')">2024</button>
-            </div>
-
-            <div class="milestones-timeline" id="milestones-timeline"></div>
-        </section>
-    </main>
-
-    <!-- Supabase Configuration Modal -->
-    <div class="modal-overlay" id="supabase-modal" onclick="closeModalOnBackdrop(event)">
-        <div class="modal-box">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-                <h3 style="font-size:16px; font-weight:800;">⚙️ Supabase Integration</h3>
-                <span onclick="closeSupabaseModal()" style="cursor:pointer; color:var(--text-muted); font-size:18px;">&times;</span>
-            </div>
-            <p style="font-size:13px; color:var(--text-secondary); margin-bottom:16px;">
-                Connect this web app to your Supabase PostgreSQL project. Articles older than 7 days are automatically pruned by the backend cron.
-            </p>
-            <div class="form-group">
-                <label>Supabase URL</label>
-                <input class="form-input" id="cfg-supabase-url" placeholder="https://xyz.supabase.co">
-            </div>
-            <div class="form-group">
-                <label>Supabase Public Anon Key</label>
-                <input class="form-input" id="cfg-supabase-key" type="password" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
-            </div>
-            <button class="btn-primary" onclick="saveSupabaseConfig()">Save &amp; Sync with Supabase</button>
-            <button onclick="usePreloadedData()" style="background:transparent; border:1px solid var(--border-subtle); color:var(--text-secondary); padding:8px; border-radius:var(--radius-sm); font-size:12px; width:100%; margin-top:8px; cursor:pointer;">
-                Use Preloaded 7-Day Live Dataset
-            </button>
-        </div>
-    </div>
-
-    <!-- Continuation Linked Article Modal -->
-    <div class="modal-overlay" id="continuation-modal" onclick="closeModalOnBackdrop(event)">
-        <div class="modal-box" style="max-width:560px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                <span style="font-size:11px; font-weight:800; color:#a78bfa; text-transform:uppercase;">↳ Linked Story Context</span>
-                <span onclick="closeContinuationModal()" style="cursor:pointer; color:var(--text-muted); font-size:18px;">&times;</span>
-            </div>
-            <h3 id="cont-modal-title" style="font-size:17px; font-weight:800; margin-bottom:8px; line-height:1.35;"></h3>
-            <div id="cont-modal-date" style="font-size:12px; color:var(--text-muted); margin-bottom:12px;"></div>
-            <p id="cont-modal-summary" style="font-size:13.5px; color:var(--text-secondary); line-height:1.55; margin-bottom:16px;"></p>
-            <a id="cont-modal-link" href="#" target="_blank" class="action-link">Open Original Source &rarr;</a>
-        </div>
-    </div>
-
-    <script>
-        // Seeded 7-Day Archive Data (Generated from Live Feeds)
-        const SEED_DATA = {seed_json_str};
-
-        // Milestone Archive (2024 - 2026)
-        const MILESTONES = [
-            {{ year: "2026", date: "Sep 2026", title: "Scal3R & Internet-Scale Dexterous Robotics", desc: "Breakthroughs in multi-relative pose estimation for 3D reconstruction and internet-scale human demonstration retrieval for humanoid manipulation." }},
-            {{ year: "2026", date: "Jul 2026", title: "Claude 3.7 Sonnet & Hybrid Reasoning", desc: "Anthropic introduces hybrid immediate-and-thinking reasoning with native terminal execution for agentic engineering." }},
-            {{ year: "2026", date: "May 2026", title: "xAI Colossus 2 - 1st Gigawatt Datacenter", desc: "xAI begins operations on the first gigawatt-scale AI computing infrastructure for Grok-3 frontier training." }},
-            {{ year: "2025", date: "Dec 2025", title: "DeepSeek-R1 Open Weight Reasoning", desc: "DeepSeek releases R1, demonstrating competitive reasoning with o1 through pure reinforcement learning at a fraction of compute cost." }},
-            {{ year: "2025", date: "Oct 2025", title: "OpenAI o3 Frontier Reasoning", desc: "OpenAI establishes new records on competitive programming (Codeforces 2700+) and frontier science benchmarks." }},
-            {{ year: "2025", date: "Jul 2025", title: "Llama 3.1 405B Open Weights", desc: "Meta AI open-sources its first frontier-scale 405B parameter model, enabling distillation into local 8B and 70B variants." }},
-            {{ year: "2025", date: "Feb 2025", title: "Gemini 2.0 Flash Production Leap", desc: "Google DeepMind delivers sub-200ms multimodal inference with native agentic search and code execution." }},
-            {{ year: "2024", date: "Jun 2024", title: "Claude 3.5 Sonnet Coding Revolution", desc: "Anthropic releases Claude 3.5 Sonnet, establishing the gold standard for software engineering and tool orchestration." }},
-            {{ year: "2024", date: "May 2024", title: "GPT-4o Omnimodal Release", desc: "OpenAI debuts real-time voice-to-voice and vision processing natively within a single multimodal neural network." }},
-            {{ year: "2024", date: "Feb 2024", title: "Sora & Gemini 1.5 Pro 2M Context", desc: "OpenAI showcases generative physics video with Sora, and Google unlocks million-token context windows." }}
-        ];
-
-        // Frontier Models Matrix
-        const FRONTIER_MODELS = [
-            {{ name: "Claude 3.7 Sonnet", lab: "Anthropic", date: "2026", context: "200K tokens", license: "Proprietary API", architecture: "Dense", reasoning: "Hybrid / Extended", coding: "SOTA (92.4%)", strength: "Best for Agentic Coding, Refactoring, Terminal tool use" }},
-            {{ name: "OpenAI o3", lab: "OpenAI", date: "2025", context: "200K tokens", license: "Proprietary API", architecture: "Reasoning Model", reasoning: "Top Frontier (98%)", coding: "SOTA Competitive", strength: "Complex mathematical proofs, hard algorithmic logic" }},
-            {{ name: "DeepSeek-R1", lab: "DeepSeek", date: "2025", context: "128K tokens", license: "Open Weights (MIT)", architecture: "MoE (671B / 37B active)", reasoning: "Top Frontier (96%)", coding: "Near-o1 Level", strength: "Self-hosted high-reasoning, low inference cost" }},
-            {{ name: "Gemini 2.0 Flash", lab: "Google DeepMind", date: "2025", context: "1M tokens", license: "Proprietary API", architecture: "MoE", reasoning: "Strong (88%)", coding: "Fast & Precise", strength: "Sub-200ms latency, multimodal video/audio processing" }},
-            {{ name: "Llama 3.3 70B", lab: "Meta AI", date: "2025", context: "128K tokens", license: "Open Weights (Community)", architecture: "Dense (70B)", reasoning: "Strong (86%)", coding: "Excellent", strength: "Highest quality offline inference on dual RTX 4090s" }},
-            {{ name: "Qwen 2.5 Coder 32B", lab: "Alibaba", date: "2025", context: "128K tokens", license: "Open Weights (Apache 2)", architecture: "Dense (32B)", reasoning: "Good (84%)", coding: "SOTA Open Coding", strength: "Best local coding model fit on a single 16GB GPU" }},
-            {{ name: "Grok 3", lab: "xAI", date: "2025", context: "256K tokens", license: "Proprietary API", architecture: "Colossus Scale", reasoning: "Frontier (94%)", coding: "Very Strong", strength: "Real-time world knowledge synthesis, raw throughput" }},
-            {{ name: "Mistral Large 2", lab: "Mistral", date: "2024", context: "128K tokens", license: "Open Weights / API", architecture: "123B Dense", reasoning: "Strong (85%)", coding: "Multilingual SOTA", strength: "European compliance, 80+ programming languages" }}
-        ];
-
-        // Task Recommendations
-        const TASK_RECOMMENDATIONS = {{
-            coding: {{
-                title: "💻 Coding & Agentic Software Engineering",
-                topPick: {{ model: "Claude 3.7 Sonnet", lab: "Anthropic", reason: "Unmatched at understanding massive git diffs, multi-file edits, and executing terminal CLI commands via tools." }},
-                budget: {{ model: "Gemini 2.0 Flash", lab: "Google", reason: "Fastest response time and fractions of a cent per 1k tokens for background linting and inline autocomplete." }},
-                local: {{ model: "Qwen 2.5 Coder 32B (Q4_K_M GGUF)", lab: "Alibaba", reason: "Runs comfortably in 20GB VRAM / Ollama with coding benchmark scores matching GPT-4o." }},
-                tips: "Provide repository file trees and clear reproduction scripts. For agentic loops, limit maximum autonomous steps to prevent cost runaway."
-            }},
-            reasoning: {{
-                title: "🧠 Complex Math, Logic & Deep Planning",
-                topPick: {{ model: "OpenAI o3 / o1", lab: "OpenAI", reason: "Gold-standard test-time compute scaling that thinks through edge cases before outputting a token." }},
-                budget: {{ model: "DeepSeek-R1 API", lab: "DeepSeek", reason: "Matches o1 benchmark curves at ~90% lower API cost per million tokens." }},
-                local: {{ model: "DeepSeek-R1-Distill-Qwen-32B", lab: "DeepSeek / Qwen", reason: "Distilled reasoning traces fit onto single GPU setups without requiring 671B parameters." }},
-                tips: "Do NOT use few-shot prompt templates with reasoning models; let the model generate its own internal chain of thought."
-            }},
-            video: {{
-                title: "🎬 Video Generation & Neural Motion Editing",
-                topPick: {{ model: "Runway Gen-3 Alpha / Sora", lab: "Runway / OpenAI", reason: "Exceptional temporal coherence, photorealistic camera motions, and cinematic lighting control." }},
-                budget: {{ model: "Kling AI / Luma Dream Machine", lab: "Kuaishou / Luma", reason: "Generous free tier credits with fast rendering speeds and consistent motion dynamics." }},
-                local: {{ model: "CogVideoX-5B / Wan2.1", lab: "THUDM / Alibaba", reason: "Leading open-weights video diffusion models executable on 24GB VRAM with ComfyUI." }},
-                tips: "Specify lens focal length (e.g. '35mm anamorphic') and exact physical motion vectors to prevent morphing artifacts."
-            }},
-            image: {{
-                title: "🎨 Image Generation & Asset Design",
-                topPick: {{ model: "Midjourney v6.1 / Flux.1 Pro", lab: "Midjourney / Black Forest Labs", reason: "Highest aesthetic composition, typography rendering, and photorealistic skin textures." }},
-                budget: {{ model: "Flux.1 Schnell", lab: "Black Forest Labs", reason: "4-step ultra-fast distillation with commercial Apache 2.0 license." }},
-                local: {{ model: "Flux.1 Dev (NF4 / GGUF)", lab: "Black Forest Labs", reason: "Runs under 12GB VRAM using Forge or ComfyUI with full LoRA compatibility." }},
-                tips: "Use natural descriptive English paragraphs rather than comma-separated tag spam for Flux and Midjourney v6."
-            }},
-            automation: {{
-                title: "⚡ Low-Cost Bulk Extraction & Workflows",
-                topPick: {{ model: "Gemini 2.0 Flash", lab: "Google", reason: "Extremely aggressive pricing ($0.10 / 1M input) with 1M context window and near-zero latency." }},
-                budget: {{ model: "GPT-4o-mini", lab: "OpenAI", reason: "Reliable structured JSON output schema support for bulk classification tasks." }},
-                local: {{ model: "Llama 3.2 3B / Qwen 2.5 7B", lab: "Meta / Alibaba", reason: "Blistering fast throughput (150+ tokens/sec) for offline edge document processing." }},
-                tips: "Always enforce strict JSON Schema validation mode when extracting tabular records."
-            }},
-            local: {{
-                title: "🔒 Local & Private Offline Inference",
-                topPick: {{ model: "Llama 3.3 70B (Q4_K_M GGUF)", lab: "Meta AI", reason: "The undisputed champion of 70B open weights. Matches original GPT-4 on almost all tasks." }},
-                budget: {{ model: "Qwen 2.5 14B (Q5_K_M GGUF)", lab: "Alibaba", reason: "Superb sweet spot between 8B and 70B; fits entirely inside 12GB RTX 3060/4060 VRAM." }},
-                local: {{ model: "Ollama / vLLM / llama.cpp", lab: "Open Source", reason: "Top tier inference engines with OpenAI-compatible local endpoints at http://localhost:11434/v1." }},
-                tips: "Use GGUF format with `llama-server` or `Ollama` for automatic CPU/GPU layer offloading on mixed memory systems."
-            }},
-            context: {{
-                title: "📚 Massive Context (1M-2M+ Tokens) Document Analysis",
-                topPick: {{ model: "Gemini 1.5 Pro / 2.0 Pro", lab: "Google DeepMind", reason: "Flawless 2,000,000 token needle-in-a-haystack retrieval across entire codebases and video streams." }},
-                budget: {{ model: "Gemini 2.0 Flash", lab: "Google DeepMind", reason: "1,000,000 token context window available for pennies." }},
-                local: {{ model: "Llama 3.1 70B (128K context)", lab: "Meta AI", reason: "Reliable 128K context window for local enterprise compliance." }},
-                tips: "Place key search instructions and queries at the VERY END of the long context prompt for optimal recall."
-            }}
-        }};
-
-        // State
-        let activeDateKey = Object.keys(SEED_DATA)[0] || "today";
-        let currentView = "feed";
-        let supabaseClient = null;
-
-        // Init
-        document.addEventListener("DOMContentLoaded", () => {{
-            initSupabaseFromStorage();
-            renderCalendarStrip();
-            renderActiveDay();
-            renderModelTracker("All");
-            selectTask("coding");
-            filterArchiveYear("2026");
-        }});
-
-        function switchView(viewName) {{
-        });
-
-        function switchView(viewName) {
-            currentView = viewName;
-            document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-            document.querySelectorAll("main > section").forEach(s => s.style.display = "none");
-
-            document.getElementById(`tab-${viewName}`).classList.add("active");
-            document.getElementById(`view-${viewName}`).style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        async function initSupabaseFromStorage() {
-            // 1. Check if hosted on Vercel with native Supabase integration
-            try {
-                const resp = await fetch('/api/config');
-                if (resp.ok) {
-                    const data = await resp.json();
-                    if (data.supabaseUrl && data.supabaseAnonKey) {
-                        connectSupabase(data.supabaseUrl, data.supabaseAnonKey, "Vercel + Supabase Live");
-                        return;
-                    }
-                }
-            } catch (e) {
-                // Not running on serverless Vercel host or offline
-            }
-
-            // 2. Check localStorage
-            const url = localStorage.getItem("ai_pulse_sb_url");
-            const key = localStorage.getItem("ai_pulse_sb_key");
-            if (url && key) {
-                connectSupabase(url, key, "Supabase Live Sync");
-            }
-        }
-
-        function connectSupabase(url, key, label) {
-            if (window.supabase) {
-                try {
-                    supabaseClient = window.supabase.createClient(url, key);
-                    document.getElementById("supabase-status-label").innerText = label;
-                    document.getElementById("supabase-status-pill").style.borderColor = "var(--accent-cyan)";
-                    fetchLiveArticlesFromSupabase();
-                } catch (e) {
-                    console.error("Supabase connect error:", e);
-                }
-            }
-        }
-
-        async function fetchLiveArticlesFromSupabase() {
-            if (!supabaseClient) return;
-            try {
-                const { data, error } = await supabaseClient
-                    .from('articles')
-                    .select('*')
-                    .order('published_date', { ascending: false });
-
-                if (!error && data && data.length > 0) {
-                    groupAndMergeSupabaseArticles(data);
-                }
-            } catch (e) {
-                console.warn("Could not fetch live articles, using preloaded data:", e);
-            }
-        }
-
-        function groupAndMergeSupabaseArticles(articles) {
-            const grouped = {};
-            articles.forEach(a => {
-                const dayKey = (a.published_date || '').slice(0, 10);
-                if (!dayKey) return;
-                if (!grouped[dayKey]) {
-                    const d = new Date(dayKey + 'T00:00:00Z');
-                    grouped[dayKey] = {
-                        date: dayKey,
-                        day_name: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
-                        highlights: [
-                            `<strong>Live Updates:</strong> ${articles.length} active articles currently indexed in Supabase.`,
-                            `<strong>Strict Retention:</strong> Articles automatically pruned after 7 days.`
-                        ],
-                        top_10: [],
-                        one_liners: []
-                    };
-                }
-                if (grouped[dayKey].top_10.length < 10) {
-                    grouped[dayKey].top_10.push(a);
-                } else {
-                    grouped[dayKey].one_liners.push(a);
-                }
-            });
-
-            // If we received valid days from Supabase, update SEED_DATA in-memory
-            if (Object.keys(grouped).length > 0) {
-                Object.assign(SEED_DATA, grouped);
-                activeDateKey = Object.keys(grouped)[0];
-                renderCalendarStrip();
-                renderActiveDay();
-            }
-        }
-
-        function renderCalendarStrip() {
-            const strip = document.getElementById("calendar-strip");
-            strip.innerHTML = "";
-            const dates = Object.keys(SEED_DATA);
-
-            dates.forEach((dateKey, index) => {{
-                const dayData = SEED_DATA[dateKey];
-                const count = (dayData.top_10 || []).length + (dayData.one_liners || []).length;
-                const pill = document.createElement("div");
-                pill.className = `day-pill ${{dateKey === activeDateKey ? 'active' : ''}}`;
-                pill.onclick = () => selectDay(dateKey);
-
-                const d = new Date(dayData.date + "T00:00:00Z");
-                const dayName = index === 0 ? "Today" : (index === 1 ? "Yesterday" : d.toLocaleDateString('en-US', {{ weekday: 'short' }}));
-                const monthDay = d.toLocaleDateString('en-US', {{ month: 'short', day: 'numeric' }});
-
-                pill.innerHTML = `
-                    <div class="day-name">${{dayName}}</div>
-                    <div class="day-date">${{monthDay}}</div>
-                    <div class="article-count">${{count}} items</div>
-                `;
-                strip.appendChild(pill);
-            }});
-        }}
-
-        function selectDay(dateKey) {{
-            activeDateKey = dateKey;
-            renderCalendarStrip();
-            renderActiveDay();
-        }}
-
-        function renderActiveDay() {{
-            const dayData = SEED_DATA[activeDateKey];
-            if (!dayData) return;
-
-            // 1. Render Highlights
-            const hlList = document.getElementById("highlights-list");
-            hlList.innerHTML = "";
-            (dayData.highlights || []).forEach(hl => {{
-                const li = document.createElement("li");
-                li.innerHTML = hl;
-                hlList.appendChild(li);
-            }});
-
-            // 2. Render Cards Grid
-            const cardsGrid = document.getElementById("cards-grid");
-            cardsGrid.innerHTML = "";
-            const topArticles = dayData.top_10 || [];
-
-            topArticles.forEach((a, idx) => {{
-                const card = document.createElement("div");
-                card.className = `article-card ${{a.is_groundbreaking ? 'groundbreaking' : ''}}`;
-
-                let mediaHtml = "";
-                if (a.image_url) {{
-                    mediaHtml = `
-                    <div class="card-media">
-                        <img src="${{a.image_url}}" alt="Thumbnail" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-media-fallback\\'>⚡</div>'">
-                    </div>`;
-                }} else {{
-                    const iconMap = {{
-                        "BREAKTHROUGH": "🚨", "DEV TOOLS": "🛠️", "LOCAL AI": "⚡", "PRODUCTION": "🚀", "RESEARCH": "🔬"
-                    }};
-                    mediaHtml = `
-                    <div class="card-media">
-                        <div class="card-media-fallback">${{iconMap[a.category_tag] || '📄'}}</div>
-                    </div>`;
-                }}
-
-                let contHtml = "";
-                if (a.continuation) {{
-                    contHtml = `
-                    <div class="continuation-badge" onclick="showContinuationModal('${{escapeHtml(a.continuation.title)}}', '${{a.continuation.published_date || ''}}', '↳ Continuation of earlier story: ${{escapeHtml(a.continuation.title)}}. Click source to verify.', '${{a.continuation.url}}')">
-                        ↳ Continued from: ${{a.continuation.title.slice(0, 32)}}...
-                    </div>`;
-                }}
-
-                const tagPills = (a.entities || []).slice(0, 4).map(e => `<span class="tag-chip">#${{escapeHtml(e)}}</span>`).join("");
-
-                card.innerHTML = `
-                    ${{mediaHtml}}
-                    <div class="card-body">
-                        <div class="card-meta">
-                            <span class="source-tag">${{escapeHtml(a.source)}}</span>
-                            <span class="badge-pill badge-${{(a.category_tag || 'research').toLowerCase().replace(' ', '')}}">
-                                ${{a.category_tag}}
-                            </span>
-                        </div>
-
-                        <div class="card-title">${{escapeHtml(a.title)}}</div>
-                        ${{contHtml}}
-
-                        <div class="card-summary">${{escapeHtml(a.summary)}}</div>
-
-                        <div class="dev-impact-box">
-                            <div class="dev-impact-title">🛠️ Developer &amp; Practical Use Case</div>
-                            <div class="dev-impact-text">${{escapeHtml(a.dev_use_case || 'Applicable for model integration & development workflows.')}}</div>
-                        </div>
-
-                        <div class="card-tags">${{tagPills}}</div>
-
-                        <div class="card-footer">
-                            <div class="impact-meter">
-                                <span>⚡ Impact: ${{a.dev_impact_score || 85}}/100</span>
+            <div class="tasks-grid">
+                <div class="task-card">
+                    <div>
+                        <div class="task-title">💻 Agentic Coding &amp; Whole-Repo Refactoring</div>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Tasks requiring multi-file analysis, unit test generation, and autonomous terminal PR execution.</p>
+                        <div class="task-recommendations">
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">Frontier Proprietary SOTA</div>
+                                <strong>Claude 3.7 Sonnet (Extended Thinking)</strong> &bull; Best-in-class tool use &amp; SWE-bench verified.
                             </div>
-                            <a href="${{a.url}}" target="_blank" rel="noopener noreferrer" class="action-link">
-                                Read Source &rarr;
-                            </a>
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">Open Weights Champion</div>
+                                <strong>Qwen 2.5 Coder 32B</strong> &bull; Highest accuracy open model, runnable on single 24GB GPU.
+                            </div>
                         </div>
                     </div>
-                `;
-                cardsGrid.appendChild(card);
-            }});
+                </div>
 
-            // 3. Render 1-Liners
-            const onelinersContainer = document.getElementById("oneliners-container");
-            onelinersContainer.innerHTML = "";
-            const oneliners = dayData.one_liners || [];
-            document.getElementById("oneliners-count-badge").innerText = `${{oneliners.length}} items`;
+                <div class="task-card">
+                    <div>
+                        <div class="task-title">📐 Deep Mathematical &amp; Algorithmic Proofs</div>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Heavy formal logic, theorem proving, contest programming, and competitive algorithmic challenges.</p>
+                        <div class="task-recommendations">
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">Maximum Frontier Reasoning</div>
+                                <strong>OpenAI o3 / o3-mini (High Effort)</strong> &bull; Test-time compute scaling champion.
+                            </div>
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">Open Architecture Equivalent</div>
+                                <strong>DeepSeek-R1 (671B MoE)</strong> &bull; Pure RL chain-of-thought matching o1.
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            oneliners.forEach(ol => {{
-                const row = document.createElement("div");
-                row.className = "oneliner-row";
-                row.innerHTML = `
-                    <div class="oneliner-source">${{escapeHtml(ol.source.slice(0, 16))}}</div>
-                    <div class="oneliner-content">
-                        <a href="${{ol.url}}" target="_blank" rel="noopener noreferrer">${{escapeHtml(ol.title)}}</a>
-                        <span style="color:var(--text-muted); margin-left:6px;">&bull; ${{escapeHtml(ol.one_liner || ol.summary)}}</span>
+                <div class="task-card">
+                    <div>
+                        <div class="task-title">🎬 High-Definition Generative Video &amp; World Simulation</div>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Cinematic 1080p generation, physical motion simulation, camera control, and rapid prototyping.</p>
+                        <div class="task-recommendations">
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">Best Quality &amp; Temporal Consistency</div>
+                                <strong>Google Veo 3.1 &amp; OpenAI Sora 2</strong> &bull; Industry standards for coherent physical physics.
+                            </div>
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">High-Speed API Pipeline</div>
+                                <strong>Veo 3.1 Fast</strong> &bull; Sub-5 second video turnarounds for creator applications.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <div>
+                        <div class="task-title">📚 Massive Multi-Document &amp; Video Context (1M+ Tokens)</div>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Analyzing whole codebases, legal portfolios, or 2 hours of raw security camera footage in one prompt.</p>
+                        <div class="task-recommendations">
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">2M Token Champion</div>
+                                <strong>Gemini 3.1 Pro (2,000,000 Tokens)</strong> &bull; Near-perfect needle-in-a-haystack recall.
+                            </div>
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">Low-Cost 1M Context</div>
+                                <strong>Gemini 3.8 Flash ($0.10/1M)</strong> &bull; High-speed whole repository processing.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <div>
+                        <div class="task-title">🔒 Air-Gapped &amp; Private Local Inference</div>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Strict zero-data-leakage environments, offline mobile devices, or high-security financial/healthcare applications.</p>
+                        <div class="task-recommendations">
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">High Reasoning on Single GPU</div>
+                                <strong>DeepSeek-R1-Distill-32B &amp; Qwen 3.8 27B</strong> &bull; Runs on RTX 4090/5090 or Mac M-series.
+                            </div>
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">Dual GPU Workhorse</div>
+                                <strong>Llama 3.3 70B Instruct</strong> &bull; 405B quality on dual consumer GPUs.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-card">
+                    <div>
+                        <div class="task-title">🖱️ Desktop OS &amp; GUI Browser Automation</div>
+                        <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Controlling native software without APIs, clicking web buttons, filling legacy invoice portals.</p>
+                        <div class="task-recommendations">
+                            <div class="task-rec-item">
+                                <div class="task-rec-role">Native OS Agent API</div>
+                                <strong>Gemini 2.5 Computer Use &amp; Anthropic Computer Use</strong> &bull; Precise coordinate screenshot control.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ==================== MODEL INSPECTION DRAWER ==================== -->
+    <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeModelDrawer(event)">
+        <div class="drawer-content" id="drawer-content" onclick="event.stopPropagation()">
+            <button class="drawer-close-btn" onclick="closeModelDrawer()">✕</button>
+            
+            <div>
+                <div id="drawer-lab" style="font-size:12px;font-weight:800;color:var(--accent-green);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;"></div>
+                <h2 id="drawer-name" style="font-size:26px;font-weight:800;letter-spacing:-0.02em;color:#ffffff;margin-bottom:8px;"></h2>
+                <div id="drawer-tags" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+            </div>
+
+            <!-- Pricing Table -->
+            <div>
+                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">API Token Pricing (USD)</div>
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>Input / 1M</th>
+                            <th>Output / 1M</th>
+                            <th>Cached Input / 1M</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="drawer-price-in">-</td>
+                            <td id="drawer-price-out">-</td>
+                            <td id="drawer-price-cached">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Specs Grid -->
+            <div>
+                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">Architecture &amp; Context Limits</div>
+                <div style="background:#121212;border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;">
+                    <div>
+                        <div style="color:var(--text-muted);font-size:11px;font-weight:700;text-transform:uppercase;">Context Window</div>
+                        <div id="drawer-context" style="color:#ffffff;font-weight:700;margin-top:2px;"></div>
                     </div>
                     <div>
-                        <a href="${{ol.url}}" target="_blank" class="action-link" style="font-size:12px;">View &rarr;</a>
+                        <div style="color:var(--text-muted);font-size:11px;font-weight:700;text-transform:uppercase;">Max Output Limit</div>
+                        <div id="drawer-max-out" style="color:#ffffff;font-weight:700;margin-top:2px;"></div>
                     </div>
-                `;
-                onelinersContainer.appendChild(row);
-            }});
+                    <div style="grid-column: span 2;">
+                        <div style="color:var(--text-muted);font-size:11px;font-weight:700;text-transform:uppercase;">Architecture</div>
+                        <div id="drawer-arch" style="color:#ffffff;margin-top:2px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Capabilities List -->
+            <div>
+                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">Supported Capabilities</div>
+                <div id="drawer-capabilities" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+            </div>
+
+            <!-- Best Application -->
+            <div>
+                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">Best Suited For</div>
+                <div id="drawer-best" style="font-size:14px;color:var(--text-secondary);line-height:1.6;background:#121212;border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:14px;"></div>
+            </div>
+
+            <!-- Code / CLI Snippet -->
+            <div>
+                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);margin-bottom:8px;">Quickstart Code / CLI Execution</div>
+                <div class="code-block-wrap">
+                    <button class="copy-code-btn" onclick="copyDrawerCode()">Copy</button>
+                    <div class="code-block" id="drawer-code"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+    <script>
+        const EMBEDDED_SEED = {seed_json_str};
+        const FRONTIER_MODELS = {models_json_str};
+        const MILESTONES_ARCHIVE = {milestones_json_str};
+
+        let supabaseClient = null;
+        let allArticlesByDate = {{}};
+        let availableDates = [];
+        let selectedDate = null;
+        let selectedTopicFilter = 'all';
+
+        // 1. App Initialization
+        document.addEventListener("DOMContentLoaded", async () => {{
+            buildCalendarDates();
+            renderModelsGrid(FRONTIER_MODELS);
+            renderMilestones("yearly");
+            loadSeedDataset();
+            await initSupabaseConnection();
+        }});
+
+        function switchTab(tabId) {{
+            document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".app-container > section").forEach(s => s.style.display = "none");
+
+            document.getElementById(`tab-${{tabId}}`).classList.add("active");
+            document.getElementById(`view-${{tabId}}`).style.display = "block";
+            window.scrollTo({{ top: 0, behavior: "smooth" }});
         }}
 
-        function renderModelTracker(selectedLab) {{
-            const grid = document.getElementById("models-grid");
-            grid.innerHTML = "";
+        // 2. Calendar Dates
+        function buildCalendarDates() {{
+            const bar = document.getElementById("calendar-bar");
+            bar.innerHTML = "";
+            availableDates = [];
 
-            const filtered = selectedLab === "All" 
-                ? FRONTIER_MODELS 
-                : FRONTIER_MODELS.filter(m => m.lab.toLowerCase().includes(selectedLab.toLowerCase()));
+            // Calculate last 7 calendar days
+            for (let i = 0; i < 7; i++) {{
+                const d = new Date();
+                d.setUTCDate(d.getUTCDate() - i);
+                const isoStr = d.toISOString().split("T")[0];
+                availableDates.push(isoStr);
 
-            filtered.forEach(m => {{
-                const card = document.createElement("div");
-                card.className = "model-card";
-                card.innerHTML = `
-                    <div class="model-header">
-                        <div>
-                            <div class="model-name">${{m.name}}</div>
-                            <div class="model-lab">${{m.lab}} &bull; ${{m.date}}</div>
-                        </div>
-                        <span class="badge-pill badge-production">${{m.license}}</span>
-                    </div>
+                const chip = document.createElement("button");
+                chip.className = `date-chip ${{i === 0 ? 'active' : ''}}`;
+                chip.id = `date-chip-${{isoStr}}`;
+                
+                const label = (i === 0) ? "Today" : (i === 1) ? "Yesterday" : d.toLocaleDateString("en-US", {{ month: "short", day: "numeric", timeZone: "UTC" }});
+                chip.innerText = `${{label}} (${{isoStr}})`;
+                chip.onclick = () => selectCalendarDate(isoStr);
+                bar.appendChild(chip);
+            }}
 
-                    <div class="model-specs-grid">
-                        <div class="spec-item">
-                            <div class="spec-label">Context Window</div>
-                            <div class="spec-val">${{m.context}}</div>
-                        </div>
-                        <div class="spec-item">
-                            <div class="spec-label">Architecture</div>
-                            <div class="spec-val">${{m.architecture}}</div>
-                        </div>
-                        <div class="spec-item">
-                            <div class="spec-label">Reasoning Strength</div>
-                            <div class="spec-val">${{m.reasoning}}</div>
-                        </div>
-                        <div class="spec-item">
-                            <div class="spec-label">Coding Score</div>
-                            <div class="spec-val" style="color:var(--accent-cyan);">${{m.coding}}</div>
-                        </div>
-                    </div>
-
-                    <div style="font-size:13px; color:var(--text-secondary); line-height:1.45;">
-                        <strong style="color:var(--text-primary);">Best Application:</strong> ${{m.strength}}
-                    </div>
-                `;
-                grid.appendChild(card);
-            }});
+            selectedDate = availableDates[0];
         }}
 
-        function filterModels(lab) {{
-            document.querySelectorAll(".filter-chip").forEach(c => {{
-                c.classList.toggle("active", c.innerText.includes(lab) || (lab === 'All' && c.innerText === 'All Labs'));
-            }});
-            renderModelTracker(lab);
+        function selectCalendarDate(dateStr) {{
+            selectedDate = dateStr;
+            document.querySelectorAll(".date-chip").forEach(c => c.classList.remove("active"));
+            const activeChip = document.getElementById(`date-chip-${{dateStr}}`);
+            if (activeChip) activeChip.classList.add("active");
+            renderCurrentDateArticles();
         }}
 
-        function selectTask(taskKey) {{
-            document.querySelectorAll(".task-btn").forEach(b => {{
-                b.classList.toggle("active", b.getAttribute("onclick").includes(taskKey));
+        // 3. Data Ingestion & Supabase
+        function loadSeedDataset() {{
+            if (EMBEDDED_SEED && Object.keys(EMBEDDED_SEED).length > 0) {{
+                allArticlesByDate = {{ ...EMBEDDED_SEED }};
+            }} else {{
+                allArticlesByDate = {{}};
+            }}
+            renderCurrentDateArticles();
+        }}
+
+        async function initSupabaseConnection() {{
+            // 1. Try Vercel auto-config
+            try {{
+                const resp = await fetch('/api/config');
+                if (resp.ok) {{
+                    const data = await resp.json();
+                    if (data.supabaseUrl && data.supabaseAnonKey) {{
+                        connectSupabase(data.supabaseUrl, data.supabaseAnonKey);
+                        return;
+                    }}
+                }}
+            }} catch (e) {{}}
+
+            // 2. Try localStorage
+            const localUrl = localStorage.getItem("ai_pulse_sb_url");
+            const localKey = localStorage.getItem("ai_pulse_sb_key");
+            if (localUrl && localKey) {{
+                connectSupabase(localUrl, localKey);
+            }}
+        }}
+
+        function connectSupabase(url, key) {{
+            if (window.supabase) {{
+                try {{
+                    supabaseClient = window.supabase.createClient(url, key);
+                    document.getElementById("header-sync-status").innerText = "Supabase Live";
+                    document.getElementById("header-sync-status").style.color = "var(--accent-green)";
+                    fetchLiveSupabaseData();
+                }} catch (e) {{
+                    console.error("Supabase connection error:", e);
+                }}
+            }}
+        }}
+
+        async function fetchLiveSupabaseData() {{
+            if (!supabaseClient) return;
+            try {{
+                const {{ data, error }} = await supabaseClient
+                    .from('articles')
+                    .select('*')
+                    .order('published_date', {{ ascending: false }});
+
+                if (!error && data && data.length > 0) {{
+                    mergeSupabaseRows(data);
+                }}
+            }} catch (e) {{
+                console.warn("Using local cache:", e);
+            }}
+        }}
+
+        function mergeSupabaseRows(rows) {{
+            const grouped = {{}};
+            rows.forEach(art => {{
+                if (!art.published_date) return;
+                const dStr = art.published_date.split("T")[0];
+                if (!grouped[dStr]) {{
+                    grouped[dStr] = {{ top_10: [], one_liners: [] }};
+                }}
+                if (art.is_groundbreaking || art.category_tag === "BREAKTHROUGH" || grouped[dStr].top_10.length < 10) {{
+                    grouped[dStr].top_10.push(art);
+                }} else {{
+                    grouped[dStr].one_liners.push(art);
+                }}
             }});
 
-            const rec = TASK_RECOMMENDATIONS[taskKey];
-            const panel = document.getElementById("recommendation-panel");
+            // Merge into allArticlesByDate
+            for (const [dateKey, payload] of Object.entries(grouped)) {{
+                allArticlesByDate[dateKey] = payload;
+            }}
 
-            panel.innerHTML = `
-                <div class="rec-box" style="border-top: 3px solid var(--accent-cyan);">
-                    <div class="rec-badge" style="color:var(--accent-cyan);">🥇 Top Recommended Choice</div>
-                    <div class="rec-model">${{rec.topPick.model}}</div>
-                    <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">${{rec.topPick.lab}}</div>
-                    <div class="rec-desc">${{rec.topPick.reason}}</div>
-                </div>
+            renderCurrentDateArticles();
+        }}
 
-                <div class="rec-box" style="border-top: 3px solid var(--accent-amber);">
-                    <div class="rec-badge" style="color:var(--accent-amber);">💰 Budget / Fast Alternative</div>
-                    <div class="rec-model">${{rec.budget.model}}</div>
-                    <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">${{rec.budget.lab}}</div>
-                    <div class="rec-desc">${{rec.budget.reason}}</div>
-                </div>
+        // 4. Feed Rendering & Real-Time Filters
+        function setTopicFilter(tag) {{
+            selectedTopicFilter = tag;
+            document.querySelectorAll(".tag-chip").forEach(c => c.classList.remove("active"));
+            event.target.classList.add("active");
+            filterArticles();
+        }}
 
-                <div class="rec-box" style="border-top: 3px solid var(--accent-emerald);">
-                    <div class="rec-badge" style="color:var(--accent-emerald);">💻 Open-Source / Local Choice</div>
-                    <div class="rec-model">${{rec.local.model}}</div>
-                    <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">${{rec.local.lab}}</div>
-                    <div class="rec-desc">${{rec.local.reason}}</div>
-                </div>
+        function renderCurrentDateArticles() {{
+            filterArticles();
+        }}
 
-                <div class="rec-box" style="grid-column: 1 / -1; background:var(--bg-surface); border:1px dashed var(--border-highlight);">
-                    <div class="rec-badge" style="color:var(--accent-purple);">💡 Engineering Pro-Tips &amp; Best Practices</div>
-                    <div class="rec-desc" style="color:var(--text-primary); font-size:13.5px;">${{rec.tips}}</div>
+        function filterArticles() {{
+            const grid = document.getElementById("articles-grid");
+            const onelinersList = document.getElementById("oneliners-list");
+            const query = document.getElementById("search-input").value.toLowerCase().trim();
+
+            const dateData = allArticlesByDate[selectedDate] || {{ top_10: [], one_liners: [] }};
+            let featured = dateData.top_10 || [];
+            let oneliners = dateData.one_liners || [];
+
+            // If selected date is empty, fallback to most recent date available
+            if (featured.length === 0 && oneliners.length === 0) {{
+                const keys = Object.keys(allArticlesByDate);
+                if (keys.length > 0) {{
+                    featured = allArticlesByDate[keys[0]].top_10 || [];
+                    oneliners = allArticlesByDate[keys[0]].one_liners || [];
+                }}
+            }}
+
+            // Filter featured
+            const filteredFeatured = featured.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter));
+            const filteredOneLiners = oneliners.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter));
+
+            // Render Featured Cards
+            if (filteredFeatured.length === 0) {{
+                grid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">No featured stories found for the selected date and filters.</div>`;
+            }} else {{
+                grid.innerHTML = filteredFeatured.map(art => renderArticleCard(art)).join("");
+            }}
+
+            // Render 1-Liners
+            document.getElementById("oneliner-count").innerText = `(${{filteredOneLiners.length}} items)`;
+            if (filteredOneLiners.length === 0) {{
+                onelinersList.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:8px 0;">No matching quick-hits.</div>`;
+            }} else {{
+                onelinersList.innerHTML = filteredOneLiners.map(art => `
+                    <div class="oneliner-item">
+                        <div class="oneliner-text">
+                            <a href="${{art.url}}" target="_blank" class="oneliner-title">${{escapeHtml(art.title)}}</a>
+                            <span>— ${{escapeHtml(art.one_liner || art.summary || '')}}</span>
+                        </div>
+                        <span style="font-size:11px;color:var(--text-muted);white-space:nowrap;">${{escapeHtml(art.source)}}</span>
+                    </div>
+                `).join("");
+            }}
+        }}
+
+        function matchesSearchAndTopic(art, query, topic) {{
+            // 1. Topic match
+            if (topic !== 'all') {{
+                const tag = (art.category_tag || '').toLowerCase();
+                const title = (art.title || '').toLowerCase();
+                const text = (art.summary || '').toLowerCase();
+
+                if (topic === '#FrontierModels' && !tag.includes('frontier') && !title.includes('gemini') && !title.includes('claude') && !title.includes('openai') && !title.includes('deepseek')) return false;
+                if (topic === '#Reasoning' && !text.includes('reason') && !text.includes('think') && !text.includes('proof')) return false;
+                if (topic === '#AgenticCoding' && !tag.includes('dev') && !text.includes('code') && !text.includes('agent')) return false;
+                if (topic === '#LocalLLM' && !tag.includes('local') && !text.includes('quant') && !text.includes('gguf')) return false;
+                if (topic === '#Vision' && !text.includes('vision') && !text.includes('image') && !text.includes('video')) return false;
+                if (topic === '#Production' && !tag.includes('prod') && !text.includes('vllm') && !text.includes('deploy')) return false;
+                if (topic === '#Robotics' && !text.includes('robot') && !text.includes('dexterous') && !text.includes('manipulation')) return false;
+                if (topic === '#Breakthroughs' && !art.is_groundbreaking && !tag.includes('breakthrough')) return false;
+            }}
+
+            // 2. Query match
+            if (!query) return true;
+            const fullStr = `${{art.title}} ${{art.summary}} ${{art.dev_use_case}} ${{art.source}} ${{art.category}}`.toLowerCase();
+            return fullStr.includes(query);
+        }}
+
+        function renderArticleCard(art) {{
+            const isBreakthrough = art.is_groundbreaking || art.category_tag === "BREAKTHROUGH";
+            const badgeClass = isBreakthrough ? "badge-breakthrough" : 
+                               art.category_tag === "DEV TOOLS" ? "badge-devtools" :
+                               art.category_tag === "LOCAL AI" ? "badge-local" :
+                               art.category_tag === "PRODUCTION" ? "badge-prod" : "badge-research";
+            const badgeLabel = isBreakthrough ? "🚨 BREAKTHROUGH" : (art.category || "AI RESEARCH");
+
+            const imgHtml = art.image_url ? `
+                <div class="article-img-wrap">
+                    <img src="${{art.image_url}}" class="article-img" alt="Visual Preview" onerror="this.parentElement.style.display='none'">
                 </div>
+            ` : "";
+
+            const capabilityHtml = art.new_capability || isBreakthrough ? `
+                <div class="capability-box">
+                    <div class="capability-label">⚡ New Capability Unlocked</div>
+                    ${{escapeHtml(art.new_capability || 'Zero-shot online camera pose formulation achieving state-of-the-art scalable 3D reconstruction without test-time depth sensors.')}}
+                </div>
+            ` : "";
+
+            const useCaseHtml = art.dev_use_case ? `
+                <div class="usecase-box">
+                    <div class="usecase-label">Practical Dev Application</div>
+                    ${{escapeHtml(art.dev_use_case)}}
+                </div>
+            ` : "";
+
+            return `
+                <article class="article-card">
+                    <div>
+                        <div class="card-top">
+                            <span class="badge ${{badgeClass}}">${{badgeLabel}}</span>
+                            <span class="card-meta">${{escapeHtml(art.source)}}</span>
+                        </div>
+                        <a href="${{art.url}}" target="_blank" class="article-title">${{escapeHtml(art.title)}}</a>
+                        ${{imgHtml}}
+                        <p class="article-summary">${{escapeHtml(art.summary || '')}}</p>
+                        ${{capabilityHtml}}
+                        ${{useCaseHtml}}
+                    </div>
+                    <div class="card-bottom">
+                        <span class="source-pill">${{art.published_date ? art.published_date.split("T")[0] : 'Today'}}</span>
+                        <a href="${{art.url}}" target="_blank" class="read-btn">Read Article ↗</a>
+                    </div>
+                </article>
             `;
         }}
 
-        function filterArchiveYear(year) {{
-            document.querySelectorAll(".year-btn").forEach(b => {{
-                b.classList.toggle("active", b.innerText === year);
-            }});
-
-            const timeline = document.getElementById("milestones-timeline");
-            timeline.innerHTML = "";
-
-            const filtered = MILESTONES.filter(m => m.year === year);
-            filtered.forEach(m => {{
-                const item = document.createElement("div");
-                item.className = "milestone-item";
-                item.innerHTML = `
-                    <div class="milestone-date">${{m.date}}</div>
-                    <div class="milestone-title">${{m.title}}</div>
-                    <div class="milestone-desc">${{m.desc}}</div>
-                `;
-                timeline.appendChild(item);
-            }});
+        // 5. Frontier Models & Inspection Drawer
+        function renderModelsGrid(models) {{
+            const grid = document.getElementById("models-grid");
+            grid.innerHTML = models.map(m => `
+                <div class="model-card" onclick="openModelDrawer('${{m.id}}')">
+                    <div class="model-top">
+                        <div class="model-lab-badge">${{escapeHtml(m.lab)}} &bull; ${{m.year}}</div>
+                        <div class="model-name">${{escapeHtml(m.name)}}</div>
+                        <div class="model-specs-row">
+                            <span class="badge badge-prod">${{escapeHtml(m.readiness)}}</span>
+                            <span class="spec-pill">${{escapeHtml(m.context_window)}}</span>
+                            <span class="spec-pill">${{escapeHtml(m.license)}}</span>
+                        </div>
+                        <p class="model-best-for">${{escapeHtml(m.best_for)}}</p>
+                    </div>
+                    <div>
+                        <div class="model-pricing-preview">
+                            <span>Input: ${{m.pricing_input}}</span>
+                            <span>Output: ${{m.pricing_output}}</span>
+                        </div>
+                        <div class="inspect-action-text">Inspect Specs &amp; Code ➔</div>
+                    </div>
+                </div>
+            `).join("");
         }}
 
-        // Modal Handlers
-        function openSupabaseModal() {{
-            document.getElementById("cfg-supabase-url").value = localStorage.getItem("ai_pulse_sb_url") || "";
-            document.getElementById("cfg-supabase-key").value = localStorage.getItem("ai_pulse_sb_key") || "";
-            document.getElementById("supabase-modal").classList.add("active");
-        }}
+        function filterModelsByLab(labSlug) {{
+            document.querySelectorAll(".lab-chip").forEach(c => c.classList.remove("active"));
+            event.target.classList.add("active");
 
-        function closeSupabaseModal() {{
-            document.getElementById("supabase-modal").classList.remove("active");
-        }}
-
-        function closeModalOnBackdrop(e) {{
-            if (e.target.classList.contains("modal-overlay")) {{
-                e.target.classList.remove("active");
+            if (labSlug === "all") {{
+                renderModelsGrid(FRONTIER_MODELS);
+            }} else {{
+                const filtered = FRONTIER_MODELS.filter(m => m.lab_slug === labSlug);
+                renderModelsGrid(filtered);
             }}
         }}
 
-        function saveSupabaseConfig() {{
-            const url = document.getElementById("cfg-supabase-url").value.trim();
-            const key = document.getElementById("cfg-supabase-key").value.trim();
-            if (!url || !key) {{
-                alert("Please enter both Supabase URL and Anon Key.");
+        function openModelDrawer(modelId) {{
+            const m = FRONTIER_MODELS.find(x => x.id === modelId);
+            if (!m) return;
+
+            document.getElementById("drawer-lab").innerText = `${{m.lab}} • ${{m.year}}`;
+            document.getElementById("drawer-name").innerText = m.name;
+            document.getElementById("drawer-tags").innerHTML = `
+                <span class="badge badge-prod">${{m.readiness}}</span>
+                <span class="spec-pill">${{m.license}}</span>
+                <span class="spec-pill">${{m.tag}}</span>
+            `;
+
+            document.getElementById("drawer-price-in").innerText = m.pricing_input;
+            document.getElementById("drawer-price-out").innerText = m.pricing_output;
+            document.getElementById("drawer-price-cached").innerText = m.pricing_cached;
+
+            document.getElementById("drawer-context").innerText = m.context_window;
+            document.getElementById("drawer-max-out").innerText = m.max_output;
+            document.getElementById("drawer-arch").innerText = m.architecture;
+
+            document.getElementById("drawer-capabilities").innerHTML = m.capabilities.map(c => `
+                <span class="spec-pill" style="color:var(--accent-green);border:1px solid #1e3a24;background:#141d16;">✓ ${{c}}</span>
+            `).join("");
+
+            document.getElementById("drawer-best").innerText = m.best_for;
+            document.getElementById("drawer-code").innerText = m.api_snippet;
+
+            document.getElementById("drawer-backdrop").classList.add("open");
+            document.body.style.overflow = "hidden";
+        }}
+
+        function closeModelDrawer(event) {{
+            if (event && event.target.id !== "drawer-backdrop" && !event.target.classList.contains("drawer-close-btn")) {{
                 return;
             }}
-            localStorage.setItem("ai_pulse_sb_url", url);
-            localStorage.setItem("ai_pulse_sb_key", key);
-            initSupabaseFromStorage();
-            closeSupabaseModal();
-            alert("Supabase credentials saved! The app will query your Supabase instance.");
+            document.getElementById("drawer-backdrop").classList.remove("open");
+            document.body.style.overflow = "";
         }}
 
-        function usePreloadedData() {{
-            localStorage.removeItem("ai_pulse_sb_url");
-            localStorage.removeItem("ai_pulse_sb_key");
-            supabaseClient = null;
-            document.getElementById("supabase-status-label").innerText = "Live Preloaded Dataset";
-            closeSupabaseModal();
+        function copyDrawerCode() {{
+            const code = document.getElementById("drawer-code").innerText;
+            navigator.clipboard.writeText(code);
+            const btn = document.querySelector(".copy-code-btn");
+            btn.innerText = "Copied!";
+            setTimeout(() => btn.innerText = "Copy", 1500);
         }}
 
-        function showContinuationModal(title, date, summary, url) {{
-            document.getElementById("cont-modal-title").innerText = title;
-            document.getElementById("cont-modal-date").innerText = "Preceding Story Date: " + (date || "Recent");
-            document.getElementById("cont-modal-summary").innerText = summary;
-            document.getElementById("cont-modal-link").href = url;
-            document.getElementById("continuation-modal").classList.add("active");
+        // 6. Milestones Period Rendering
+        function switchMilestonePeriod(periodType) {{
+            document.querySelectorAll(".period-chip").forEach(c => c.classList.remove("active"));
+            document.getElementById(`pchip-${{periodType}}`).classList.add("active");
+            renderMilestones(periodType);
         }}
 
-        function closeContinuationModal() {{
-            document.getElementById("continuation-modal").classList.remove("active");
+        function renderMilestones(periodType) {{
+            const container = document.getElementById("milestones-container");
+            const items = MILESTONES_ARCHIVE[periodType] || [];
+
+            container.innerHTML = items.map(grp => `
+                <div class="milestone-group">
+                    <div class="milestone-group-title">
+                        <span>📅 ${{grp.period}} Landmark Top 3</span>
+                    </div>
+                    <div>
+                        ${{grp.top3.map(m => `
+                            <div class="milestone-card">
+                                <div class="milestone-header">
+                                    <span class="milestone-title">${{escapeHtml(m.title)}}</span>
+                                    <span class="milestone-lab">${{escapeHtml(m.lab)}} &bull; ${{m.date}}</span>
+                                </div>
+                                <div class="milestone-cap"><strong>Capability Unlocked:</strong> ${{escapeHtml(m.capability)}}</div>
+                                ${{m.impact ? `<div class="milestone-impact"><strong>Developer Impact:</strong> ${{escapeHtml(m.impact)}}</div>` : ''}}
+                            </div>
+                        `).join("")}}
+                    </div>
+                </div>
+            `).join("");
         }}
 
+        // Utility
         function escapeHtml(str) {{
             if (!str) return "";
             return String(str)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+                .replace(/"/g, "&quot;");
         }}
     </script>
 </body>
-</html>
-"""
+</html>"""
 
-output_path = Path("index.html")
-output_path.write_text(html_template, encoding="utf-8")
-print(f"Generated {output_path.resolve()} ({output_path.stat().st_size / 1024:.1f} KB)")
+with open("index.html", "w") as f:
+    f.write(html_template)
+
+print("✅ Successfully built Spotify-inspired index.html!")

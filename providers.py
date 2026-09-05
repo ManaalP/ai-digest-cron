@@ -110,21 +110,53 @@ class OpenAIProvider:
 
 class GoogleProvider:
     name = "google"
+    FALLBACK_MODELS = [
+        "gemini-3.8-flash",
+        "gemini-3.6-flash",
+        "gemini-3.5-flash",
+        "gemini-3.1-flash-lite",
+        "gemini-flash-latest"
+    ]
 
-    def __init__(self, api_key, model):
+    def __init__(self, api_key, model="gemini-3.8-flash"):
         import google.generativeai as genai
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(model, system_instruction=SYSTEM_PROMPT)
+        self.genai = genai
+        self.api_key = api_key
+        self.genai.configure(api_key=api_key)
+        
+        # Priority order: user-specified model first, followed by available fallbacks
+        self.model_pool = [model] + [m for m in self.FALLBACK_MODELS if m != model]
+        self.current_idx = 0
+        self.model_name = self.model_pool[self.current_idx]
+        self.model = self.genai.GenerativeModel(self.model_name, system_instruction=SYSTEM_PROMPT)
+
+    def _rotate_model(self):
+        self.current_idx = (self.current_idx + 1) % len(self.model_pool)
+        self.model_name = self.model_pool[self.current_idx]
+        print(f"[providers.google] Quota/Limit mitigation: Rotated active model to '{self.model_name}'")
+        self.model = self.genai.GenerativeModel(self.model_name, system_instruction=SYSTEM_PROMPT)
 
     def summarize(self, title, raw_text, source):
-        try:
-            resp = self.model.generate_content(
-                _user_content(title, raw_text, source),
-                generation_config={"max_output_tokens": 2048, "response_mime_type": "application/json"},
-            )
-            return _parse_json_response(resp.text)
-        except Exception as e:
-            raise ProviderError(f"google: {e}") from e
+        last_err = None
+        for attempt in range(len(self.model_pool)):
+            try:
+                resp = self.model.generate_content(
+                    _user_content(title, raw_text, source),
+                    generation_config={"max_output_tokens": 2048, "response_mime_type": "application/json"},
+                )
+                return _parse_json_response(resp.text)
+            except Exception as e:
+                err_str = str(e)
+                last_err = e
+                # Rotate on 429, quota exhausted, rate limits, or model unavailability
+                if any(x in err_str.lower() for x in ["429", "quota", "resource_exhausted", "ratelimit", "not available", "404", "overloaded"]):
+                    print(f"[providers.google] '{self.model_name}' rate/quota notice: {err_str[:70]}...")
+                    self._rotate_model()
+                    continue
+                else:
+                    self._rotate_model()
+                    continue
+        raise ProviderError(f"google: all {len(self.model_pool)} rotation models exhausted. Last: {last_err}") from last_err
 
 
 PROVIDER_CLASSES = {

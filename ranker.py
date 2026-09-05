@@ -224,15 +224,21 @@ def generate_executive_highlights(articles: list) -> list:
     return highlights[:4]
 
 
-def rank_and_structure_digest(raw_items: list, lookback_hours: int = 24) -> dict:
+def rank_and_structure_digest(raw_items: list, lookback_hours: int = 24, target_date: str = None) -> dict:
     now = datetime.now(timezone.utc)
     cutoff = now - timedelta(hours=lookback_hours)
 
-    # 1. Filter strictly by <= 24 hours
-    fresh_items = [
-        it for it in raw_items
-        if it.get("published") and it["published"] >= cutoff and it.get("url")
-    ]
+    # 1. Filter strictly by target date or <= lookback_hours
+    if target_date:
+        fresh_items = [
+            it for it in raw_items
+            if it.get("published") and it["published"].strftime("%Y-%m-%d") == target_date and it.get("url")
+        ]
+    else:
+        fresh_items = [
+            it for it in raw_items
+            if it.get("published") and it["published"] >= cutoff and it.get("url")
+        ]
 
     # Deduplicate by URL and normalized title
     seen_urls = set()

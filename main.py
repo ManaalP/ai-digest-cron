@@ -81,8 +81,18 @@ def main():
     unseen_set = db.filter_unseen_urls(all_urls) if hasattr(db, "filter_unseen_urls") else {u for u in all_urls if not db.url_exists(u)}
     fresh_unseen = [it for it in raw_items if it.get("url") in unseen_set]
 
-    # Structure into Highlights, Top 10, and 1-Liners (strict 24h window)
-    digest_data = rank_and_structure_digest(fresh_unseen, lookback_hours=lookback_hours)
+    # Parse command line date targets if specified
+    target_date = None
+    if "--yesterday" in sys.argv:
+        target_date = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
+        print(f"[main] Target date set to completed previous day: {target_date}")
+    for arg in sys.argv:
+        if arg.startswith("--date="):
+            target_date = arg.split("=", 1)[1].strip()
+            print(f"[main] Target date explicitly set to: {target_date}")
+
+    # Structure into Highlights, Top 10, and 1-Liners (strict 24h window or target date)
+    digest_data = rank_and_structure_digest(fresh_unseen, lookback_hours=lookback_hours, target_date=target_date)
     top_articles = digest_data["top_10"]
     one_liners = digest_data.get("one_liners", [])
 
