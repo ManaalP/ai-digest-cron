@@ -348,6 +348,8 @@ def _best_match(entities, index, threshold):
 
 def export_db_to_seed(db, output_file="seed_7days.json"):
     """Export recent database articles directly to seed_7days.json so static builds match live DB."""
+    from ranker import generate_executive_highlights
+
     rows = db.get_all_recent_articles(days=7)
     grouped = {}
     for r in rows:
@@ -397,13 +399,14 @@ def export_db_to_seed(db, output_file="seed_7days.json"):
             "entities": entities_val,
             "image_url": r.get("image_url")
         }
+
+        # Separate into Top 10 main articles vs Quick Hits
         if art["is_groundbreaking"] or len(grouped[d_str]["top_10"]) < 10:
             grouped[d_str]["top_10"].append(art)
         else:
             grouped[d_str]["one_liners"].append(art)
 
     # Generate executive highlights for each date
-    from ranker import generate_executive_highlights
     for d_str, day_data in grouped.items():
         all_day_items = day_data["top_10"] + day_data["one_liners"]
         day_data["highlights"] = generate_executive_highlights(all_day_items)
