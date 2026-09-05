@@ -1,7 +1,26 @@
-*.py
-requirements.txt
+# Vercel Deployment Ignore
+.env
+*.env
+digest.db
+*.db
+venv/
+logs/
+__pycache__/
+*.pyc
+*.png
+
+# Ignore backend cron-only CLI files
+main.py
+fetchers.py
+ranker.py
+db.py
+emailer.py
+summarizer.py
+providers.py
+sample_run.py
+build_webapp.py
 setup_cron.sh
-sample_digest.html
+supabase_schema.sql
 .github/
 README.md
-supabase_schema.sql
+sample_digest.html
