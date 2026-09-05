@@ -224,20 +224,45 @@ def generate_executive_highlights(articles: list) -> list:
     return highlights[:4]
 
 
+AI_RELEVANCE_PATTERNS = [
+    r"\b(artificial intelligence|machine learning|deep learning)\b",
+    r"\b(llm|llms|gpt|claude|gemini|deepseek|llama|qwen|mistral|grok|cohere)\b",
+    r"\b(neural network|transformer|attention mechanism|weights|checkpoint|safetensors)\b",
+    r"\b(gguf|vllm|ollama|kv cache|sglang|tgi|exllama|nvfp4)\b",
+    r"\b(reasoning model|prompt engineering|context window|fine-tuning|pretraining|rlvr|rlhf|dpo)\b",
+    r"\b(coding agent|software agent|autonomous agent|agentic|multi-agent|vibecoding)\b",
+    r"\b(openai|anthropic|google deepmind|meta ai|hugging face|mistral ai|coderabbit|artificial analysis|mlperf)\b",
+    r"\bai\s+(model|models|agent|agents|workstation|tool|tools|research|system|systems|incident)\b",
+]
+
+
+def is_ai_relevant(item: dict) -> bool:
+    title = item.get("title", "")
+    raw = item.get("raw_text", "")
+    content = f"{title} {raw}".lower()
+    return any(re.search(pat, content, re.IGNORECASE) for pat in AI_RELEVANCE_PATTERNS)
+
+
+def is_reddit_article(item: dict) -> bool:
+    source = (item.get("source") or "").lower()
+    url = (item.get("url") or "").lower()
+    return "reddit.com" in url or "reddit" in source or source.startswith("r/")
+
+
 def rank_and_structure_digest(raw_items: list, lookback_hours: int = 24, target_date: str = None) -> dict:
     now = datetime.now(timezone.utc)
     cutoff = now - timedelta(hours=lookback_hours)
 
-    # 1. Filter strictly by target date or <= lookback_hours
+    # 1. Filter strictly by target date or <= lookback_hours AND require AI relevance
     if target_date:
         fresh_items = [
             it for it in raw_items
-            if it.get("published") and it["published"].strftime("%Y-%m-%d") == target_date and it.get("url")
+            if it.get("published") and it["published"].strftime("%Y-%m-%d") == target_date and it.get("url") and is_ai_relevant(it)
         ]
     else:
         fresh_items = [
             it for it in raw_items
-            if it.get("published") and it["published"] >= cutoff and it.get("url")
+            if it.get("published") and it["published"] >= cutoff and it.get("url") and is_ai_relevant(it)
         ]
 
     # Deduplicate by URL and normalized title
@@ -259,11 +284,11 @@ def rank_and_structure_digest(raw_items: list, lookback_hours: int = 24, target_
     # Sort descending by score, then published date
     scored.sort(key=lambda x: (x["score"], x["published"] or datetime.min.replace(tzinfo=timezone.utc)), reverse=True)
 
-    # Identify groundbreaking articles
-    groundbreaking = [a for a in scored if a["is_groundbreaking"]]
+    # Identify groundbreaking articles (non-Reddit only for Top 10)
+    groundbreaking = [a for a in scored if a["is_groundbreaking"] and not is_reddit_article(a)]
 
-    # Pick Top 10 articles:
-    # Ensure top groundbreaking is included at the head if present
+    # Pick Top 10 articles (main articles):
+    # Reddit articles are strictly barred from Top 10
     top_10 = []
     top_10_urls = set()
 
@@ -274,15 +299,48 @@ def rank_and_structure_digest(raw_items: list, lookback_hours: int = 24, target_
     for a in scored:
         if len(top_10) >= 10:
             break
-        if a["url"] not in top_10_urls:
+        if not is_reddit_article(a) and a["url"] not in top_10_urls:
             top_10.append(a)
             top_10_urls.add(a["url"])
 
     # Remaining items go to Quick Hits (1-liners)
-    one_liners = [a for a in scored if a["url"] not in top_10_urls]
+    # Curate exactly 15 items for Quick-Hit 1-Liners:
+    # Ensure Reddit discussions are featured here instead of main articles
+    remaining_candidates = [a for a in scored if a["url"] not in top_10_urls]
+    reddit_candidates = [a for a in remaining_candidates if is_reddit_article(a)]
+    other_candidates = [a for a in remaining_candidates if not is_reddit_article(a)]
 
-    # Generate executive highlights summary
-    highlights = generate_executive_highlights(scored)
+    max_quick_hits = 15
+    selected_one_liners = []
+    selected_urls = set()
+
+    # Prioritize top Reddit discussions into Quick-Hits
+    for r in reddit_candidates[:6]:
+        selected_one_liners.append(r)
+        selected_urls.add(r["url"])
+
+    # Fill remaining slots up to 15 with highest-scoring other candidates
+    for o in other_candidates:
+        if len(selected_one_liners) >= max_quick_hits:
+            break
+        if o["url"] not in selected_urls:
+            selected_one_liners.append(o)
+            selected_urls.add(o["url"])
+
+    # If still under 15, add any remaining Reddit candidates
+    for r in reddit_candidates[6:]:
+        if len(selected_one_liners) >= max_quick_hits:
+            break
+        if r["url"] not in selected_urls:
+            selected_one_liners.append(r)
+            selected_urls.add(r["url"])
+
+    # Sort the 15 one-liners by score descending
+    selected_one_liners.sort(key=lambda x: (x["score"], x["published"] or datetime.min.replace(tzinfo=timezone.utc)), reverse=True)
+    one_liners = selected_one_liners
+
+    # Generate executive highlights summary from top 10 main articles
+    highlights = generate_executive_highlights(top_10)
 
     return {
         "total_scanned": len(raw_items),

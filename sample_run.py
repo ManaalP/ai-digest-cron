@@ -103,8 +103,8 @@ def generate_sample_digest():
 
     print(f"[sample] Fresh items (<24h): {digest_data['total_fresh_24h']}")
     print(f"[sample] Groundbreaking items detected: {digest_data['groundbreaking_count']}")
-    print(f"[sample] Top 10 Ranked articles selected.")
-    print(f"[sample] Quick-hit 1-liners remaining: {len(one_liners)}\n")
+    print(f"[sample] Top 10 Ranked articles selected (non-Reddit only).")
+    print(f"[sample] Quick-hit 1-liners selected: {len(one_liners)} (Reddit posts featured)\n")
 
     # Simulate / detect continuation across top articles
     if top_10:

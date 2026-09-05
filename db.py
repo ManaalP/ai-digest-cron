@@ -104,6 +104,15 @@ class SQLiteDigestDB:
         print(f"[db] Pruned {count} articles older than {days} days.")
         return count
 
+    def get_all_recent_articles(self, days=7):
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+        with self._conn() as conn:
+            rows = conn.execute(
+                "SELECT * FROM articles WHERE published_date >= ? ORDER BY published_date DESC, dev_impact_score DESC",
+                (cutoff,)
+            ).fetchall()
+            return [dict(r) for r in rows]
+
     def _recent_entity_index(self, days):
         cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
         with self._conn() as conn:
@@ -247,6 +256,16 @@ class PostgresDigestDB:
         print(f"[db] Supabase: Pruned {count} articles older than {days} days.")
         return count
 
+    def get_all_recent_articles(self, days=7):
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+        with self._conn() as conn, conn.cursor() as cur:
+            cur.execute(
+                "SELECT * FROM articles WHERE published_date >= %s ORDER BY published_date DESC, dev_impact_score DESC",
+                (cutoff,)
+            )
+            cols = [desc[0] for desc in cur.description]
+            return [dict(zip(cols, row)) for row in cur.fetchall()]
+
     def _recent_entity_index(self, days=7):
         cutoff = datetime.now(timezone.utc) - timedelta(days=days)
         with self._conn() as conn, conn.cursor() as cur:
@@ -325,3 +344,71 @@ def _best_match(entities, index, threshold):
             best = {"id": aid, "title": title, "url": url,
                     "published_date": published_date, "score": score}
     return best
+
+
+def export_db_to_seed(db, output_file="seed_7days.json"):
+    """Export recent database articles directly to seed_7days.json so static builds match live DB."""
+    rows = db.get_all_recent_articles(days=7)
+    grouped = {}
+    for r in rows:
+        p_date = r.get("published_date")
+        if not p_date:
+            continue
+        if isinstance(p_date, datetime):
+            d_str = p_date.strftime("%Y-%m-%d")
+        else:
+            d_str = str(p_date)[:10]
+
+        if d_str not in grouped:
+            try:
+                dt_obj = datetime.strptime(d_str, "%Y-%m-%d")
+                day_name = dt_obj.strftime("%a, %b %d")
+            except Exception:
+                day_name = d_str
+            grouped[d_str] = {
+                "date": d_str,
+                "day_name": day_name,
+                "highlights": [],
+                "top_10": [],
+                "one_liners": []
+            }
+
+        entities_val = r.get("entities")
+        if isinstance(entities_val, str):
+            try:
+                entities_val = json.loads(entities_val)
+            except Exception:
+                entities_val = []
+        elif not isinstance(entities_val, list):
+            entities_val = []
+
+        art = {
+            "source": r.get("source"),
+            "title": r.get("title"),
+            "url": r.get("url"),
+            "published": str(r.get("published_date")),
+            "summary": r.get("summary"),
+            "dev_use_case": r.get("dev_use_case"),
+            "one_liner": r.get("one_liner"),
+            "category": r.get("category"),
+            "category_tag": r.get("category_tag"),
+            "dev_impact_score": r.get("dev_impact_score", 75),
+            "is_groundbreaking": bool(r.get("is_groundbreaking")),
+            "entities": entities_val,
+            "image_url": r.get("image_url")
+        }
+        if art["is_groundbreaking"] or len(grouped[d_str]["top_10"]) < 10:
+            grouped[d_str]["top_10"].append(art)
+        else:
+            grouped[d_str]["one_liners"].append(art)
+
+    # Generate executive highlights for each date
+    from ranker import generate_executive_highlights
+    for d_str, day_data in grouped.items():
+        all_day_items = day_data["top_10"] + day_data["one_liners"]
+        day_data["highlights"] = generate_executive_highlights(all_day_items)
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        json.dump(grouped, f, indent=2)
+    print(f"[export] Successfully exported {len(rows)} articles across {len(grouped)} dates to {output_file}")
+    return grouped

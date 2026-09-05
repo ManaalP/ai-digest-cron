@@ -1976,7 +1976,7 @@ html_template = f"""<!DOCTYPE html>
             <div class="oneliners-container" id="oneliners-container">
                 <div class="oneliners-header">
                     <span>⚡ Quick-Hit 1-Liners</span>
-                    <span id="oneliner-count" style="font-size:12px;color:var(--text-muted);font-weight:400;"></span>
+                    <span id="oneliner-count" style="font-size:12px;color:var(--text-muted);font-weight:400;">(15 items)</span>
                 </div>
                 <div id="oneliners-list">
                     <!-- Dynamically populated 1-liners -->
@@ -2332,6 +2332,12 @@ html_template = f"""<!DOCTYPE html>
             }}
         }}
 
+        function isRedditArticle(art) {{
+            const src = (art.source || "").toLowerCase();
+            const url = (art.url || "").toLowerCase();
+            return url.includes("reddit.com") || src.includes("reddit") || src.startsWith("r/");
+        }}
+
         function mergeSupabaseRows(rows) {{
             const grouped = {{}};
             rows.forEach(art => {{
@@ -2340,12 +2346,39 @@ html_template = f"""<!DOCTYPE html>
                 if (!grouped[dStr]) {{
                     grouped[dStr] = {{ top_10: [], one_liners: [] }};
                 }}
-                if (art.is_groundbreaking || art.category_tag === "BREAKTHROUGH" || grouped[dStr].top_10.length < 10) {{
+                const isReddit = isRedditArticle(art);
+                // Reddit articles are never permitted in top_10 (main articles)
+                if (!isReddit && (art.is_groundbreaking || art.category_tag === "BREAKTHROUGH" || grouped[dStr].top_10.length < 10)) {{
                     grouped[dStr].top_10.push(art);
                 }} else {{
                     grouped[dStr].one_liners.push(art);
                 }}
             }});
+
+            // Curate exactly up to 15 items for Quick-Hit 1-Liners, ensuring Reddit discussions are included
+            for (const [dStr, payload] of Object.entries(grouped)) {{
+                const redditItems = payload.one_liners.filter(isRedditArticle);
+                const otherItems = payload.one_liners.filter(a => !isRedditArticle(a));
+                const seenUrls = new Set();
+                const curated = [];
+                // Prioritize top Reddit items
+                for (const r of redditItems) {{
+                    if (curated.length >= 15) break;
+                    if (!seenUrls.has(r.url)) {{
+                        curated.push(r);
+                        seenUrls.add(r.url);
+                    }}
+                }}
+                // Fill up to 15 with remaining items
+                for (const o of otherItems) {{
+                    if (curated.length >= 15) break;
+                    if (!seenUrls.has(o.url)) {{
+                        curated.push(o);
+                        seenUrls.add(o.url);
+                    }}
+                }}
+                payload.one_liners = curated;
+            }}
 
             for (const [dateKey, payload] of Object.entries(grouped)) {{
                 allArticlesByDate[dateKey] = payload;
@@ -2380,7 +2413,7 @@ html_template = f"""<!DOCTYPE html>
 
             const dateData = allArticlesByDate[selectedDate] || {{ top_10: [], one_liners: [] }};
             const featured = dateData.top_10 || [];
-            const oneliners = dateData.one_liners || [];
+            const oneliners = (dateData.one_liners || []).slice(0, 15);
 
             // Strict single-day isolation: NO cross-date fallback!
             const filteredFeatured = featured.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter));

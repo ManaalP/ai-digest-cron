@@ -177,6 +177,16 @@ def main():
 
     print(f"[main] Database successfully updated with {len(top_articles) + len(one_liners)} fresh articles.")
 
+    # Automatically sync seed_7days.json and rebuild index.html
+    try:
+        from db import export_db_to_seed
+        export_db_to_seed(db)
+        import subprocess
+        subprocess.run([sys.executable, "build_webapp.py"], check=True)
+        print("[main] Automatically refreshed seed_7days.json and rebuilt index.html.")
+    except Exception as e:
+        print(f"[main] Web app auto-build warning: {e}")
+
     # Email notification (if SMTP credentials are provided)
     if smtp_host and smtp_username and smtp_password and email_from and email_to:
         try:

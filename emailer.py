@@ -32,13 +32,13 @@ def build_digest_html(digest_input) -> str:
     if isinstance(digest_input, list):
         # Wrap legacy format into standard structure
         top_articles = digest_input[:10]
-        one_liners = digest_input[10:]
+        one_liners = digest_input[10:][:15]
         highlights = ["Daily digest of recent technical AI developments."]
         total_scanned = len(digest_input)
         total_fresh = len(digest_input)
     else:
         top_articles = digest_input.get("top_10", [])
-        one_liners = digest_input.get("one_liners", [])
+        one_liners = digest_input.get("one_liners", [])[:15]
         highlights = digest_input.get("highlights", [])
         total_scanned = digest_input.get("total_scanned", len(top_articles))
         total_fresh = digest_input.get("total_fresh_24h", len(top_articles))
@@ -215,11 +215,11 @@ def build_digest_text(digest_input) -> str:
     today_str = date.today().isoformat()
     if isinstance(digest_input, list):
         top_articles = digest_input[:10]
-        one_liners = digest_input[10:]
+        one_liners = digest_input[10:][:15]
         highlights = ["Daily digest of recent technical AI developments."]
     else:
         top_articles = digest_input.get("top_10", [])
-        one_liners = digest_input.get("one_liners", [])
+        one_liners = digest_input.get("one_liners", [])[:15]
         highlights = digest_input.get("highlights", [])
 
     lines = [
