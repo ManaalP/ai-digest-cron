@@ -1,0 +1,7 @@
+*.py
+requirements.txt
+setup_cron.sh
+sample_digest.html
+.github/
+README.md
+supabase_schema.sql

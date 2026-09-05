@@ -120,3 +120,10 @@ if __name__ == "__main__":
         generate_sample_digest()
     else:
         main()
+
+# Top-level handler for Vercel/serverless environments if inspected
+def handler(request=None, response=None):
+    return {"status": "ok", "message": "AI Pulse Cron CLI"}
+
+app = handler
+
