@@ -80,6 +80,21 @@ class SQLiteDigestDB:
             row = conn.execute("SELECT 1 FROM articles WHERE url = ?", (url,)).fetchone()
             return row is not None
 
+    def filter_unseen_urls(self, urls):
+        """Batch-check hundreds of URLs in single query chunks."""
+        if not urls:
+            return set()
+        url_list = list(urls)
+        existing = set()
+        with self._conn() as conn:
+            for i in range(0, len(url_list), 500):
+                chunk = url_list[i:i+500]
+                placeholders = ",".join("?" for _ in chunk)
+                rows = conn.execute(f"SELECT url FROM articles WHERE url IN ({placeholders})", chunk).fetchall()
+                for r in rows:
+                    existing.add(r[0])
+        return set(urls) - existing
+
     def cleanup_older_than(self, days=7):
         """Purge articles older than N days to maintain strict rolling retention."""
         cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
@@ -172,6 +187,7 @@ class PostgresDigestDB:
         import psycopg2
         self._psycopg2 = psycopg2
         self.database_url = database_url
+        self._connection = None
         with self._conn() as conn, conn.cursor() as cur:
             cur.execute(self.SCHEMA)
             # Add columns if migrating an older database
@@ -192,16 +208,28 @@ class PostgresDigestDB:
 
     @contextmanager
     def _conn(self):
-        conn = self._psycopg2.connect(self.database_url)
+        if self._connection is None or self._connection.closed:
+            self._connection = self._psycopg2.connect(self.database_url)
         try:
-            yield conn
-        finally:
-            conn.close()
+            yield self._connection
+        except Exception:
+            if self._connection and not self._connection.closed:
+                self._connection.rollback()
+            raise
 
     def url_exists(self, url):
         with self._conn() as conn, conn.cursor() as cur:
             cur.execute("SELECT 1 FROM articles WHERE url = %s", (url,))
             return cur.fetchone() is not None
+
+    def filter_unseen_urls(self, urls):
+        """Batch-check hundreds of URLs in a single roundtrip query."""
+        if not urls:
+            return set()
+        with self._conn() as conn, conn.cursor() as cur:
+            cur.execute("SELECT url FROM articles WHERE url = ANY(%s)", (list(urls),))
+            existing = {r[0] for r in cur.fetchall()}
+            return set(urls) - existing
 
     def cleanup_older_than(self, days=7):
         """Delete articles older than N days to maintain strict rolling retention."""

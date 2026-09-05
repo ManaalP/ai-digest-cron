@@ -76,8 +76,10 @@ def main():
     raw_items = fetch_all()
     print(f"[main] Fetched {len(raw_items)} raw items across all sources.")
 
-    # Filter out URLs already stored in DB
-    fresh_unseen = [it for it in raw_items if it.get("url") and not db.url_exists(it["url"])]
+    # Filter out URLs already stored in DB using high-speed batch check
+    all_urls = [it["url"] for it in raw_items if it.get("url")]
+    unseen_set = db.filter_unseen_urls(all_urls) if hasattr(db, "filter_unseen_urls") else {u for u in all_urls if not db.url_exists(u)}
+    fresh_unseen = [it for it in raw_items if it.get("url") in unseen_set]
 
     # Structure into Highlights, Top 10, and 1-Liners (strict 24h window)
     digest_data = rank_and_structure_digest(fresh_unseen, lookback_hours=lookback_hours)

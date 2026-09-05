@@ -120,7 +120,7 @@ class GoogleProvider:
         try:
             resp = self.model.generate_content(
                 _user_content(title, raw_text, source),
-                generation_config={"max_output_tokens": 500},
+                generation_config={"max_output_tokens": 2048, "response_mime_type": "application/json"},
             )
             return _parse_json_response(resp.text)
         except Exception as e:
