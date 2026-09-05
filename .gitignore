@@ -1,0 +1,10 @@
+.env
+*.env
+digest.db
+*.db
+venv/
+logs/
+__pycache__/
+*.pyc
+*.png
+.vercel/

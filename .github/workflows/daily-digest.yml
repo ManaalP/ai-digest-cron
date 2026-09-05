@@ -1,0 +1,44 @@
+name: Daily AI Digest
+
+on:
+  schedule:
+    # 7:13 AM UTC daily. Deliberately off the hour/half-hour -- GitHub
+    # deprioritizes scheduled runs at round times (00, 15, 30, 45) under load.
+    - cron: "13 7 * * *"
+  workflow_dispatch: {}   # lets you click "Run workflow" manually to test
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run digest
+        env:
+          PROVIDER_PRIORITY: ${{ vars.PROVIDER_PRIORITY || 'anthropic,openai,google' }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL || 'claude-sonnet-5' }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4.1-mini' }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_MODEL: ${{ vars.GOOGLE_MODEL || 'gemini-2.0-flash' }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          MAX_ARTICLES_PER_RUN: "15"
+          LOOKBACK_HOURS: "26"
+          CONTINUATION_LOOKBACK_DAYS: "21"
+          CONTINUATION_SIMILARITY_THRESHOLD: "0.34"
+        run: python main.py
