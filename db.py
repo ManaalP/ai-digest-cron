@@ -436,14 +436,17 @@ def export_db_to_seed(db, output_file="seed_7days.json", ref_date=None):
         if c_type == "video" or is_video(art):
             if len(w_obj["videos"]) < 8:
                 w_obj["videos"].append(art)
-        elif c_type == "social_buzz" or is_social_media(art):
+        elif c_type == "social_buzz":
             if len(w_obj["social_buzz"]) < 10:
                 w_obj["social_buzz"].append(art)
-            # Allow up to 1 social post in top_articles
+            # Allow at most 1 social post in top_articles if not already present
             social_in_top = sum(1 for a in w_obj["top_articles"] if is_social_media(a))
             if social_in_top < 1 and len(w_obj["top_articles"]) < 10:
                 w_obj["top_articles"].append(art)
             elif len(w_obj["one_liners"]) < 15:
+                w_obj["one_liners"].append(art)
+        elif c_type == "one_liner":
+            if len(w_obj["one_liners"]) < 15:
                 w_obj["one_liners"].append(art)
         else:
             if len(w_obj["top_articles"]) < 10:

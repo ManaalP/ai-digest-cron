@@ -126,138 +126,143 @@ def main():
 
     # Calculate weekly windows (Week 1 = Aug 30 - Sep 05, 2026 for reference date 2026-09-06)
     weekly_windows = get_weekly_windows()
-    target_week = weekly_windows[0]
+    target_weeks = [weekly_windows[0]]
+    if "--all-weeks" in sys.argv or "--reset" in sys.argv:
+        target_weeks = weekly_windows
     for arg in sys.argv:
         if arg.startswith("--week-index="):
             try:
                 idx = int(arg.split("=", 1)[1])
                 if 0 <= idx < len(weekly_windows):
-                    target_week = weekly_windows[idx]
+                    target_weeks = [weekly_windows[idx]]
             except ValueError:
                 pass
 
-    print(f"[main] Target weekly edition: {target_week['short_label']} ({target_week['start']} to {target_week['end']})")
+    total_added = 0
+    for target_week in target_weeks:
+        print(f"\n[main] Processing edition: {target_week['short_label']} ({target_week['start']} to {target_week['end']})")
 
-    # Structure weekly digest
-    digest_data = rank_and_structure_weekly_digest(
-        fresh_unseen,
-        start_date=target_week["start"],
-        end_date=target_week["end"]
-    )
-
-    top_articles = digest_data.get("top_articles", [])
-    videos = digest_data.get("videos", [])
-    social_buzz = digest_data.get("social_buzz", [])
-    one_liners = digest_data.get("one_liners", [])
-
-    print(f"[main] Storing {len(top_articles)} articles, {len(videos)} videos, {len(social_buzz)} social items, {len(one_liners)} quick-hits in database...")
-
-    # 1. Process and store Top Articles (with optional LLM summarization)
-    for item in top_articles:
-        if summarizer and not is_social_media(item):
-            try:
-                result = summarizer.summarize(item["title"], item.get("raw_text", ""), item["source"])
-                item["summary"] = result.get("summary") or item.get("summary")
-                item["entities"] = result.get("entities") or item.get("entities", [])
-            except Exception as e:
-                print(f"[main] LLM Summarization failed for '{item['title']}', using excerpt: {e}")
-
-        continuation = db.find_continuation(item.get("entities", []), cont_days, cont_threshold)
-        item["continuation"] = continuation
-        parent_id = continuation["id"] if continuation else None
-
-        db.insert_article(
-            source=item["source"],
-            title=item["title"],
-            url=item["url"],
-            published_date=item["published"].isoformat() if item.get("published") else "",
-            summary=item.get("summary", ""),
-            entities=item.get("entities", []),
-            parent_id=parent_id,
-            category=item.get("category"),
-            category_tag=item.get("category_tag"),
-            dev_impact_score=item.get("dev_impact_score", 75),
-            is_groundbreaking=item.get("is_groundbreaking", False),
-            image_url=item.get("image_url"),
-            dev_use_case=item.get("dev_use_case"),
-            one_liner=item.get("one_liner"),
-            content_type=item.get("content_type", "article"),
-            week_id=target_week["id"],
-            week_label=target_week["label"],
-            video_id=item.get("video_id"),
+        # Structure weekly digest with live URL verification
+        digest_data = rank_and_structure_weekly_digest(
+            fresh_unseen,
+            start_date=target_week["start"],
+            end_date=target_week["end"]
         )
 
-    # 2. Process and store Videos
-    for item in videos:
-        db.insert_article(
-            source=item["source"],
-            title=item["title"],
-            url=item["url"],
-            published_date=item["published"].isoformat() if item.get("published") else "",
-            summary=item.get("raw_text", ""),
-            entities=item.get("entities", []),
-            parent_id=None,
-            category="🎥 AI Video Breakdown",
-            category_tag="VIDEO",
-            dev_impact_score=item.get("dev_impact_score", 80),
-            is_groundbreaking=False,
-            image_url=item.get("image_url"),
-            dev_use_case=item.get("dev_use_case", "Watch technical breakdown and architecture walkthrough."),
-            one_liner=item.get("one_liner", item.get("title")),
-            content_type="video",
-            week_id=target_week["id"],
-            week_label=target_week["label"],
-            video_id=item.get("video_id"),
-        )
+        top_articles = digest_data.get("top_articles", [])
+        videos = digest_data.get("videos", [])
+        social_buzz = digest_data.get("social_buzz", [])
+        one_liners = digest_data.get("one_liners", [])
 
-    # 3. Process and store Social Media Buzz & Founder Takes
-    for item in social_buzz:
-        db.insert_article(
-            source=item["source"],
-            title=item["title"],
-            url=item["url"],
-            published_date=item["published"].isoformat() if item.get("published") else "",
-            summary=item.get("raw_text", ""),
-            entities=item.get("entities", []),
-            parent_id=None,
-            category="💬 Community Buzz & Founder Takes",
-            category_tag="SOCIAL",
-            dev_impact_score=item.get("dev_impact_score", 70),
-            is_groundbreaking=False,
-            image_url=item.get("image_url"),
-            dev_use_case="Real-world practitioner discussions, model quirks, and founder perspectives.",
-            one_liner=item.get("one_liner", item.get("title")),
-            content_type="social_buzz",
-            week_id=target_week["id"],
-            week_label=target_week["label"],
-            video_id=None,
-        )
+        print(f"[main] Storing {len(top_articles)} articles, {len(videos)} videos, {len(social_buzz)} social items, {len(one_liners)} quick-hits in database for {target_week['short_label']}...")
 
-    # 4. Process and store Quick-Hit 1-Liners (up to 15)
-    for item in one_liners:
-        db.insert_article(
-            source=item["source"],
-            title=item["title"],
-            url=item["url"],
-            published_date=item["published"].isoformat() if item.get("published") else "",
-            summary=item.get("summary") or item.get("one_liner", ""),
-            entities=item.get("entities", []),
-            parent_id=None,
-            category=item.get("category"),
-            category_tag=item.get("category_tag"),
-            dev_impact_score=item.get("dev_impact_score", 60),
-            is_groundbreaking=item.get("is_groundbreaking", False),
-            image_url=item.get("image_url"),
-            dev_use_case=item.get("dev_use_case"),
-            one_liner=item.get("one_liner"),
-            content_type=item.get("content_type", "article"),
-            week_id=target_week["id"],
-            week_label=target_week["label"],
-            video_id=item.get("video_id"),
-        )
+        # 1. Process and store Top Articles (with optional LLM summarization)
+        for item in top_articles:
+            if summarizer and not is_social_media(item):
+                try:
+                    result = summarizer.summarize(item["title"], item.get("raw_text", ""), item["source"])
+                    item["summary"] = result.get("summary") or item.get("summary")
+                    item["entities"] = result.get("entities") or item.get("entities", [])
+                except Exception as e:
+                    print(f"[main] LLM Summarization failed for '{item['title']}', using excerpt: {e}")
 
-    total_added = len(top_articles) + len(videos) + len(social_buzz) + len(one_liners)
-    print(f"[main] Database successfully updated with {total_added} weekly items.")
+            continuation = db.find_continuation(item.get("entities", []), cont_days, cont_threshold)
+            item["continuation"] = continuation
+            parent_id = continuation["id"] if continuation else None
+
+            db.insert_article(
+                source=item["source"],
+                title=item["title"],
+                url=item["url"],
+                published_date=item["published"].isoformat() if item.get("published") else "",
+                summary=item.get("summary", ""),
+                entities=item.get("entities", []),
+                parent_id=parent_id,
+                category=item.get("category"),
+                category_tag=item.get("category_tag"),
+                dev_impact_score=item.get("dev_impact_score", 75),
+                is_groundbreaking=item.get("is_groundbreaking", False),
+                image_url=item.get("image_url"),
+                dev_use_case=item.get("dev_use_case"),
+                one_liner=item.get("one_liner"),
+                content_type=item.get("content_type", "article"),
+                week_id=target_week["id"],
+                week_label=target_week["label"],
+                video_id=item.get("video_id"),
+            )
+
+        # 2. Process and store Videos
+        for item in videos:
+            db.insert_article(
+                source=item["source"],
+                title=item["title"],
+                url=item["url"],
+                published_date=item["published"].isoformat() if item.get("published") else "",
+                summary=item.get("raw_text", ""),
+                entities=item.get("entities", []),
+                parent_id=None,
+                category="🎥 AI Video Breakdown",
+                category_tag="VIDEO",
+                dev_impact_score=item.get("dev_impact_score", 80),
+                is_groundbreaking=False,
+                image_url=item.get("image_url"),
+                dev_use_case=item.get("dev_use_case", "Watch technical breakdown and architecture walkthrough."),
+                one_liner=item.get("one_liner", item.get("title")),
+                content_type="video",
+                week_id=target_week["id"],
+                week_label=target_week["label"],
+                video_id=item.get("video_id"),
+            )
+
+        # 3. Process and store Social Media Buzz & Founder Takes
+        for item in social_buzz:
+            db.insert_article(
+                source=item["source"],
+                title=item["title"],
+                url=item["url"],
+                published_date=item["published"].isoformat() if item.get("published") else "",
+                summary=item.get("raw_text", ""),
+                entities=item.get("entities", []),
+                parent_id=None,
+                category="💬 Community Buzz & Founder Takes",
+                category_tag="SOCIAL",
+                dev_impact_score=item.get("dev_impact_score", 70),
+                is_groundbreaking=False,
+                image_url=item.get("image_url"),
+                dev_use_case="Real-world practitioner discussions, model quirks, and founder perspectives.",
+                one_liner=item.get("one_liner", item.get("title")),
+                content_type="social_buzz",
+                week_id=target_week["id"],
+                week_label=target_week["label"],
+                video_id=None,
+            )
+
+        # 4. Process and store Quick-Hit 1-Liners (up to 15)
+        for item in one_liners:
+            db.insert_article(
+                source=item["source"],
+                title=item["title"],
+                url=item["url"],
+                published_date=item["published"].isoformat() if item.get("published") else "",
+                summary=item.get("summary") or item.get("one_liner", ""),
+                entities=item.get("entities", []),
+                parent_id=None,
+                category=item.get("category"),
+                category_tag=item.get("category_tag"),
+                dev_impact_score=item.get("dev_impact_score", 60),
+                is_groundbreaking=item.get("is_groundbreaking", False),
+                image_url=item.get("image_url"),
+                dev_use_case=item.get("dev_use_case"),
+                one_liner=item.get("one_liner"),
+                content_type="one_liner",
+                week_id=target_week["id"],
+                week_label=target_week["label"],
+                video_id=item.get("video_id"),
+            )
+
+        total_added += len(top_articles) + len(videos) + len(social_buzz) + len(one_liners)
+
+    print(f"\n[main] Database successfully updated with {total_added} total verified items across editions.")
 
     # Automatically sync seed_7days.json and rebuild index.html
     try:

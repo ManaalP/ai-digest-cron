@@ -7,7 +7,65 @@ breakthroughs (e.g. cancer/biology/robotics/3D generation) over generic corporat
 
 import re
 import html
+import concurrent.futures
+import urllib.parse
 from datetime import datetime, timedelta, timezone
+import requests
+
+
+def is_reachable_url(url: str, timeout: float = 3.5) -> bool:
+    """Live HTTP verification ensuring URL is accessible and does not return 404/410/broken."""
+    if not url or not isinstance(url, str):
+        return False
+    url = url.strip()
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme not in ("http", "https") or not parsed.netloc:
+        return False
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+    try:
+        resp = requests.head(url, headers=headers, allow_redirects=True, timeout=timeout)
+        if resp.status_code in (404, 410):
+            print(f"[verifier] ❌ Discarded broken URL ({resp.status_code}): {url}")
+            return False
+        if resp.status_code == 405:  # Method Not Allowed for HEAD
+            r2 = requests.get(url, headers=headers, stream=True, timeout=timeout)
+            if r2.status_code in (404, 410):
+                print(f"[verifier] ❌ Discarded broken URL ({r2.status_code}): {url}")
+                return False
+        return True
+    except Exception:
+        # Retry with streaming GET in case HEAD was blocked or timed out
+        try:
+            r3 = requests.get(url, headers=headers, stream=True, timeout=timeout)
+            if r3.status_code in (404, 410):
+                print(f"[verifier] ❌ Discarded broken URL ({r3.status_code}): {url}")
+                return False
+            return True
+        except Exception:
+            print(f"[verifier] ⚠️ Unreachable URL: {url}")
+            return False
+
+
+def verify_urls_concurrently(items: list, max_workers: int = 16) -> list:
+    """Verify all candidate URLs concurrently with a thread pool."""
+    if not items:
+        return []
+    valid_items = []
+    print(f"[verifier] Verifying live reachability for {len(items)} candidate URLs...")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_item = {executor.submit(is_reachable_url, it.get("url")): it for it in items if it.get("url")}
+        for future in concurrent.futures.as_completed(future_to_item):
+            item = future_to_item[future]
+            try:
+                if future.result():
+                    valid_items.append(item)
+            except Exception:
+                pass
+    print(f"[verifier] ✅ {len(valid_items)} / {len(items)} URLs passed live reachability audit.")
+    return valid_items
+
 
 
 GROUNDBREAKING_PATTERNS = [
@@ -321,8 +379,11 @@ def rank_and_structure_weekly_digest(raw_items: list, start_date: str = None, en
         seen_titles.add(norm_title)
         deduped.append(it)
 
+    # Live URL reachability audit: discard broken, 404, or non-existent URLs
+    verified_items = verify_urls_concurrently(deduped)
+
     # Score and classify each item
-    scored = [score_and_classify_article(it) for it in deduped]
+    scored = [score_and_classify_article(it) for it in verified_items]
     scored.sort(key=lambda x: (x["score"], x["published"] or datetime.min.replace(tzinfo=timezone.utc)), reverse=True)
 
     # 2. Segregate Videos

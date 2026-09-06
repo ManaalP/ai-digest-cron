@@ -198,8 +198,67 @@ def fetch_wesroth_videos():
     return _youtube_rss("Wes Roth", "https://www.youtube.com/feeds/videos.xml?channel_id=UCqcbQf6yw5KzRoDDcZ_wDOA", limit=8)
 
 
-def fetch_anthropic_news():
-    return _rss("Anthropic News", "https://www.anthropic.com/news/rss.xml", limit=10)
+def fetch_anthropic_news(limit=10):
+    items = []
+    try:
+        resp = requests.get(
+            "https://www.anthropic.com/news",
+            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},
+            timeout=10,
+        )
+        if resp.ok:
+            links = re.findall(r'href="(/news/[a-z0-9\-]+)"', resp.text)
+            seen = set()
+            now = datetime.now(timezone.utc)
+            for l in links:
+                if l not in seen and l != "/news" and not l.endswith("/feed") and not l.endswith("/rss"):
+                    seen.add(l)
+                    full_url = f"https://www.anthropic.com{l}"
+                    slug = l.replace("/news/", "")
+                    title = slug.replace("-", " ").title()
+                    summary = ""
+                    pub_dt = now
+                    try:
+                        art_resp = requests.get(full_url, headers={"User-Agent": "Mozilla/5.0"}, timeout=5)
+                        if art_resp.ok:
+                            t_match = re.search(r'<title>(.*?)</title>', art_resp.text)
+                            if t_match:
+                                title = t_match.group(1).replace(r"\ Anthropic", "").replace("| Anthropic", "").strip()
+                            d_match = re.search(r'<meta name="description" content="(.*?)"', art_resp.text)
+                            if d_match:
+                                summary = d_match.group(1).strip()
+                            # Parse genuine publication date from page
+                            date_match = re.search(r'(\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]* \d{1,2},? \d{4}\b)', art_resp.text)
+                            if date_match:
+                                raw_d = date_match.group(1).replace(',', '')
+                                try:
+                                    pub_dt = datetime.strptime(raw_d, '%b %d %Y').replace(tzinfo=timezone.utc)
+                                except ValueError:
+                                    pub_dt = datetime.strptime(raw_d, '%B %d %Y').replace(tzinfo=timezone.utc)
+                    except Exception:
+                        pass
+
+                    items.append({
+                        "source": "Anthropic News",
+                        "title": title,
+                        "url": full_url,
+                        "published": pub_dt,
+                        "summary": summary or f"Official Anthropic announcement regarding {title}.",
+                        "raw_text": summary,
+                        "category": "🛠️ Developer Tooling & Agents",
+                        "category_tag": "DEV TOOLS",
+                        "dev_impact_score": 92,
+                        "is_groundbreaking": "opus" in slug or "standard" in slug,
+                        "image_url": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80",
+                        "dev_use_case": f"Frontier developer capabilities and platform updates from Anthropic.",
+                        "one_liner": summary[:140] if summary else f"Anthropic updates: {title}.",
+                        "content_type": "article",
+                    })
+                    if len(items) >= limit:
+                        break
+    except Exception as e:
+        print(f"[fetchers] Anthropic News fetch failed: {e}")
+    return items
 
 
 def fetch_openai_news():
