@@ -870,9 +870,9 @@ html_template = f"""<!DOCTYPE html>
     <meta property="og:site_name" content="AI Pulse">
     <meta property="og:title" content="AI Pulse — Frontier AI &amp; Developer Intelligence">
     <meta property="og:description" content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons.">
-    <meta property="og:url" content="https://ai-pulse.vercel.app">
-    <meta property="og:image" content="https://ai-pulse.vercel.app/og-preview.jpg">
-    <meta property="og:image:secure_url" content="https://ai-pulse.vercel.app/og-preview.jpg">
+    <meta property="og:url" content="https://ai-digest-by-mp.vercel.app">
+    <meta property="og:image" content="https://ai-digest-by-mp.vercel.app/og-preview.jpg">
+    <meta property="og:image:secure_url" content="https://ai-digest-by-mp.vercel.app/og-preview.jpg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -882,7 +882,7 @@ html_template = f"""<!DOCTYPE html>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="AI Pulse — Frontier AI &amp; Developer Intelligence">
     <meta name="twitter:description" content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons.">
-    <meta name="twitter:image" content="https://ai-pulse.vercel.app/og-preview.jpg">
+    <meta name="twitter:image" content="https://ai-digest-by-mp.vercel.app/og-preview.jpg">
     
     <!-- Modern Reader Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1331,24 +1331,6 @@ html_template = f"""<!DOCTYPE html>
             color: var(--accent-primary-hover);
         }}
 
-        /* One-Liners Section */
-        .oneliners-container {{
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            padding: 24px;
-            margin-top: 20px;
-        }}
-
-        .oneliners-header {{
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }}
-
         .oneliner-item {{
             padding: 12px 0;
             border-bottom: 1px solid var(--border-subtle);
@@ -1775,6 +1757,7 @@ html_template = f"""<!DOCTYPE html>
 
         /* Floating Interactive Tooltip Popover */
         #benchmark-tooltip {{
+            display: none;
             position: fixed;
             z-index: 100;
             pointer-events: none;
@@ -1791,6 +1774,7 @@ html_template = f"""<!DOCTYPE html>
         }}
 
         #benchmark-tooltip.visible {{
+            display: block;
             opacity: 1;
             transform: translateY(0);
         }}
@@ -2534,10 +2518,13 @@ html_template = f"""<!DOCTYPE html>
             </div>
 
             <!-- Quick-Hit 1-Liners -->
-            <div class="oneliners-container" id="oneliners-container">
-                <div class="oneliners-header">
-                    <span>⚡ Quick-Hit 1-Liners</span>
-                    <span id="oneliner-count" style="font-size:12px;color:var(--text-muted);font-weight:400;">(15 items)</span>
+            <div class="media-section" id="oneliners-container">
+                <div class="media-section-header">
+                    <div class="media-section-title">
+                        <span>⚡ Quick-Hit 1-Liners</span>
+                        <span class="media-section-badge">Headlines &amp; Snapshots</span>
+                    </div>
+                    <div class="media-section-desc">Rapid-fire highlights you can scan in under a minute.</div>
                 </div>
                 <div id="oneliners-list">
                     <!-- Dynamically populated 1-liners -->
@@ -2558,8 +2545,8 @@ html_template = f"""<!DOCTYPE html>
                     <div>
                         <div class="benchmark-title">🏆 Frontier Benchmark Leaderboard (SWE-bench &amp; Reasoning Composite)</div>
                         <div class="benchmark-desc">Ranked by real-world coding benchmark performance and deep deliberate reasoning capabilities.</div>
+                        <div style="font-size:11px;color:var(--text-muted);margin-top:4px;font-style:italic;">Benchmark data as of September 2026 · SWE-bench Pro · Hover/tap bars for full specs</div>
                     </div>
-                    <div style="font-size:12px;color:var(--text-muted);">Hover/tap for full specs</div>
                 </div>
 
                 <div class="benchmark-bars-container" id="benchmark-bars-container">
@@ -2570,35 +2557,35 @@ html_template = f"""<!DOCTYPE html>
             <!-- Floating Tooltip for Benchmark Bar Chart -->
             <div id="benchmark-tooltip">
                 <div class="tooltip-header">
-                    <div class="tooltip-title" id="tt-title">Model Name</div>
-                    <div class="tooltip-score" id="tt-score">86.4%</div>
+                    <div class="tooltip-title" id="tt-title"></div>
+                    <div class="tooltip-score" id="tt-score"></div>
                 </div>
-                <div class="tooltip-lab" id="tt-lab">Organization &bull; Year</div>
+                <div class="tooltip-lab" id="tt-lab"></div>
                 
                 <div class="tooltip-grid">
                     <div>
                         <div class="tooltip-item-label">Context Window</div>
-                        <div class="tooltip-item-val" id="tt-context">500K tokens</div>
+                        <div class="tooltip-item-val" id="tt-context"></div>
                     </div>
                     <div>
                         <div class="tooltip-item-label">Token Pricing</div>
-                        <div class="tooltip-item-val" id="tt-pricing">$12 / $48</div>
+                        <div class="tooltip-item-val" id="tt-pricing"></div>
                     </div>
                     <div>
                         <div class="tooltip-item-label">Release Date</div>
-                        <div class="tooltip-item-val" id="tt-release">Aug 2026</div>
+                        <div class="tooltip-item-val" id="tt-release"></div>
                     </div>
                     <div>
                         <div class="tooltip-item-label">Architecture</div>
-                        <div class="tooltip-item-val" id="tt-arch">Dense MoE</div>
+                        <div class="tooltip-item-val" id="tt-arch"></div>
                     </div>
                 </div>
 
                 <div class="tooltip-item-label" style="margin-bottom:2px;">What is it best for?</div>
-                <div class="tooltip-bestfor" id="tt-bestfor">Best for description</div>
+                <div class="tooltip-bestfor" id="tt-bestfor"></div>
 
                 <div class="tooltip-item-label" style="margin-bottom:2px;margin-top:6px;">Is it better to work with?</div>
-                <div class="tooltip-verdict" id="tt-verdict">Developer verdict</div>
+                <div class="tooltip-verdict" id="tt-verdict"></div>
             </div>
 
             <!-- Lab Filter Bar -->
@@ -2633,11 +2620,9 @@ html_template = f"""<!DOCTYPE html>
 
             <!-- Period Selector Bar -->
             <div class="milestone-period-bar">
-                <button class="period-chip active" id="pchip-yearly" onclick="switchMilestonePeriod('yearly')">Yearly Top 3</button>
-                <button class="period-chip" id="pchip-half_yearly" onclick="switchMilestonePeriod('half_yearly')">6-Month Top 3</button>
-                <button class="period-chip" id="pchip-quarterly" onclick="switchMilestonePeriod('quarterly')">Quarterly Top 3</button>
-                <button class="period-chip" id="pchip-monthly" onclick="switchMilestonePeriod('monthly')">Monthly Top 3 (Past 36 Mo)</button>
-                <button class="period-chip" id="pchip-weekly" onclick="switchMilestonePeriod('weekly')">Weekly Top 3 (Rolling)</button>
+                <button class="period-chip" id="pchip-yearly" onclick="switchMilestonePeriod('yearly')">Yearly</button>
+                <button class="period-chip active" id="pchip-quarterly" onclick="switchMilestonePeriod('quarterly')">Quarterly</button>
+                <button class="period-chip" id="pchip-monthly" onclick="switchMilestonePeriod('monthly')">Monthly</button>
             </div>
 
             <div id="milestones-container">
@@ -2747,7 +2732,7 @@ html_template = f"""<!DOCTYPE html>
             <div class="share-card-info">
                 <div class="share-card-title" id="share-card-title">AI Pulse — Frontier AI &amp; Developer Intelligence</div>
                 <div class="share-card-desc">Frontier models, famous Substack analyses, viral community debates, and developer benchmarks.</div>
-                <div class="share-card-domain" id="share-card-domain">ai-pulse.vercel.app</div>
+                <div class="share-card-domain" id="share-card-domain">ai-digest-by-mp.vercel.app</div>
             </div>
         </div>
 
@@ -2804,7 +2789,7 @@ html_template = f"""<!DOCTYPE html>
             loadSeedDataset();
             renderBenchmarkChart();
             filterModelsByLab("all");
-            switchMilestonePeriod("yearly");
+            switchMilestonePeriod("quarterly");
 
             // Client-side Canonical & OG synchronization
             try {{
@@ -2813,7 +2798,7 @@ html_template = f"""<!DOCTYPE html>
                     const ogUrl = document.querySelector('meta[property="og:url"]');
                     if (ogUrl) ogUrl.setAttribute("content", window.location.href);
                     const ogImg = document.querySelector('meta[property="og:image"]');
-                    if (ogImg && ogImg.getAttribute("content").startsWith("https://ai-pulse.vercel.app")) {{
+                    if (ogImg && ogImg.getAttribute("content").startsWith("https://ai-digest-by-mp.vercel.app")) {{
                         ogImg.setAttribute("content", `${{origin}}/og-preview.jpg`);
                     }}
                 }}
@@ -2896,7 +2881,7 @@ html_template = f"""<!DOCTYPE html>
             const overlay = document.getElementById("share-modal-overlay");
             const domainElem = document.getElementById("share-card-domain");
             const titleElem = document.getElementById("share-card-title");
-            if (domainElem) domainElem.innerText = window.location.host || "ai-pulse.vercel.app";
+            if (domainElem) domainElem.innerText = window.location.host || "ai-digest-by-mp.vercel.app";
             if (titleElem) titleElem.innerText = document.title;
             overlay.classList.add("open");
             modal.classList.add("open");
