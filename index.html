@@ -1441,7 +1441,17 @@
             } else {
                 allArticlesByDate = {};
             }
-            renderCurrentDateArticles();
+            // If today's edition has not arrived yet, automatically select the latest date that has articles
+            const datesWithData = Object.keys(allArticlesByDate).filter(d => {
+                const day = allArticlesByDate[d];
+                return (day.top_10 && day.top_10.length > 0) || (day.one_liners && day.one_liners.length > 0);
+            });
+            if (datesWithData.length > 0 && (!allArticlesByDate[selectedDate] || (allArticlesByDate[selectedDate].top_10.length === 0 && allArticlesByDate[selectedDate].one_liners.length === 0))) {
+                datesWithData.sort().reverse();
+                selectCalendarDate(datesWithData[0]);
+            } else {
+                renderCurrentDateArticles();
+            }
         }
 
         async function initSupabaseConnection() {
