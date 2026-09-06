@@ -21,7 +21,9 @@ load_dotenv()
 
 
 def env(name, default=None, required=False):
-    val = os.getenv(name, default)
+    val = os.getenv(name)
+    if val is None or (isinstance(val, str) and val.strip() == ""):
+        val = default
     if required and not val:
         print(f"[main] Missing required env var: {name}. Copy .env.example to .env and fill it in.")
         sys.exit(1)
@@ -36,17 +38,37 @@ def main():
     provider_configs = {
         "anthropic": {"api_key": env("ANTHROPIC_API_KEY"), "model": env("ANTHROPIC_MODEL", "claude-sonnet-5")},
         "openai": {"api_key": env("OPENAI_API_KEY"), "model": env("OPENAI_MODEL", "gpt-4.1-mini")},
-        "google": {"api_key": env("GOOGLE_API_KEY"), "model": env("GOOGLE_MODEL", "gemini-2.0-flash")},
+        "google": {"api_key": env("GOOGLE_API_KEY"), "model": env("GOOGLE_MODEL", "gemini-3.6-flash")},
     }
 
-    max_articles = int(env("MAX_ARTICLES_PER_RUN", "15"))
-    lookback_hours = int(env("LOOKBACK_HOURS", "26"))
-    cont_days = int(env("CONTINUATION_LOOKBACK_DAYS", "21"))
-    cont_threshold = float(env("CONTINUATION_SIMILARITY_THRESHOLD", "0.34"))
+    try:
+        max_articles = int(env("MAX_ARTICLES_PER_RUN", "15"))
+    except (TypeError, ValueError):
+        max_articles = 15
+
+    try:
+        lookback_hours = int(env("LOOKBACK_HOURS", "26"))
+    except (TypeError, ValueError):
+        lookback_hours = 26
+
+    try:
+        cont_days = int(env("CONTINUATION_LOOKBACK_DAYS", "21"))
+    except (TypeError, ValueError):
+        cont_days = 21
+
+    try:
+        cont_threshold = float(env("CONTINUATION_SIMILARITY_THRESHOLD", "0.34"))
+    except (TypeError, ValueError):
+        cont_threshold = 0.34
 
     # SMTP credentials (optional: if omitted, updates DB without sending email)
     smtp_host = env("SMTP_HOST", required=False)
-    smtp_port = int(env("SMTP_PORT", "587"))
+    smtp_port_raw = env("SMTP_PORT", "587")
+    try:
+        smtp_port = int(smtp_port_raw) if smtp_port_raw else 587
+    except (TypeError, ValueError):
+        smtp_port = 587
+
     smtp_username = env("SMTP_USERNAME", required=False)
     smtp_password = env("SMTP_PASSWORD", required=False)
     email_from = env("EMAIL_FROM", required=False)
@@ -55,7 +77,12 @@ def main():
 
     print(f"[main] Run started {datetime.now(timezone.utc).isoformat()}")
 
-    db = get_db(database_url, db_path)
+    try:
+        db = get_db(database_url, db_path)
+    except Exception as e:
+        print(f"[main] Database connection notice ({e}). Falling back to local SQLite ({db_path}).")
+        from db import SQLiteDigestDB
+        db = SQLiteDigestDB(db_path)
 
     # Clean reset support
     if "--reset" in sys.argv:
@@ -63,7 +90,12 @@ def main():
         db.purge_all_articles()
 
     # Configurable retention window (defaults to 1 day when --yesterday or --one-day-only is passed)
-    retention_days = int(env("RETENTION_DAYS", "1" if "--yesterday" in sys.argv or "--one-day-only" in sys.argv else "7"))
+    retention_days_default = "1" if "--yesterday" in sys.argv or "--one-day-only" in sys.argv else "7"
+    try:
+        retention_days = int(env("RETENTION_DAYS", retention_days_default))
+    except (TypeError, ValueError):
+        retention_days = 7
+
     for arg in sys.argv:
         if arg.startswith("--retention-days="):
             try:

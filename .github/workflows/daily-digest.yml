@@ -11,6 +11,8 @@ jobs:
   digest:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
@@ -23,13 +25,13 @@ jobs:
 
       - name: Run digest
         env:
-          PROVIDER_PRIORITY: ${{ vars.PROVIDER_PRIORITY || 'anthropic,openai,google' }}
+          PROVIDER_PRIORITY: ${{ vars.PROVIDER_PRIORITY || 'google,anthropic,openai' }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL || 'claude-sonnet-5' }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4.1-mini' }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          GOOGLE_MODEL: ${{ vars.GOOGLE_MODEL || 'gemini-2.0-flash' }}
+          GOOGLE_MODEL: ${{ vars.GOOGLE_MODEL || 'gemini-3.6-flash' }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_PORT: ${{ secrets.SMTP_PORT }}
@@ -42,3 +44,11 @@ jobs:
           CONTINUATION_LOOKBACK_DAYS: "21"
           CONTINUATION_SIMILARITY_THRESHOLD: "0.34"
         run: python main.py
+
+      - name: Commit and push updated web app & seed dataset
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add seed_7days.json index.html
+          git diff --staged --quiet || (git commit -m "Auto-update 7-day digest and web app [skip ci]" && git push || echo "Push skipped or branch protected")
+
