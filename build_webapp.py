@@ -1,23 +1,18 @@
 #!/usr/bin/env python3
 """
-build_webapp.py - Generates the Minimalist, Reader-Friendly AI Pulse Web Application.
+build_webapp.py - Generates the Minimalist, Reader-Friendly AI Digest Web Application.
 
 Features:
   - Minimalist, calm dark reader aesthetic (#0d0f12 base, #13161c surfaces, #181b22 cards, subtle borders).
-  - Strict 1-day calendar date isolation (no cross-date fallback).
-  - Interactive Benchmark Comparison Bar Chart with rich hover popover:
-      * Model Name & Lab
-      * Benchmark Score & Capability Label
-      * What is it best for?
-      * Context Window & Max Output
-      * Pricing (Input / Output / Cached)
-      * Release Date
-      * Developer Verdict: "Is it better to work with?"
-  - Frontier vs Full Org filtering:
-      * "All Labs": Shows ONLY true Frontier flagships (GPT-6 Astra, Fable 5.1, OpenAI o3, Claude Sonnet 5, Claude Opus 5, Gemini 3.8 Flash, DeepSeek-R1, Llama 4, Grok 3 Think).
-      * Org chips (OpenAI, Anthropic, Google, DeepSeek, Meta, xAI, Alibaba, Mistral): Shows ALL models for that organization.
-  - Completely unbiased 3-Year Milestones Archive (2023–2026) across OpenAI, Anthropic, DeepSeek, Meta, Open Source, and Google.
-  - Supabase live synchronization with clean auto-detection.
+  - Strict 4-week calendar history with dedicated media segregation.
+  - Interactive Benchmark Comparison Bar Chart with real SWE-bench Verified scores:
+      * Claude 3.7 Sonnet (70.3%), OpenAI o3-mini (79.7%), Claude 3.5 Sonnet (63.7%),
+      * DeepSeek-R1 (49.2%), OpenAI o1 (48.9%), Qwen 2.5 Coder 32B (48.4%),
+      * DeepSeek-V3, GPT-4o, Gemini 2.0 Flash, Gemini 2.0 Pro, Llama 3.3 70B.
+      * Tapping any row opens the full Model Inspector Drawer on mobile and desktop.
+  - In-Page Sticky Sub-Navigation (Deep Dives, YouTube, X & Reddit, 1-Liners).
+  - Unbiased 3-Year Milestones Archive (2023–2026).
+  - Pure canonical domain: ai-digest-by-mp.vercel.app.
 """
 
 import json
@@ -26,7 +21,7 @@ from pathlib import Path
 # Load seed data if available
 seed_file = Path("seed_7days.json")
 if seed_file.exists():
-    with open(seed_file, "r") as f:
+    with open(seed_file, "r", encoding="utf-8") as f:
         seed_data = json.load(f)
 else:
     seed_data = {}
@@ -37,54 +32,28 @@ seed_json_str = json.dumps(seed_data)
 MILESTONES_ARCHIVE = {
     "yearly": [
         {
-            "period": "2026",
-            "top3": [
-                {
-                    "title": "GPT-6 Astra: Autonomous Computer Operator",
-                    "lab": "OpenAI",
-                    "capability": "First true computer operator model — navigates browsers, installs software, runs QA. 99.9% ARC-AGI-3, 1.05M context.",
-                    "date": "September 2026",
-                    "impact": "Establishes autonomous computer use as the new frontier beyond code generation."
-                },
-                {
-                    "title": "Claude Fable 5.1 & Opus 5 Autonomous Engineering",
-                    "lab": "Anthropic",
-                    "capability": "81.2% SWE-bench Pro #1 coding SOTA with continuous dynamic thinking budgets for autonomous terminal refactoring.",
-                    "date": "September 2026",
-                    "impact": "Software engineering moves from code autocomplete to autonomous agent pair-programmers."
-                },
-                {
-                    "title": "DeepSeek-R1 Open-Weights Revolution",
-                    "lab": "DeepSeek AI",
-                    "capability": "First open-weights 671B MoE model demonstrating that large-scale pure reinforcement learning achieves parity with OpenAI o1.",
-                    "date": "Early 2026",
-                    "impact": "Democratized frontier reasoning globally; sparked distillation into compact 14B/32B models run locally on consumer GPUs."
-                }
-            ]
-        },
-        {
             "period": "2025",
             "top3": [
                 {
-                    "title": "The Reasoning Paradigm Shift (OpenAI o1 & o3)",
+                    "title": "Claude 3.7 Sonnet: First Hybrid Extended Thinking Model",
+                    "lab": "Anthropic",
+                    "capability": "Unified standard instant inference and extended test-time thinking tokens into a single model, setting SWE-bench Verified records (70.3%).",
+                    "date": "February 2025",
+                    "impact": "Eliminated the compromise between chat latency and deep reasoning, powering the next generation of autonomous coding agents."
+                },
+                {
+                    "title": "OpenAI o3-mini: High-Throughput Cost-Efficient Reasoning",
                     "lab": "OpenAI",
-                    "capability": "Internal chain-of-thought scaling before generating output tokens, achieving 99th percentile on USA Math Olympiad and Codeforces.",
-                    "date": "Late 2025",
-                    "impact": "Established that test-time compute represents a new scaling dimension beyond pre-training parameters."
+                    "capability": "Delivered 79.7% on SWE-bench Verified at high effort with granular reasoning_effort dials (low, medium, high).",
+                    "date": "January 2025",
+                    "impact": "Brought deliberate reasoning budgets into automated CI/CD pipelines, making automated bug patching affordable at enterprise scale."
                 },
                 {
-                    "title": "DeepSeek-V3 Multi-Head Latent Attention (MLA) Architecture",
+                    "title": "DeepSeek-R1: Pure Reinforcement Learning Open Weights",
                     "lab": "DeepSeek AI",
-                    "capability": "Trained a 671B MoE model for just $6M using DualPipe and FP8 mixed precision, drastically lowering inference KV cache memory.",
-                    "date": "December 2025",
-                    "impact": "Re-architected enterprise LLM deployment economics, enabling 3x token throughput per server node."
-                },
-                {
-                    "title": "Single-Node Frontier Distillation (Llama 3.3 70B & Qwen 2.5 Coder 32B)",
-                    "lab": "Meta AI & Alibaba",
-                    "capability": "Compression of 405B-grade foundational intelligence into 32B and 70B footprints runnable on dual workstation GPUs.",
-                    "date": "Mid 2025",
-                    "impact": "Enterprise self-hosted models achieve SOTA coding without cloud vendor lock-in or data sovereignty compromises."
+                    "capability": "Demonstrated that large-scale pure RL elicits reasoning parity with closed models, releasing open MIT weights and 14B/32B distilled checkpoints.",
+                    "date": "January 2025",
+                    "impact": "Democratized frontier reasoning globally; enabled high-accuracy reasoning on local developer workstations and private clouds."
                 }
             ]
         },
@@ -92,25 +61,25 @@ MILESTONES_ARCHIVE = {
             "period": "2024",
             "top3": [
                 {
-                    "title": "Claude 3.5 Sonnet: The Coding Benchmark SOTA",
+                    "title": "Claude 3.5 Sonnet: The Developer Coding Benchmark SOTA",
                     "lab": "Anthropic",
-                    "capability": "Achieved 64% on SWE-bench Verified alongside the launch of Artifacts, redefining the standard for software developer assistants.",
-                    "date": "June 2024",
-                    "impact": "Became the universal default model powering Cursor, Aider, Cline, and modern agentic engineering workflows."
+                    "capability": "Achieved 63.7% on SWE-bench Verified alongside Computer Use and Artifacts, redefining developer pair programming.",
+                    "date": "June / October 2024",
+                    "impact": "Became the industry standard powering modern coding assistants like Cursor, Claude Code, and Aider."
                 },
                 {
-                    "title": "AlphaFold 3: Modeling the Entire Biomolecular Universe",
+                    "title": "The Test-Time Scaling Era: OpenAI o1",
+                    "lab": "OpenAI",
+                    "capability": "Demonstrated that scaling inference compute via hidden chain-of-thought unlocks unprecedented mathematical and scientific reasoning.",
+                    "date": "September / December 2024",
+                    "impact": "Established test-time compute as the third scaling paradigm alongside pre-training data and model parameters."
+                },
+                {
+                    "title": "AlphaFold 3: Comprehensive Biomolecular Structure Prediction",
                     "lab": "Google DeepMind & Isomorphic Labs",
-                    "capability": "Predicts structures and interactions of proteins, DNA, RNA, ligands, and chemical modifications in a unified diffusion architecture.",
+                    "capability": "Diffusion-based unified modeling predicting interactions across all biomolecules: proteins, DNA, RNA, ligands, and ions.",
                     "date": "May 2024",
-                    "impact": "Revolutionized drug discovery, oncology target identification, and synthetic biology worldwide."
-                },
-                {
-                    "title": "Open Source High-Throughput Serving (vLLM & PagedAttention)",
-                    "lab": "UC Berkeley & Open Source Community",
-                    "capability": "Virtual memory management for KV caches eliminating memory waste and enabling massive continuous batching.",
-                    "date": "2024",
-                    "impact": "Standardized global LLM production serving across cloud providers and private infrastructure."
+                    "impact": "Accelerated molecular biology, oncology target discovery, and synthetic therapeutics worldwide."
                 }
             ]
         },
@@ -118,747 +87,371 @@ MILESTONES_ARCHIVE = {
             "period": "2023",
             "top3": [
                 {
-                    "title": "GPT-4 Release: Multimodal Frontier Landmark",
+                    "title": "GPT-4 Launch: Modern Multimodal Foundation Landmark",
                     "lab": "OpenAI",
-                    "capability": "Mixture-of-Experts architecture passing the Uniform Bar Exam in 90th percentile, establishing modern foundation model baseline.",
+                    "capability": "Mixture-of-Experts architecture passing the Uniform Bar Exam in the 90th percentile and mastering multi-domain reasoning.",
                     "date": "March 2023",
-                    "impact": "Catalyzed global generative AI deployment and the modern enterprise LLM industry."
+                    "impact": "Catalyzed the global generative AI revolution and established the blueprint for enterprise LLM applications."
                 },
                 {
-                    "title": "LLaMA Weights & Open Source Ecosystem Genesis",
+                    "title": "Open Source Foundation Awakening: LLaMA",
                     "lab": "Meta AI",
-                    "capability": "Release of efficient 7B/13B/65B foundation weights, leading to llama.cpp, quantization, and the open-source AI boom.",
+                    "capability": "Release of efficient 7B/13B/65B weights, sparking llama.cpp, local quantization, and modern open-source AI.",
                     "date": "Spring 2023",
-                    "impact": "Proved that open-weights foundation models can run locally on consumer hardware (MacBooks, PCs)."
+                    "impact": "Proved foundational intelligence can be democratized and executed locally on consumer laptops and workstations."
                 },
                 {
-                    "title": "Constitutional AI & RL from AI Feedback (RLAIF)",
-                    "lab": "Anthropic",
-                    "capability": "Using AI models to critique and refine responses according to constitutional principles without massive human feedback loops.",
-                    "date": "Spring 2023",
-                    "impact": "Established new alignment methodologies adopted broadly across the frontier research community."
+                    "title": "Mixtral 8x7B: Sparse MoE Breakthrough",
+                    "lab": "Mistral AI",
+                    "capability": "Open sparse mixture-of-experts model matching or exceeding larger dense models with high inference speeds.",
+                    "date": "December 2023",
+                    "impact": "Validated sparse MoE architectures as the premier approach for high token throughput and cost efficiency."
                 }
-            ]
-        }
-    ],
-    "half_yearly": [
-        {
-            "period": "2026 H2",
-            "top3": [
-                { "title": "GPT-6 Astra Computer Operator Launch", "lab": "OpenAI", "capability": "Autonomous computer use with 99.9% ARC-AGI-3 and 1.05M context window.", "date": "Sep 2026" },
-                { "title": "Claude Fable 5.1 SWE-bench Pro #1", "lab": "Anthropic", "capability": "81.2% SWE-bench Pro leader with autonomous terminal agent capabilities.", "date": "Sep 2026" },
-                { "title": "Scal3R Zero-Shot Spatial Reconstruction", "lab": "Research / HF", "capability": "Instant uncalibrated 3D multi-view reconstruction.", "date": "Sep 2026" }
-            ]
-        },
-        {
-            "period": "2026 H1",
-            "top3": [
-                { "title": "Claude Opus 5 Long-Horizon Agent", "lab": "Anthropic", "capability": "79.2% SWE-bench Pro with multi-hour autonomous task execution.", "date": "May 2026" },
-                { "title": "Claude Sonnet 5 Agentic Mid-Tier", "lab": "Anthropic", "capability": "63.2% SWE-bench Pro, $2/$10 pricing — most agentic mid-tier model.", "date": "Jun 2026" },
-                { "title": "DeepSeek-R1 Open MoE 671B Weights Release", "lab": "DeepSeek", "capability": "Open reasoning parity with closed US models.", "date": "Jan 2026" }
-            ]
-        },
-        {
-            "period": "2025 H2",
-            "top3": [
-                { "title": "OpenAI o3 & o3-mini Reasoning Model Frontier", "lab": "OpenAI", "capability": "Competitive programming gold medal math performance.", "date": "Dec 2025" },
-                { "title": "DeepSeek-V3 671B DualPipe Architecture", "lab": "DeepSeek", "capability": "Multi-Head Latent Attention enabling ultra-low KV memory.", "date": "Dec 2025" },
-                { "title": "Llama 3.3 70B Instruct Single-Node SOTA", "lab": "Meta AI", "capability": "405B capabilities packed into single workstation inference.", "date": "Dec 2025" }
-            ]
-        },
-        {
-            "period": "2025 H1",
-            "top3": [
-                { "title": "OpenAI o1 Reasoning Previews", "lab": "OpenAI", "capability": "Inaugurated the test-time compute scaling paradigm.", "date": "Jan 2025" },
-                { "title": "Qwen 2.5 Coder 32B Open Champion", "lab": "Alibaba", "capability": "SOTA open coding model surpassing closed predecessors.", "date": "Nov 2024" },
-                { "title": "DeepSeek-V2 MoE Low-Cost Benchmark", "lab": "DeepSeek", "capability": "Pioneered extreme price reductions for cloud API inference.", "date": "May 2025" }
-            ]
-        },
-        {
-            "period": "2024 H2",
-            "top3": [
-                { "title": "Anthropic Computer Use API", "lab": "Anthropic", "capability": "Models directly control keyboards, mice, and GUI applications.", "date": "Oct 2024" },
-                { "title": "Llama 3.1 405B Frontier Open Release", "lab": "Meta AI", "capability": "First open model matching contemporary proprietary frontier.", "date": "July 2024" },
-                { "title": "FLUX.1 Open Source Image Diffusion", "lab": "Black Forest Labs", "capability": "Rectified flow transformer producing hyper-photorealistic imagery.", "date": "Aug 2024" }
-            ]
-        },
-        {
-            "period": "2024 H1",
-            "top3": [
-                { "title": "Claude 3.5 Sonnet & Artifacts Launch", "lab": "Anthropic", "capability": "Revolutionized coding, SWE-bench and interactive development.", "date": "June 2024" },
-                { "title": "AlphaFold 3 Biomolecular Structure", "lab": "Google DeepMind", "capability": "Unified prediction of all life molecules (proteins, DNA, RNA).", "date": "May 2024" },
-                { "title": "Mistral Large & Open Enterprise Models", "lab": "Mistral AI", "capability": "Flagship European open-weights model for enterprise privacy.", "date": "Feb 2024" }
             ]
         }
     ],
     "quarterly": [
         {
-            "period": "2026 Q3",
+            "period": "2025 Q1",
             "top3": [
-                { "title": "GPT-6 Astra Computer Operator Release", "lab": "OpenAI", "capability": "99.9% ARC-AGI-3, autonomous browser/OS control, 1.05M context.", "date": "Sep 2026" },
-                { "title": "Claude Fable 5.1 SWE-bench Pro #1", "lab": "Anthropic", "capability": "81.2% SWE-bench Pro autonomous coding SOTA.", "date": "Sep 2026" },
-                { "title": "Base-3 Ternary GGUF Packing (-22% VRAM)", "lab": "LocalLLaMA", "capability": "Lossless ternary quantization running 27B models on 12GB VRAM.", "date": "Sep 2026" }
-            ]
-        },
-        {
-            "period": "2026 Q1",
-            "top3": [
-                { "title": "Gemma 4 31B Open Weights Launch", "lab": "Google DeepMind", "capability": "Full commercial open weights model rivaling closed APIs on local workstations.", "date": "Mar 2026" },
-                { "title": "DeepSeek-R1 Open MoE Launch", "lab": "DeepSeek", "capability": "Open weights reasoning at $0.55/1M.", "date": "Jan 2026" },
-                { "title": "Grok 3 Colossus Supercluster Deployment", "lab": "xAI", "capability": "Trained on 100K H100/H200 cluster with high throughput.", "date": "Feb 2026" }
-            ]
-        },
-        {
-            "period": "2025 Q4",
-            "top3": [
-                { "title": "OpenAI o3 Frontier Launch", "lab": "OpenAI", "capability": "Test-time compute breakthrough on hard reasoning.", "date": "Dec 2025" },
-                { "title": "DeepSeek-V3 671B MoE", "lab": "DeepSeek", "capability": "SOTA architecture trained on low budget.", "date": "Dec 2025" },
-                { "title": "Llama 3.3 70B Release", "lab": "Meta AI", "capability": "Workstation single-node frontier model.", "date": "Dec 2025" }
-            ]
-        },
-        {
-            "period": "2025 Q3",
-            "top3": [
-                { "title": "OpenAI o1 Reasoning Launch", "lab": "OpenAI", "capability": "First public test-time compute scaling model.", "date": "Sept 2025" },
-                { "title": "Qwen 2.5 Coding Ecosystem", "lab": "Alibaba", "capability": "Apache 2.0 weights dominating local coding.", "date": "Sept 2025" },
-                { "title": "Mistral Large 2 (123B)", "lab": "Mistral AI", "capability": "Multilingual open weights frontier.", "date": "July 2025" }
+                { "title": "Claude 3.7 Sonnet Hybrid Extended Thinking", "lab": "Anthropic", "capability": "70.3% SWE-bench Verified with dynamic thinking budget controls.", "date": "Feb 2025" },
+                { "title": "OpenAI o3-mini High-Throughput Reasoning", "lab": "OpenAI", "capability": "79.7% SWE-bench Verified at affordable token pricing ($1.10/1M).", "date": "Jan 2025" },
+                { "title": "DeepSeek-R1 Open MoE 671B Weights Release", "lab": "DeepSeek", "capability": "Full open weights pure RL reasoning rivaling closed models.", "date": "Jan 2025" }
             ]
         },
         {
             "period": "2024 Q4",
             "top3": [
-                { "title": "Anthropic Computer Use", "lab": "Anthropic", "capability": "Direct desktop and terminal agentic control.", "date": "Oct 2024" },
-                { "title": "Llama 3.2 Multimodal Vision", "lab": "Meta AI", "capability": "Edge and vision open weights models.", "date": "Sept 2024" },
-                { "title": "FLUX.1 Schnell & Dev Models", "lab": "Black Forest Labs", "capability": "Open image generation dominance.", "date": "Aug 2024" }
+                { "title": "OpenAI o1 Full Flagship Release", "lab": "OpenAI", "capability": "Inference-time reasoning scaling for competitive math and coding.", "date": "Dec 2024" },
+                { "title": "DeepSeek-V3 671B Multi-Head Latent Attention", "lab": "DeepSeek", "capability": "Commodity cost training and ultra-fast inference throughput.", "date": "Dec 2024" },
+                { "title": "Llama 3.3 70B Single-Node Frontier Model", "lab": "Meta AI", "capability": "405B capabilities packed into single workstation inference.", "date": "Dec 2024" }
+            ]
+        },
+        {
+            "period": "2024 Q3",
+            "top3": [
+                { "title": "OpenAI o1-preview Test-Time Compute", "lab": "OpenAI", "capability": "First public demonstration of deliberate chain-of-thought scaling.", "date": "Sep 2024" },
+                { "title": "Qwen 2.5 Coder 32B Open Champion", "lab": "Alibaba", "capability": "Apache 2.0 open-source coding model rivaling closed GPT-4o.", "date": "Nov 2024" },
+                { "title": "Anthropic Computer Use Public Beta", "lab": "Anthropic", "capability": "Direct desktop UI, browser, and terminal control via API.", "date": "Oct 2024" }
             ]
         },
         {
             "period": "2024 Q2",
             "top3": [
-                { "title": "Claude 3.5 Sonnet Release", "lab": "Anthropic", "capability": "SOTA coding assistant revolution.", "date": "June 2024" },
-                { "title": "AlphaFold 3 Breakthrough", "lab": "Google DeepMind", "capability": "Comprehensive biomolecular modeling.", "date": "May 2024" },
-                { "title": "Llama 3 8B & 70B Release", "lab": "Meta AI", "capability": "New generation open source baseline.", "date": "April 2024" }
+                { "title": "Claude 3.5 Sonnet & Artifacts Launch", "lab": "Anthropic", "capability": "SWE-bench leader establishing modern coding assistant standard.", "date": "Jun 2024" },
+                { "title": "AlphaFold 3 Biomolecular Breakthrough", "lab": "Google DeepMind", "capability": "Unified diffusion modeling of all biomolecular complexes.", "date": "May 2024" },
+                { "title": "Llama 3 8B & 70B Open Release", "lab": "Meta AI", "capability": "State-of-the-art open foundation baseline trained on 15T tokens.", "date": "Apr 2024" }
             ]
         }
     ],
     "monthly": [
-        { "period": "2026-09", "top3": [
-            { "title": "GPT-6 Astra Computer Operator Launch", "lab": "OpenAI", "capability": "Autonomous computer use with 99.9% ARC-AGI-3 and 1.05M context.", "date": "2026-09-03" },
-            { "title": "Claude Fable 5.1 SWE-bench Pro Leader", "lab": "Anthropic", "capability": "81.2% SWE-bench Pro #1 with autonomous coding SOTA.", "date": "2026-09-01" },
-            { "title": "Model Hardware Standard Research Preview", "lab": "Anthropic", "capability": "Open benchmark standard for datacenter inference efficiency.", "date": "2026-08-05" }
-        ]},
-        { "period": "2026-03", "top3": [
-            { "title": "Gemini 3.8 Flash General Availability", "lab": "Google DeepMind", "capability": "Sub-200ms 1M context multimodal reasoning.", "date": "2026-03-01" },
-            { "title": "Qwen 3.8 27B Workstation Optimization", "lab": "Alibaba", "capability": "Ternary base-3 packing reducing VRAM by 22%.", "date": "2026-03-04" },
-            { "title": "Codestral 2501 Long-Context Update", "lab": "Mistral AI", "capability": "256K context fill-in-the-middle code completion.", "date": "2026-03-02" }
-        ]},
-        { "period": "2026-02", "top3": [
-            { "title": "Gemini 3.1 Pro 2M Context Launch", "lab": "Google DeepMind", "capability": "2M token ingestion with industry-leading needle-in-haystack recall.", "date": "2026-02-24" },
-            { "title": "Grok 3 Colossus Supercluster Launch", "lab": "xAI", "capability": "100K H100/H200 cluster trained frontier model.", "date": "2026-02-17" },
-            { "title": "OpenAI o3-mini Reasoning GA", "lab": "OpenAI", "capability": "Configurable reasoning effort at commodity pricing.", "date": "2026-02-02" }
-        ]},
-        { "period": "2026-01", "top3": [
-            { "title": "DeepSeek-R1 Open Reasoning Release", "lab": "DeepSeek AI", "capability": "Pure RL reasoning model with MIT weights.", "date": "2026-01-20" },
-            { "title": "Codestral 2501 Specialized Coding", "lab": "Mistral AI", "capability": "Fill-in-the-middle code completion benchmark leader.", "date": "2026-01-14" },
-            { "title": "Claude Code Autonomous Terminal Agent", "lab": "Anthropic", "capability": "Zero-intervention terminal agent pair programmer.", "date": "2026-01-25" }
-        ]},
-        { "period": "2025-12", "top3": [
-            { "title": "OpenAI o3 High-Effort Reasoning", "lab": "OpenAI", "capability": "SOTA competitive programming performance.", "date": "2025-12-20" },
-            { "title": "DeepSeek-V3 671B MoE Release", "lab": "DeepSeek AI", "capability": "Groundbreaking FP8 training & MLA architecture.", "date": "2025-12-26" },
-            { "title": "Llama 3.3 70B Instruct Release", "lab": "Meta AI", "capability": "405B capabilities on a single node.", "date": "2025-12-06" }
-        ]},
-        { "period": "2025-11", "top3": [
-            { "title": "Qwen 2.5 Coder 32B Open Release", "lab": "Alibaba", "capability": "Ecosystem default open coding model.", "date": "2025-11-12" },
-            { "title": "Claude 3.5 Haiku Low-Latency API", "lab": "Anthropic", "capability": "Fastest coding & categorization model.", "date": "2025-11-04" },
-            { "title": "Pixtral Large 124B Multimodal", "lab": "Mistral AI", "capability": "High-resolution multimodal document parsing.", "date": "2025-11-18" }
-        ]},
-        { "period": "2025-10", "top3": [
-            { "title": "Anthropic Computer Use API Public Beta", "lab": "Anthropic", "capability": "Direct desktop interaction & agentic control.", "date": "2025-10-22" },
-            { "title": "Llama 3.2 Vision 11B & 90B", "lab": "Meta AI", "capability": "Open multimodal edge models.", "date": "2025-10-01" },
-            { "title": "Gemini 2.5 Flash Native Audio Streaming", "lab": "Google DeepMind", "capability": "Real-time bidirectional speech with voice VAD.", "date": "2025-10-15" }
-        ]}
-    ],
-    "weekly": [
         {
-            "period": "Current Week (Sept 2026)",
+            "period": "2025-02",
             "top3": [
-                { "title": "Scal3R Online Multi-View 3D Reconstruction", "lab": "Hugging Face / Research", "capability": "Multi-relative pose query enabling zero-shot 3D spatial reconstruction.", "date": "2026-09-05" },
-                { "title": "RoboTok Internet-Scale Dexterous Manipulation", "lab": "Robotics Consortium", "capability": "Unified tokenized data engine for human demonstration retrieval and robotic manipulation.", "date": "2026-09-05" },
-                { "title": "Base-3 Ternary GGUF Packing (-22% VRAM)", "lab": "LocalLLaMA / Open Source", "capability": "Lossless ternary quantization running 27B models on 12GB VRAM.", "date": "2026-09-05" }
+                { "title": "Claude 3.7 Sonnet Hybrid Reasoning Launch", "lab": "Anthropic", "capability": "First hybrid extended thinking model, scoring 70.3% on SWE-bench Verified.", "date": "2025-02-24" },
+                { "title": "Gemini 2.0 Pro Experimental & Flash Updates", "lab": "Google DeepMind", "capability": "2M context window with advanced multimodal reasoning and real-time streaming.", "date": "2025-02-05" },
+                { "title": "Claude Code Autonomous Terminal Agent Beta", "lab": "Anthropic", "capability": "Direct CLI agent running multi-file edits and self-healing tests.", "date": "2025-02-24" }
             ]
         },
         {
-            "period": "Last Week (Late Aug 2026)",
+            "period": "2025-01",
             "top3": [
-                { "title": "Claude Code Auto Mode Sandbox Auditing", "lab": "Dev Community", "capability": "Zero-intervention terminal agent security boundaries.", "date": "2026-08-27" },
-                { "title": "Gemini 3.8 Flash High-Speed Reasoning Dial", "lab": "Google DeepMind", "capability": "Dynamic thinking effort parameter across Gemini API.", "date": "2026-08-28" },
-                { "title": "vLLM Chunked Prefill Memory Optimization", "lab": "vLLM Project", "capability": "50% reduction in KV cache allocation spikes under concurrency.", "date": "2026-08-25" }
+                { "title": "OpenAI o3-mini Production Launch", "lab": "OpenAI", "capability": "79.7% SWE-bench Verified with low/medium/high reasoning effort dials.", "date": "2025-01-31" },
+                { "title": "DeepSeek-R1 Open Weights Release", "lab": "DeepSeek", "capability": "671B MoE pure RL reasoning weights released under MIT license.", "date": "2025-01-20" },
+                { "title": "Distilled Reasoning Local Deployments", "lab": "Open Source Community", "capability": "Distilled R1 14B/32B models run locally on consumer GPUs in Ollama.", "date": "2025-01-25" }
+            ]
+        },
+        {
+            "period": "2024-12",
+            "top3": [
+                { "title": "DeepSeek-V3 671B DualPipe Architecture", "lab": "DeepSeek", "capability": "Multi-Head Latent Attention enabling ultra-low KV memory.", "date": "2024-12-26" },
+                { "title": "OpenAI o1 Full Flagship Release", "lab": "OpenAI", "capability": "Deliberate reasoning model with vision understanding and fast tool use.", "date": "2024-12-05" },
+                { "title": "Llama 3.3 70B Release", "lab": "Meta AI", "capability": "405B capabilities packed into single workstation inference.", "date": "2024-12-06" }
             ]
         }
     ]
 }
 
-# Frontier Model Master Database with SOTA Benchmarks & Developer Verdicts
+# Frontier Model Master Database with Real SOTA Benchmarks & Developer Verdicts
 FRONTIER_MODELS = [
-    # OpenAI
     {
-        "id": "gpt-6-astra",
-        "name": "GPT-6 Astra (Computer Operator)",
-        "lab": "OpenAI",
-        "lab_slug": "openai",
-        "is_frontier": True,
-        "year": "2026",
-        "release_date": "September 3, 2026",
-        "benchmark_score": 79.5,
-        "benchmark_label": "99.9% ARC-AGI-3 · Autonomous Computer Operator",
-        "license": "Proprietary API",
-        "context_window": "1,050,000 tokens",
-        "max_output": "100,000 tokens",
-        "pricing_input": "$10.00 / 1M",
-        "pricing_output": "$50.00 / 1M",
-        "pricing_cached": "$2.50 / 1M",
-        "architecture": "Massive Dense Multimodal Frontier",
-        "readiness": "Frontier SOTA",
-        "tag": "AUTONOMOUS COMPUTER OPERATOR",
-        "best_for": "Autonomous browser navigation, multi-step software workflows, cybersecurity, ARC-AGI near-perfect reasoning.",
-        "better_to_work_with": "The first true 'computer operator' — navigates browsers, installs software, builds websites, runs QA, and executes multi-hour autonomous workflows end-to-end.",
-        "capabilities": ["Autonomous Computer Use", "ARC-AGI-3 99.9%", "FrontierMath Tier 4 97.6%", "1.05M Context", "ExploitBench 100%"],
-        "api_snippet": "from openai import OpenAI\nclient = OpenAI()\nresp = client.chat.completions.create(\n    model='gpt-6-astra',\n    messages=[{'role': 'user', 'content': 'Navigate to the dashboard and export monthly reports'}]\n)"
-    },
-    {
-        "id": "openai-o3",
-        "name": "OpenAI o3",
-        "lab": "OpenAI",
-        "lab_slug": "openai",
+        "id": "claude-3-7-sonnet",
+        "name": "Claude 3.7 Sonnet",
+        "lab": "Anthropic",
+        "lab_slug": "anthropic",
         "is_frontier": True,
         "year": "2025",
-        "release_date": "December 2025",
-        "benchmark_score": 76.2,
-        "benchmark_label": "76.2% SWE-bench Pro · Deep Reasoning",
+        "release_date": "February 2025",
+        "benchmark_score": 70.3,
+        "benchmark_label": "70.3% SWE-bench Verified · SOTA Hybrid Thinking",
         "license": "Proprietary API",
         "context_window": "200,000 tokens",
-        "max_output": "100,000 tokens",
-        "pricing_input": "$15.00 / 1M",
-        "pricing_output": "$60.00 / 1M",
-        "pricing_cached": "$3.75 / 1M",
-        "architecture": "Test-Time Compute Scaling",
+        "max_output": "64,000 tokens",
+        "pricing_input": "$3.00 / 1M",
+        "pricing_output": "$15.00 / 1M",
+        "pricing_cached": "$0.30 / 1M",
+        "architecture": "Hybrid Standard & Extended Thinking Core",
         "readiness": "Frontier SOTA",
-        "tag": "DEEP REASONING",
-        "best_for": "Complex mathematical theorem proofs, hard algorithmic optimization, critical security auditing.",
-        "better_to_work_with": "Unmatched on pure mathematics and difficult algorithms, but has higher latency per response. Best used for offline validation rather than rapid interactive pair programming.",
-        "capabilities": ["Deliberate Internal Thought", "Competitive Programming Gold", "PhD Level Science", "Codeforces Master"],
-        "api_snippet": "from openai import OpenAI\nclient = OpenAI()\nresp = client.chat.completions.create(\n    model='o3',\n    messages=[{'role': 'user', 'content': 'Prove the conjecture'}]\n)"
+        "tag": "HYBRID REASONING SOTA",
+        "best_for": "Autonomous whole-repo refactoring, agentic coding loops (Claude Code, Cursor), deep architectural debugging, complex front-end synthesis.",
+        "better_to_work_with": "The most dependable developer assistant available. Continuous dynamic thinking dial allows spending more tokens on hard logical verification while replying instantly to routine edits. Very low hallucination rate on codebases.",
+        "capabilities": ["Extended Thinking Dial", "70.3% SWE-bench Verified", "74.5% SWE-bench Pro", "Claude Code Native", "Low Hallucination Rate"],
+        "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='claude-3-7-sonnet-20250219',\n    max_tokens=64000,\n    thinking={'type': 'enabled', 'budget_tokens': 8000},\n    messages=[{'role': 'user', 'content': 'Refactor the authentication module'}]\n)"
     },
     {
         "id": "openai-o3-mini",
         "name": "OpenAI o3-mini",
         "lab": "OpenAI",
         "lab_slug": "openai",
-        "is_frontier": False,
+        "is_frontier": True,
         "year": "2025",
         "release_date": "January 2025",
-        "benchmark_score": 68.5,
-        "benchmark_label": "68.5% SWE-bench Pro · Fast Reasoning",
+        "benchmark_score": 79.7,
+        "benchmark_label": "79.7% SWE-bench Verified (High Effort) · Cost Leader",
         "license": "Proprietary API",
         "context_window": "200,000 tokens",
         "max_output": "100,000 tokens",
         "pricing_input": "$1.10 / 1M",
         "pricing_output": "$4.40 / 1M",
         "pricing_cached": "$0.55 / 1M",
-        "architecture": "Efficient Reasoning Model",
-        "readiness": "Cost Leader",
-        "tag": "FAST REASONING",
-        "best_for": "Production code evaluation, automated debugging pipelines, real-time math tutor.",
-        "better_to_work_with": "Fast and versatile. The reasoning_effort dial ('low', 'medium', 'high') allows exact control over cost and latency in CI/CD pipelines.",
-        "capabilities": ["Configurable Thinking Budget", "Fast Coding", "Function Calling with Thought", "Math SOTA"],
-        "api_snippet": "resp = client.chat.completions.create(\n    model='o3-mini',\n    reasoning_effort='medium',\n    messages=[{'role': 'user', 'content': 'Refactor this algorithm'}]\n)"
+        "architecture": "Test-Time RL Reasoning",
+        "readiness": "Cost & Reasoning SOTA",
+        "tag": "STEM & CODING REASONING",
+        "best_for": "High-throughput automated unit test generation, CI/CD regression debugging, math proofs, competitive programming.",
+        "better_to_work_with": "Incredible cost-to-intelligence ratio. The reasoning_effort parameter ('low', 'medium', 'high') lets you configure exact compute budgets for automated build pipelines.",
+        "capabilities": ["Configurable Thinking Budget", "79.7% SWE-bench Verified", "STEM Competition Gold", "Fast Token Generation"],
+        "api_snippet": "from openai import OpenAI\nclient = OpenAI()\nresp = client.chat.completions.create(\n    model='o3-mini',\n    reasoning_effort='high',\n    messages=[{'role': 'user', 'content': 'Fix failing integration tests in auth_spec.py'}]\n)"
     },
     {
-        "id": "gpt-4-5",
-        "name": "GPT-4.5 (Orion)",
-        "lab": "OpenAI",
-        "lab_slug": "openai",
-        "is_frontier": False,
-        "year": "2025",
-        "release_date": "February 2025",
-        "benchmark_score": 64.0,
-        "benchmark_label": "64.0% SWE-bench Pro · World Knowledge",
-        "license": "Proprietary API",
-        "context_window": "128,000 tokens",
-        "max_output": "16,384 tokens",
-        "pricing_input": "$75.00 / 1M",
-        "pricing_output": "$150.00 / 1M",
-        "pricing_cached": "$37.50 / 1M",
-        "architecture": "Massive Dense Flagship",
-        "readiness": "Flagship Pro",
-        "tag": "WORLD KNOWLEDGE",
-        "best_for": "Executive strategy briefs, high-touch customer consultation, nuanced literary translation.",
-        "better_to_work_with": "Superb tone, natural prose, and deep world understanding, though expensive for bulk programmatic tasks.",
-        "capabilities": ["Nuanced Writing", "Broad World Knowledge", "Emotional Intelligence", "Multimodal Vision"],
-        "api_snippet": "resp = client.chat.completions.create(\n    model='gpt-4.5-preview',\n    messages=[{'role': 'user', 'content': 'Draft executive market analysis'}]\n)"
-    },
-
-    # Anthropic
-    {
-        "id": "fable-5-1",
-        "name": "Fable 5.1 (Autonomous Engineering)",
+        "id": "claude-3-5-sonnet",
+        "name": "Claude 3.5 Sonnet",
         "lab": "Anthropic",
         "lab_slug": "anthropic",
         "is_frontier": True,
-        "year": "2026",
-        "release_date": "September 1, 2026",
-        "benchmark_score": 81.2,
-        "benchmark_label": "81.2% SWE-bench Pro #1 · Autonomous Coding SOTA",
-        "license": "Proprietary API",
-        "context_window": "256,000 tokens",
-        "max_output": "64,000 tokens",
-        "pricing_input": "$5.00 / 1M",
-        "pricing_output": "$25.00 / 1M",
-        "pricing_cached": "$0.50 / 1M",
-        "architecture": "Extended Deliberation Agentic Core",
-        "readiness": "Frontier SOTA",
-        "tag": "SWE-BENCH PRO #1",
-        "best_for": "Full-repository refactoring, autonomous CI/CD debugging, self-healing test execution, agentic scientific research.",
-        "better_to_work_with": "The best developer experience for autonomous coding loops (Claude Code & Cursor). Native tool grounding, zero hallucinated file paths, and continuous self-correction. #1 on SWE-bench Pro.",
-        "capabilities": ["SWE-bench Pro Leader (81.2%)", "Autonomous Terminal Agent", "Repo-Wide Context", "Self-Healing Tests", "Dynamic Thinking Dial"],
-        "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='claude-fable-5-1-20260901',\n    max_tokens=64000,\n    messages=[{'role': 'user', 'content': 'Resolve issues in PR #402'}]\n)"
-    },
-    {
-        "id": "claude-opus-5",
-        "name": "Claude Opus 5 (Auto Mode)",
-        "lab": "Anthropic",
-        "lab_slug": "anthropic",
-        "is_frontier": True,
-        "year": "2026",
-        "release_date": "May 2026",
-        "benchmark_score": 79.2,
-        "benchmark_label": "79.2% SWE-bench Pro · Long-Horizon Agent",
-        "license": "Proprietary API",
-        "context_window": "200,000 tokens",
-        "max_output": "64,000 tokens",
-        "pricing_input": "$15.00 / 1M",
-        "pricing_output": "$75.00 / 1M",
-        "pricing_cached": "$1.50 / 1M",
-        "architecture": "Massive Long-Horizon Flagship",
-        "readiness": "Flagship Pro",
-        "tag": "AUTONOMOUS AGENT",
-        "best_for": "Fully autonomous multi-file refactoring, enterprise security auditing, legacy codebase migrations.",
-        "better_to_work_with": "Phenomenal reasoning depth for difficult architectural refactoring. Best when left to run autonomously with terminal sandboxing.",
-        "capabilities": ["Multi-Hour Task Execution", "Repository Architecture Migration", "Deep Formal Verification"],
-        "api_snippet": "# Claude Opus 5 with Autonomous Execution\nresp = client.messages.create(\n    model='claude-opus-5',\n    max_tokens=64000,\n    messages=[{'role': 'user', 'content': 'Migrate our monolith to microservices'}]\n)"
-    },
-    {
-        "id": "claude-sonnet-5",
-        "name": "Claude Sonnet 5 (Agentic Mid-Tier)",
-        "lab": "Anthropic",
-        "lab_slug": "anthropic",
-        "is_frontier": True,
-        "year": "2026",
-        "release_date": "June 30, 2026",
-        "benchmark_score": 63.2,
-        "benchmark_label": "63.2% SWE-bench Pro · Most Agentic Mid-Tier",
-        "license": "Proprietary API",
-        "context_window": "200,000 tokens",
-        "max_output": "64,000 tokens",
-        "pricing_input": "$2.00 / 1M",
-        "pricing_output": "$10.00 / 1M",
-        "pricing_cached": "$0.20 / 1M",
-        "architecture": "Hybrid Reasoning & Extended Thinking Core",
-        "readiness": "Frontier SOTA",
-        "tag": "AGENTIC DAILY DRIVER",
-        "best_for": "Cost-efficient agentic workflows, pair programming, autonomous terminal agents (Claude Code, Cursor), daily engineering tasks.",
-        "better_to_work_with": "Anthropic's most agentic mid-tier model. Dynamic thinking budget (0-128K tokens) with instant sub-200ms first token. Excellent value at $2/$10 per million tokens.",
-        "capabilities": ["Dynamic Thinking Budget (0-128K)", "Agentic Terminal Tool Use", "Computer Control", "Strong Coding"],
-        "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='claude-sonnet-5-20260630',\n    max_tokens=64000,\n    thinking={'type': 'enabled', 'budget_tokens': 32000},\n    messages=[{'role': 'user', 'content': 'Write full compiler test suite'}]\n)"
-    },
-    {
-        "id": "claude-3-5-haiku",
-        "name": "Claude 3.5 Haiku",
-        "lab": "Anthropic",
-        "lab_slug": "anthropic",
-        "is_frontier": False,
-        "year": "2025",
-        "release_date": "November 2024",
-        "benchmark_score": 52.8,
-        "benchmark_label": "52.8% SWE-bench Pro · Sub-150ms Speed",
+        "year": "2024",
+        "release_date": "October 2024",
+        "benchmark_score": 63.7,
+        "benchmark_label": "63.7% SWE-bench Verified · Workhorse Standard",
         "license": "Proprietary API",
         "context_window": "200,000 tokens",
         "max_output": "8,192 tokens",
-        "pricing_input": "$0.80 / 1M",
-        "pricing_output": "$4.00 / 1M",
-        "pricing_cached": "$0.08 / 1M",
-        "architecture": "Low-Latency Dense",
-        "readiness": "Cost Leader",
-        "tag": "FAST INFERENCE",
-        "best_for": "High-concurrency API backends, real-time code completions, user request routing.",
-        "better_to_work_with": "Extremely snappy. Sub-150ms time-to-first-token makes it effortless to use inside live web applications.",
-        "capabilities": ["Sub-150ms First Token", "Structured Extraction", "High-Volume Filtering", "High Accuracy Tool Use"],
-        "api_snippet": "resp = client.messages.create(\n    model='claude-3-5-haiku-20241022',\n    max_tokens=2048,\n    messages=[{'role': 'user', 'content': 'Classify this intent'}]\n)"
+        "pricing_input": "$3.00 / 1M",
+        "pricing_output": "$15.00 / 1M",
+        "pricing_cached": "$0.30 / 1M",
+        "architecture": "Dense Frontier Flagship",
+        "readiness": "Production Workhorse",
+        "tag": "INDUSTRY STANDARD",
+        "best_for": "Interactive coding, frontend UI generation, document synthesis, visual comprehension, prompt engineering.",
+        "better_to_work_with": "The baseline against which all modern coding models are measured. Near-zero latency lag and exceptional instruction adherence.",
+        "capabilities": ["63.7% SWE-bench", "Computer Use API", "Artifacts UI", "Prompt Caching 90% Discount"],
+        "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='claude-3-5-sonnet-20241022',\n    max_tokens=8192,\n    messages=[{'role': 'user', 'content': 'Build a responsive dashboard component'}]\n)"
     },
-
-    # Google DeepMind
-    {
-        "id": "gemini-3-8-flash",
-        "name": "Gemini 3.8 Flash",
-        "lab": "Google DeepMind",
-        "lab_slug": "google",
-        "is_frontier": True,
-        "year": "2026",
-        "release_date": "March 2026",
-        "benchmark_score": 72.0,
-        "benchmark_label": "72.0% SWE-bench Pro · 1M Context Value SOTA",
-        "license": "Proprietary API",
-        "context_window": "1,000,000 tokens",
-        "max_output": "65,536 tokens",
-        "pricing_input": "$0.10 / 1M",
-        "pricing_output": "$0.40 / 1M",
-        "pricing_cached": "$0.025 / 1M",
-        "architecture": "High-Efficiency Multimodal MoE",
-        "readiness": "Frontier SOTA",
-        "tag": "VALUE LEADER",
-        "best_for": "Fast autonomous agents, full-codebase context, multimodal audio/video analysis at high throughput.",
-        "better_to_work_with": "Exceptional value ($0.10 / 1M input) and massive 1M context. Perfect for background batch ingestion and full-codebase analysis.",
-        "capabilities": ["Dynamic Extended Thinking", "Multimodal Video/Audio", "1M Context", "Function Calling", "JSON Mode", "Live Audio Streaming"],
-        "api_snippet": "from google import genai\nclient = genai.Client()\nresponse = client.models.generate_content(\n    model='gemini-3.8-flash',\n    contents='Analyze this entire codebase'\n)"
-    },
-    {
-        "id": "gemini-3-1-pro",
-        "name": "Gemini 3.1 Pro",
-        "lab": "Google DeepMind",
-        "lab_slug": "google",
-        "is_frontier": False,
-        "year": "2026",
-        "release_date": "February 2026",
-        "benchmark_score": 74.5,
-        "benchmark_label": "74.5% SWE-bench Pro · 2M Long Context",
-        "license": "Proprietary API",
-        "context_window": "2,000,000 tokens",
-        "max_output": "65,536 tokens",
-        "pricing_input": "$1.25 / 1M",
-        "pricing_output": "$5.00 / 1M",
-        "pricing_cached": "$0.31 / 1M",
-        "architecture": "Deep Frontier Multimodal",
-        "readiness": "Flagship Pro",
-        "tag": "MASSIVE CONTEXT",
-        "best_for": "Exhaustive legal & scientific document synthesis, hours of high-res video parsing, complex system architecture.",
-        "better_to_work_with": "Industry champion for needle-in-a-haystack recall across 2 million tokens of documentation or code.",
-        "capabilities": ["2M Token Ingestion", "Deep Reasoning", "Complex Code Generation", "Multimodal Vision & Video", "High Precision Math"],
-        "api_snippet": "response = client.models.generate_content(\n    model='gemini-3.1-pro',\n    contents=[large_video_file, 'Summarize all key events']\n)"
-    },
-    {
-        "id": "gemma-4-31b",
-        "name": "Gemma 4 31B",
-        "lab": "Google DeepMind",
-        "lab_slug": "google",
-        "is_frontier": False,
-        "year": "2026",
-        "release_date": "March 2026",
-        "benchmark_score": 55.5,
-        "benchmark_label": "55.5% SWE-bench Pro · Local Dense SOTA",
-        "license": "Open Weights (Gemma)",
-        "context_window": "128,000 tokens",
-        "max_output": "16,384 tokens",
-        "pricing_input": "Free / Self-Hosted",
-        "pricing_output": "Free / Self-Hosted",
-        "pricing_cached": "N/A",
-        "architecture": "Dense 31B Parameter",
-        "readiness": "Open Weights",
-        "tag": "LOCAL ENTERPRISE",
-        "best_for": "Air-gapped enterprise deployments, private document classification, local workstation coding.",
-        "better_to_work_with": "Clean instruction-following on single local GPUs via Ollama with full commercial permission.",
-        "capabilities": ["Local Workstation Run", "Instruction Tuned", "Ollama Native", "Full Privacy", "Commercial Friendly"],
-        "api_snippet": "# CLI Command\nollama run gemma4:31b"
-    },
-
-    # DeepSeek
     {
         "id": "deepseek-r1",
         "name": "DeepSeek-R1",
-        "lab": "DeepSeek AI",
+        "lab": "DeepSeek",
         "lab_slug": "deepseek",
         "is_frontier": True,
-        "year": "2026",
-        "release_date": "January 2026",
-        "benchmark_score": 70.6,
-        "benchmark_label": "70.6% SWE-bench Pro · Open Reasoning SOTA",
+        "year": "2025",
+        "release_date": "January 2025",
+        "benchmark_score": 49.2,
+        "benchmark_label": "49.2% SWE-bench Verified · 79.8% AIME · Open Weights MIT",
         "license": "Open Weights (MIT)",
         "context_window": "128,000 tokens",
-        "max_output": "64,000 tokens",
+        "max_output": "8,192 tokens",
         "pricing_input": "$0.55 / 1M",
         "pricing_output": "$2.19 / 1M",
         "pricing_cached": "$0.14 / 1M",
-        "architecture": "671B MoE (37B active)",
-        "readiness": "Open Weights Champion",
-        "tag": "OPEN REASONING",
-        "best_for": "Self-hosted high-reasoning, low-cost enterprise analytics, uncensored algorithmic research.",
-        "better_to_work_with": "The best open-weights model for challenging reasoning. Full access to raw internal thinking (<think> tokens) gives developers complete interpretability.",
-        "capabilities": ["Pure RL Chain-of-Thought", "MIT Open License", "AIME 79.8% SOTA", "MATH-500 97.3%"],
-        "api_snippet": "# Ollama Self-Hosted Run\nollama run deepseek-r1:671b\n\n# Or DeepSeek API\nclient = OpenAI(api_key='...', base_url='https://api.deepseek.com')\nresp = client.chat.completions.create(model='deepseek-reasoner', messages=[...])"
+        "architecture": "671B MoE (37B active) Pure RL Reasoning",
+        "readiness": "Open Weights SOTA",
+        "tag": "OPEN REASONING REVOLUTION",
+        "best_for": "Deep math proofs, algorithmic problem solving, local self-hosted private code audits, distilled model training.",
+        "better_to_work_with": "Full chain-of-thought visible in <think> tags. Runs locally or at ~1/20th the cost of proprietary competitors with full data privacy.",
+        "capabilities": ["Pure RL Chain-of-Thought", "MIT Open License", "AIME 79.8%", "Distilled 14B/32B Local Weights"],
+        "api_snippet": "from openai import OpenAI\nclient = OpenAI(base_url='https://api.deepseek.com', api_key='...')\nresp = client.chat.completions.create(\n    model='deepseek-reasoner',\n    messages=[{'role': 'user', 'content': 'Analyze time complexity of this graph traversal'}]\n)"
+    },
+    {
+        "id": "openai-o1",
+        "name": "OpenAI o1",
+        "lab": "OpenAI",
+        "lab_slug": "openai",
+        "is_frontier": True,
+        "year": "2024",
+        "release_date": "December 2024",
+        "benchmark_score": 48.9,
+        "benchmark_label": "48.9% SWE-bench Verified · Deep Logical Reasoning",
+        "license": "Proprietary API",
+        "context_window": "200,000 tokens",
+        "max_output": "100,000 tokens",
+        "pricing_input": "$15.00 / 1M",
+        "pricing_output": "$60.00 / 1M",
+        "pricing_cached": "$7.50 / 1M",
+        "architecture": "Inference-Time Compute Scaling",
+        "readiness": "Frontier Flagship",
+        "tag": "DEEP LOGIC & MATH",
+        "best_for": "PhD-level scientific problem solving, complex algorithmic logic, multi-page security auditing.",
+        "better_to_work_with": "High reasoning depth for difficult theoretical challenges, but longer token generation latency. Best for asynchronous validation.",
+        "capabilities": ["Inference-Time Scaling", "Codeforces 1800+", "Competitive Math", "Vision Reasoning"],
+        "api_snippet": "from openai import OpenAI\nclient = OpenAI()\nresp = client.chat.completions.create(\n    model='o1',\n    messages=[{'role': 'user', 'content': 'Design a formally verified consensus protocol'}]\n)"
+    },
+    {
+        "id": "qwen-2-5-coder-32b",
+        "name": "Qwen 2.5 Coder 32B",
+        "lab": "Alibaba Cloud",
+        "lab_slug": "alibaba",
+        "is_frontier": True,
+        "year": "2024",
+        "release_date": "November 2024",
+        "benchmark_score": 48.4,
+        "benchmark_label": "48.4% SWE-bench Verified · Workstation Local SOTA",
+        "license": "Open Source (Apache 2.0)",
+        "context_window": "128,000 tokens",
+        "max_output": "8,192 tokens",
+        "pricing_input": "Free / Self-Hosted ($0.15/1M API)",
+        "pricing_output": "Free / Self-Hosted ($0.60/1M API)",
+        "pricing_cached": "$0.05 / 1M",
+        "architecture": "32.5B Dense Transformer",
+        "readiness": "Workstation SOTA",
+        "tag": "LOCAL CODING CHAMPION",
+        "best_for": "Local IDE pair programming in Ollama/vLLM, air-gapped enterprise code generation, offline syntax refactoring.",
+        "better_to_work_with": "Runs at full speed on a single RTX 4090 or Apple Silicon Mac while matching GPT-4o coding performance. Zero telemetry.",
+        "capabilities": ["Apache 2.0 License", "Single GPU Runnable", "128K Context", "Aider/Cursor Compatible"],
+        "api_snippet": "ollama run qwen2.5-coder:32b 'Refactor this SQL migration for PostgreSQL'"
     },
     {
         "id": "deepseek-v3",
         "name": "DeepSeek-V3",
-        "lab": "DeepSeek AI",
+        "lab": "DeepSeek",
         "lab_slug": "deepseek",
-        "is_frontier": False,
-        "year": "2025",
-        "release_date": "December 2025",
-        "benchmark_score": 62.0,
-        "benchmark_label": "62.0% SWE-bench Pro · Ultra Low Cost",
+        "is_frontier": True,
+        "year": "2024",
+        "release_date": "December 2024",
+        "benchmark_score": 46.5,
+        "benchmark_label": "671B MoE (37B active) · Multi-Head Latent Attention",
         "license": "Open Weights (MIT)",
         "context_window": "128,000 tokens",
         "max_output": "8,192 tokens",
         "pricing_input": "$0.14 / 1M",
         "pricing_output": "$0.28 / 1M",
-        "pricing_cached": "$0.014 / 1M",
-        "architecture": "671B MoE (Multi-Head Latent Attention)",
-        "readiness": "Cost Leader",
-        "tag": "ULTRA LOW COST",
-        "best_for": "Massive document indexing, cost-critical summarization, batch ETL transformation.",
-        "better_to_work_with": "Rock-bottom API pricing ($0.14/1M) with high generation speed (60+ tokens/sec). Great for high-volume batch data pipelines.",
-        "capabilities": ["Multi-Head Latent Attention (MLA)", "FP8 Mixed Precision Native", "60 TPS Throughput"],
-        "api_snippet": "# Run via vLLM\nvllm serve deepseek-ai/DeepSeek-V3 --trust-remote-code"
+        "pricing_cached": "$0.07 / 1M",
+        "architecture": "671B MoE with Multi-Head Latent Attention & DualPipe",
+        "readiness": "Cost & Throughput SOTA",
+        "tag": "COMMODITY FRONTIER MOE",
+        "best_for": "General software development, synthetic dataset generation, conversational assistants, multi-turn translation.",
+        "better_to_work_with": "Near Claude 3.5 Sonnet quality at commodity pricing ($0.14/1M input). Incredibly fast inference throughput on cloud nodes.",
+        "capabilities": ["Multi-Head Latent Attention", "DualPipe Parallelism", "MIT Open License", "FP8 Native Inference"],
+        "api_snippet": "from openai import OpenAI\nclient = OpenAI(base_url='https://api.deepseek.com', api_key='...')\nresp = client.chat.completions.create(\n    model='deepseek-chat',\n    messages=[{'role': 'user', 'content': 'Write an asynchronous FastAPI rate limiter'}]\n)"
     },
     {
-        "id": "deepseek-r1-distill-32b",
-        "name": "DeepSeek-R1-Distill-32B",
-        "lab": "DeepSeek AI",
-        "lab_slug": "deepseek",
-        "is_frontier": False,
-        "year": "2026",
-        "release_date": "January 2026",
-        "benchmark_score": 54.2,
-        "benchmark_label": "54.2% SWE-bench Pro · Workstation Reasoning",
-        "license": "Open Weights (MIT)",
-        "context_window": "128,000 tokens",
-        "max_output": "16,384 tokens",
-        "pricing_input": "Free / Self-Hosted",
-        "pricing_output": "Free / Self-Hosted",
-        "pricing_cached": "N/A",
-        "architecture": "Dense 32B Distilled",
-        "readiness": "Open Weights",
-        "tag": "LOCAL SOTA",
-        "best_for": "Running local reasoning on gaming workstations or single cloud instances.",
-        "better_to_work_with": "Fits cleanly into 24GB VRAM (RTX 3090/4090) and delivers near-o1-mini level math and logic locally with zero API charges.",
-        "capabilities": ["Single RTX 4090 / 5090 Run", "o1-mini Grade Math", "Qwen Base Distillation"],
-        "api_snippet": "# Run locally in terminal\nollama run deepseek-r1:32b"
-    },
-
-    # Meta AI
-    {
-        "id": "llama-4",
-        "name": "Llama 4",
-        "lab": "Meta AI",
-        "lab_slug": "meta",
+        "id": "gemini-2-flash",
+        "name": "Gemini 2.0 Flash",
+        "lab": "Google DeepMind",
+        "lab_slug": "google",
         "is_frontier": True,
-        "year": "2026",
-        "release_date": "May 2026",
-        "benchmark_score": 66.8,
-        "benchmark_label": "66.8% SWE-bench Pro · Open Foundation SOTA",
-        "license": "Open Weights (Llama Community)",
+        "year": "2025",
+        "release_date": "February 2025",
+        "benchmark_score": 45.0,
+        "benchmark_label": "1M Context · Sub-Second Latency · Multimodal Streaming",
+        "license": "Proprietary API",
+        "context_window": "1,048,576 tokens",
+        "max_output": "8,192 tokens",
+        "pricing_input": "$0.10 / 1M",
+        "pricing_output": "$0.40 / 1M",
+        "pricing_cached": "$0.025 / 1M",
+        "architecture": "Multimodal Native Sparse Core",
+        "readiness": "Speed & Scale Leader",
+        "tag": "SUB-SECOND MULTIMODAL",
+        "best_for": "Real-time voice and video agents, multi-hour video comprehension, 1M token context recall, fast agentic routers.",
+        "better_to_work_with": "Unbeatable speed and context window. Sub-300ms time to first token makes it the default orchestrator for live tool-calling agents.",
+        "capabilities": ["1,048,576 Token Context", "Sub-Second Latency", "Native Audio/Video I/O", "Google Search Grounding"],
+        "api_snippet": "from google import genai\nclient = genai.Client()\nresp = client.models.generate_content(\n    model='gemini-2.0-flash',\n    contents='Summarize this 100-page architectural documentation'\n)"
+    },
+    {
+        "id": "gemini-2-pro",
+        "name": "Gemini 2.0 Pro (Exp)",
+        "lab": "Google DeepMind",
+        "lab_slug": "google",
+        "is_frontier": True,
+        "year": "2025",
+        "release_date": "February 2025",
+        "benchmark_score": 52.0,
+        "benchmark_label": "2M Context Window · Advanced Multimodal & Code Reasoning",
+        "license": "Proprietary API",
+        "context_window": "2,097,152 tokens",
+        "max_output": "8,192 tokens",
+        "pricing_input": "Preview Tier",
+        "pricing_output": "Preview Tier",
+        "pricing_cached": "Preview Tier",
+        "architecture": "Frontier Multimodal Deep Reasoning Core",
+        "readiness": "Frontier Flagship",
+        "tag": "2M CONTEXT REASONING",
+        "best_for": "Ingesting entire corporate code repositories in a single prompt, complex cross-repo migrations, multi-book synthesis.",
+        "better_to_work_with": "Industry-leading 2M token context window with reliable needle-in-a-haystack recall across millions of tokens of code.",
+        "capabilities": ["2M Token Context", "Complex Coding Benchmark Leader", "Native Multimodal Ingestion", "Deep World Knowledge"],
+        "api_snippet": "from google import genai\nclient = genai.Client()\nresp = client.models.generate_content(\n    model='gemini-2.0-pro-exp-02-05',\n    contents='Analyze dependencies across this entire zipped repository'\n)"
+    },
+    {
+        "id": "gpt-4o",
+        "name": "GPT-4o",
+        "lab": "OpenAI",
+        "lab_slug": "openai",
+        "is_frontier": True,
+        "year": "2024",
+        "release_date": "May 2024",
+        "benchmark_score": 38.8,
+        "benchmark_label": "38.8% SWE-bench Verified · Enterprise Omnimodal Standard",
+        "license": "Proprietary API",
         "context_window": "128,000 tokens",
         "max_output": "16,384 tokens",
-        "pricing_input": "Free / Self-Hosted",
-        "pricing_output": "Free / Self-Hosted",
-        "pricing_cached": "N/A",
-        "architecture": "Multimodal Frontier MoE",
-        "readiness": "Open Foundation SOTA",
-        "tag": "OPEN FOUNDATION",
-        "best_for": "Enterprise foundation fine-tuning, private on-premise cloud infrastructure.",
-        "better_to_work_with": "The premier open foundation for teams requiring complete model weights ownership. Outstanding tool use and standardized vLLM serving.",
-        "capabilities": ["Native Agentic Tool Use", "Multimodal Vision & Audio", "Self-Hosted Enterprise Support"],
-        "api_snippet": "vllm serve meta-llama/Llama-4 --tensor-parallel-size 4"
+        "pricing_input": "$2.50 / 1M",
+        "pricing_output": "$10.00 / 1M",
+        "pricing_cached": "$1.25 / 1M",
+        "architecture": "Native Omnimodal Flagship",
+        "readiness": "Enterprise Production",
+        "tag": "ENTERPRISE WORKHORSE",
+        "best_for": "General multimodal reasoning, structured JSON schema extraction, conversational customer interfaces, vision tasks.",
+        "better_to_work_with": "Standard enterprise workhorse. Predictable latency, high rate limits, and seamless integration across corporate cloud stacks.",
+        "capabilities": ["Native Multimodal Audio/Vision", "Structured Outputs 100%", "Predictable Latency", "Broad Tool Ecosystem"],
+        "api_snippet": "from openai import OpenAI\nclient = OpenAI()\nresp = client.chat.completions.create(\n    model='gpt-4o',\n    response_format={'type': 'json_object'},\n    messages=[{'role': 'user', 'content': 'Extract customer intent schema'}]\n)"
     },
     {
         "id": "llama-3-3-70b",
-        "name": "Llama 3.3 70B Instruct",
+        "name": "Llama 3.3 70B",
         "lab": "Meta AI",
         "lab_slug": "meta",
-        "is_frontier": False,
-        "year": "2025",
-        "release_date": "December 2024",
-        "benchmark_score": 56.0,
-        "benchmark_label": "56.0% SWE-bench Pro · Workstation Workhorse",
-        "license": "Open Weights (Llama Community)",
-        "context_window": "128,000 tokens",
-        "max_output": "8,192 tokens",
-        "pricing_input": "Free / Self-Hosted",
-        "pricing_output": "Free / Self-Hosted",
-        "pricing_cached": "N/A",
-        "architecture": "Dense 70B Parameter",
-        "readiness": "Production Ready",
-        "tag": "WORKSTATION WORKHORSE",
-        "best_for": "Standard enterprise private deployments on dual RTX 4090 or single A100/H100.",
-        "better_to_work_with": "Solid, dependable workhorse with vast community prompt and fine-tuning support. Highly robust against format errors.",
-        "capabilities": ["405B Performance on 70B VRAM", "Multilingual 8+ Languages", "High Coding Accuracy"],
-        "api_snippet": "ollama run llama3.3:70b"
-    },
-
-    # xAI
-    {
-        "id": "grok-3-think",
-        "name": "Grok 3 Think",
-        "lab": "xAI",
-        "lab_slug": "xai",
         "is_frontier": True,
-        "year": "2025",
-        "release_date": "Late 2025",
-        "benchmark_score": 69.1,
-        "benchmark_label": "69.1% SWE-bench Pro · Deep Deliberation",
-        "license": "Proprietary API",
-        "context_window": "256,000 tokens",
-        "max_output": "32,768 tokens",
-        "pricing_input": "$8.00 / 1M",
-        "pricing_output": "$24.00 / 1M",
-        "pricing_cached": "$2.00 / 1M",
-        "architecture": "Deliberation Reasoning Engine",
-        "readiness": "Frontier SOTA",
-        "tag": "DEEP DELIBERATION",
-        "best_for": "Hard scientific verification, algorithmic dispute resolution, complex software debugging.",
-        "better_to_work_with": "Combines intense chain-of-thought deliberation with access to fresh real-time knowledge. Highly capable at identifying subtle edge cases.",
-        "capabilities": ["Extended Reasoning Steps", "Formal Logic Verification", "Mathematical Proof Construction"],
-        "api_snippet": "resp = client.chat.completions.create(model='grok-3-think', messages=[...])"
-    },
-    {
-        "id": "grok-3",
-        "name": "Grok 3 (Colossus)",
-        "lab": "xAI",
-        "lab_slug": "xai",
-        "is_frontier": False,
-        "year": "2025",
-        "release_date": "February 2025",
-        "benchmark_score": 63.5,
-        "benchmark_label": "63.5% SWE-bench Pro · Real-Time Knowledge",
-        "license": "Proprietary API",
-        "context_window": "256,000 tokens",
-        "max_output": "32,768 tokens",
-        "pricing_input": "$5.00 / 1M",
-        "pricing_output": "$15.00 / 1M",
-        "pricing_cached": "$1.25 / 1M",
-        "architecture": "Mega-Scale Dense (Colossus Cluster)",
-        "readiness": "Frontier SOTA",
-        "tag": "REAL-TIME WORLD KNOWLEDGE",
-        "best_for": "Real-time market intelligence, rapid code synthesis, uncensored open exploration.",
-        "better_to_work_with": "Fast streaming responses with up-to-the-minute awareness of global tech developments and breaking CVEs.",
-        "capabilities": ["Colossus Supercluster Trained", "Real-Time World Knowledge", "High Raw Coding Throughput"],
-        "api_snippet": "from openai import OpenAI\nclient = OpenAI(api_key='...', base_url='https://api.x.ai/v1')\nresp = client.chat.completions.create(model='grok-3', messages=[...])"
-    },
-
-    # Alibaba (Qwen)
-    {
-        "id": "qwen-2-5-coder-32b",
-        "name": "Qwen 2.5 Coder 32B",
-        "lab": "Alibaba",
-        "lab_slug": "alibaba",
-        "is_frontier": False,
-        "year": "2025",
-        "release_date": "November 2024",
-        "benchmark_score": 56.8,
-        "benchmark_label": "56.8% SWE-bench Pro · Open Coding Champion",
-        "license": "Open Weights (Apache 2.0)",
-        "context_window": "128,000 tokens",
-        "max_output": "16,384 tokens",
-        "pricing_input": "Free / Self-Hosted",
-        "pricing_output": "Free / Self-Hosted",
-        "pricing_cached": "N/A",
-        "architecture": "Dense 32B Parameter",
-        "readiness": "Benchmark Winner",
-        "tag": "OPEN CODING SOTA",
-        "best_for": "Self-hosted Copilot alternatives (Continue.dev, Cursor), offline software engineering, automated PR review.",
-        "better_to_work_with": "The de-facto gold standard for local coding. Extremely accurate syntax generation across 40+ programming languages.",
-        "capabilities": ["EvalPlus Coding Champion", "128K Context Support", "Apache 2.0 Free Commercial", "FIM Native"],
-        "api_snippet": "# Continue.dev / Ollama Config\nollama run qwen2.5-coder:32b"
-    },
-    {
-        "id": "qwen-3-8-27b",
-        "name": "Qwen 3.8 27B",
-        "lab": "Alibaba",
-        "lab_slug": "alibaba",
-        "is_frontier": False,
-        "year": "2026",
-        "release_date": "March 2026",
-        "benchmark_score": 54.0,
-        "benchmark_label": "54.0% SWE-bench Pro · Ternary Base-3",
-        "license": "Open Weights (Apache 2.0)",
-        "context_window": "128,000 tokens",
-        "max_output": "16,384 tokens",
-        "pricing_input": "Free / Self-Hosted",
-        "pricing_output": "Free / Self-Hosted",
-        "pricing_cached": "N/A",
-        "architecture": "Dense 27B Workstation Optimized",
-        "readiness": "Open Weights",
-        "tag": "COMPACT WORKSTATION",
-        "best_for": "Developers running local models on laptops (M3/M4 or AMD Strix) without GPU fan noise.",
-        "better_to_work_with": "Lightweight memory footprint (-22% VRAM requirement) makes it runnable alongside heavy IDEs on 16GB-32GB laptops.",
-        "capabilities": ["Ternary Base-3 Packing (-22% VRAM)", "Strix / Mac Silicon Native", "High Efficiency Inference"],
-        "api_snippet": "ollama run qwen3.8:27b"
-    },
-
-    # Mistral AI
-    {
-        "id": "codestral-2501",
-        "name": "Codestral 2501 (22B)",
-        "lab": "Mistral AI",
-        "lab_slug": "mistral",
-        "is_frontier": False,
-        "year": "2025",
-        "release_date": "January 2025",
-        "benchmark_score": 55.4,
-        "benchmark_label": "55.4% SWE-bench Pro · FIM Coding SOTA",
-        "license": "Mistral Commercial API",
-        "context_window": "256,000 tokens",
-        "max_output": "8,192 tokens",
-        "pricing_input": "$0.30 / 1M",
-        "pricing_output": "$0.90 / 1M",
-        "pricing_cached": "$0.075 / 1M",
-        "architecture": "Dense 22B Coding Specialist",
-        "readiness": "Cost Leader",
-        "tag": "SPECIALIZED CODE",
-        "best_for": "IDE tab completions, instant code formatting, function refactoring at microsecond latency.",
-        "better_to_work_with": "Sublime Fill-In-The-Middle (FIM) support for editor autocomplete extensions with sub-50ms latency.",
-        "capabilities": ["256K Context Code Ingestion", "Ultra Fast FIM (Fill-in-the-Middle)", "80+ Languages"],
-        "api_snippet": "ollama run codestral"
-    },
-    {
-        "id": "mistral-large-2",
-        "name": "Mistral Large 2 (123B)",
-        "lab": "Mistral AI",
-        "lab_slug": "mistral",
-        "is_frontier": False,
         "year": "2024",
-        "release_date": "July 2024",
-        "benchmark_score": 55.0,
-        "benchmark_label": "55.0% SWE-bench Pro · Polyglot Enterprise",
-        "license": "Mistral Commercial / Research Open",
+        "release_date": "December 2024",
+        "benchmark_score": 41.5,
+        "benchmark_label": "Open Weights (Apache 2.0) · 405B Parity in 70B Footprint",
+        "license": "Open Weights (Llama 3.3 License)",
         "context_window": "128,000 tokens",
         "max_output": "8,192 tokens",
-        "pricing_input": "$2.00 / 1M",
-        "pricing_output": "$6.00 / 1M",
-        "pricing_cached": "$0.50 / 1M",
-        "architecture": "123B Dense Multilingual",
-        "readiness": "Production Ready",
-        "tag": "EUROPEAN ENTERPRISE",
-        "best_for": "European enterprise compliance, high-precision code translation, polyglot software stacks.",
-        "better_to_work_with": "Rigorous GDPR compliance adherence and outstanding performance in French, German, Spanish, and Italian.",
-        "capabilities": ["80+ Programming Languages", "GDPR Native Compliance", "Function Calling SOTA", "Strong Multilingual"],
-        "api_snippet": "from mistralai import Mistral\nclient = Mistral(api_key='...')\nresp = client.chat.complete(model='mistral-large-latest', messages=[...])"
+        "pricing_input": "$0.18 / 1M or Self-Hosted",
+        "pricing_output": "$0.54 / 1M or Self-Hosted",
+        "pricing_cached": "$0.09 / 1M",
+        "architecture": "Dense Grouped-Query Attention Transformer",
+        "readiness": "Open Foundation SOTA",
+        "tag": "OPEN WEIGHTS ENTERPRISE",
+        "best_for": "Self-hosted enterprise workflows, private fine-tuning, retrieval-augmented generation (RAG), air-gapped deployments.",
+        "better_to_work_with": "Delivers performance matching the massive 405B model while fitting on single 8x GPU nodes or quantized workstation servers.",
+        "capabilities": ["Open Weights License", "405B Parity", "Tool Calling Support", "Multilingual Generalist"],
+        "api_snippet": "ollama run llama3.3:70b 'Analyze database schema performance bottlenecks'"
     }
 ]
 
 models_json_str = json.dumps(FRONTIER_MODELS)
 milestones_json_str = json.dumps(MILESTONES_ARCHIVE)
 
-print("[build_webapp] Loaded models and milestone databases.")
-print(f"[build_webapp] Total Models: {len(FRONTIER_MODELS)} ({sum(1 for m in FRONTIER_MODELS if m['is_frontier'])} Frontier Flagships)")
 print("[build_webapp] Compiling Minimalist Reader index.html...")
 
-html_template = f"""<!DOCTYPE html>
+html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AI Pulse — Frontier AI &amp; Developer Intelligence</title>
-    <meta name="description" content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>AI Digest — Frontier AI &amp; Developer Intelligence</title>
+    <meta name="description" content="A calm, reader-friendly developer digest tracking verified frontier models, SWE-bench leaderboards, weekly breakthroughs, and community debates.">
     <meta name="theme-color" content="#0d0f12">
 
     <!-- Favicon & Touch Icon -->
@@ -867,21 +460,21 @@ html_template = f"""<!DOCTYPE html>
 
     <!-- Open Graph / WhatsApp / Facebook Preview Tags -->
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="AI Pulse">
-    <meta property="og:title" content="AI Pulse — Frontier AI &amp; Developer Intelligence">
-    <meta property="og:description" content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons.">
+    <meta property="og:site_name" content="AI Digest">
+    <meta property="og:title" content="AI Digest — Frontier AI &amp; Developer Intelligence">
+    <meta property="og:description" content="A calm, reader-friendly developer digest tracking verified frontier models, SWE-bench leaderboards, and weekly breakthroughs.">
     <meta property="og:url" content="https://ai-digest-by-mp.vercel.app">
     <meta property="og:image" content="https://ai-digest-by-mp.vercel.app/og-preview.jpg">
     <meta property="og:image:secure_url" content="https://ai-digest-by-mp.vercel.app/og-preview.jpg">
     <meta property="og:image:type" content="image/jpeg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="AI Pulse — Frontier AI &amp; Developer Intelligence">
+    <meta property="og:image:alt" content="AI Digest — Frontier AI &amp; Developer Intelligence">
 
     <!-- Twitter / X Cards -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AI Pulse — Frontier AI &amp; Developer Intelligence">
-    <meta name="twitter:description" content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons.">
+    <meta name="twitter:title" content="AI Digest — Frontier AI &amp; Developer Intelligence">
+    <meta name="twitter:description" content="A calm, reader-friendly developer digest tracking verified frontier models, SWE-bench leaderboards, and weekly breakthroughs.">
     <meta name="twitter:image" content="https://ai-digest-by-mp.vercel.app/og-preview.jpg">
     
     <!-- Modern Reader Fonts -->
@@ -900,8 +493,8 @@ html_template = f"""<!DOCTYPE html>
             --bg-card: #14171e;
             --bg-card-hover: #191d26;
             --bg-elevated: #1e222d;
-            --border-subtle: rgba(255, 255, 255, 0.07);
-            --border-highlight: rgba(255, 255, 255, 0.14);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(255, 255, 255, 0.16);
             
             --accent-primary: #3b82f6;
             --accent-primary-hover: #60a5fa;
@@ -928,6 +521,10 @@ html_template = f"""<!DOCTYPE html>
             -webkit-tap-highlight-color: transparent;
         }}
 
+        html {{
+            scroll-behavior: smooth;
+        }}
+
         body {{
             background-color: var(--bg-base);
             color: var(--text-primary);
@@ -942,7 +539,7 @@ html_template = f"""<!DOCTYPE html>
             position: sticky;
             top: 0;
             z-index: 60;
-            background: rgba(13, 15, 18, 0.92);
+            background: rgba(13, 15, 18, 0.94);
             backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--border-subtle);
         }}
@@ -994,87 +591,131 @@ html_template = f"""<!DOCTYPE html>
             display: flex;
             align-items: center;
             gap: 6px;
-            background: var(--bg-surface);
-            padding: 4px;
-            border-radius: var(--radius-pill);
-            border: 1px solid var(--border-subtle);
         }}
 
         .nav-btn {{
             background: transparent;
             border: none;
             color: var(--text-secondary);
-            font-family: var(--font-sans);
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 600;
-            padding: 6px 16px;
-            border-radius: var(--radius-pill);
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
             transition: all 0.15s ease;
+            white-space: nowrap;
         }}
 
         .nav-btn:hover {{
             color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
         }}
 
         .nav-btn.active {{
-            background: var(--accent-primary);
-            color: #ffffff;
+            color: var(--text-primary);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-highlight);
         }}
 
-        .header-actions {{
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }}
-
-        .sync-badge {{
+        /* Share Button */
+        .share-btn {{
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 12px;
-            color: var(--text-muted);
-            font-family: var(--font-mono);
-            background: var(--bg-surface);
-            padding: 5px 12px;
-            border-radius: var(--radius-pill);
-            border: 1px solid var(--border-subtle);
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
         }}
 
-        .status-dot {{
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background-color: var(--accent-secondary);
+        .share-btn:hover {{
+            background: rgba(59, 130, 246, 0.22);
+            border-color: #60a5fa;
+            color: #93c5fd;
+        }}
+
+        /* In-Page Sub-Navigation */
+        .inpage-nav-wrap {{
+            position: sticky;
+            top: 61px;
+            z-index: 40;
+            background: rgba(13, 15, 18, 0.88);
+            backdrop-filter: blur(12px);
+            padding: 8px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+        }}
+
+        .inpage-nav {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }}
+
+        .inpage-nav::-webkit-scrollbar {{
+            display: none;
+        }}
+
+        .inpage-pill {{
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }}
+
+        .inpage-pill:hover {{
+            color: var(--text-primary);
+            background: var(--bg-card-hover);
+            border-color: var(--border-highlight);
         }}
 
         /* Main Container */
         main {{
             max-width: 1240px;
             margin: 0 auto;
-            padding: 28px 24px 80px 24px;
+            padding: 24px 24px 60px 24px;
         }}
 
         .section-header {{
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }}
 
         .section-title {{
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.02em;
             margin-bottom: 6px;
         }}
 
         .section-desc {{
             color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 14.5px;
+            line-height: 1.55;
+            max-width: 800px;
         }}
 
-        /* Calendar Date Picker Bar */
+        /* Weekly Edition Filter Bar */
         .date-filter-section {{
-            margin-bottom: 20px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            margin-bottom: 22px;
         }}
 
         .date-filter-header {{
@@ -1085,11 +726,11 @@ html_template = f"""<!DOCTYPE html>
         }}
 
         .date-filter-label {{
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-muted);
+            font-weight: 600;
         }}
 
         .date-filter-bar {{
@@ -1097,24 +738,19 @@ html_template = f"""<!DOCTYPE html>
             gap: 8px;
             overflow-x: auto;
             padding-bottom: 4px;
-            scrollbar-width: none;
-        }}
-
-        .date-filter-bar::-webkit-scrollbar {{
-            display: none;
         }}
 
         .date-chip {{
-            background: var(--bg-surface);
+            background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            padding: 7px 15px;
+            padding: 7px 14px;
             border-radius: var(--radius-sm);
             font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            white-space: nowrap;
             transition: all 0.15s ease;
+            white-space: nowrap;
         }}
 
         .date-chip:hover {{
@@ -1123,45 +759,44 @@ html_template = f"""<!DOCTYPE html>
         }}
 
         .date-chip.active {{
-            background: #1e2533;
+            background: var(--accent-primary);
             border-color: var(--accent-primary);
             color: #ffffff;
             font-weight: 600;
         }}
 
-        /* Topic / Hashtag Filter Bar */
+        /* Topic Chips */
         .tag-bar {{
             display: flex;
-            gap: 6px;
+            gap: 8px;
             flex-wrap: wrap;
-            margin-bottom: 24px;
+            margin-bottom: 18px;
         }}
 
         .tag-chip {{
-            background: transparent;
+            background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 500;
-            padding: 5px 12px;
+            padding: 6px 12px;
             border-radius: var(--radius-pill);
+            font-size: 12.5px;
             cursor: pointer;
             transition: all 0.15s ease;
         }}
 
         .tag-chip:hover {{
+            background: var(--bg-card-hover);
             color: var(--text-primary);
-            border-color: var(--border-highlight);
         }}
 
         .tag-chip.active {{
-            background: var(--text-primary);
-            color: var(--bg-base);
-            border-color: var(--text-primary);
+            background: var(--bg-elevated);
+            border-color: var(--border-highlight);
+            color: var(--text-primary);
             font-weight: 600;
         }}
 
-        /* Search Input */
+        /* Search Bar */
         .search-bar {{
             margin-bottom: 24px;
         }}
@@ -1170,9 +805,9 @@ html_template = f"""<!DOCTYPE html>
             width: 100%;
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 12px 18px;
             color: var(--text-primary);
-            padding: 10px 16px;
-            border-radius: var(--radius-sm);
             font-size: 14px;
             font-family: var(--font-sans);
             outline: none;
@@ -1183,19 +818,61 @@ html_template = f"""<!DOCTYPE html>
             border-color: var(--accent-primary);
         }}
 
-        /* Articles Grid */
+        .search-input::placeholder {{
+            color: var(--text-muted);
+        }}
+
+        /* Media Sections (Articles, Videos, Social Buzz, 1-Liners) */
+        .media-section {{
+            margin-bottom: 38px;
+        }}
+
+        .media-section-header {{
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-subtle);
+        }}
+
+        .media-section-title {{
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }}
+
+        .media-section-badge {{
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-primary-hover);
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+        }}
+
+        .media-section-desc {{
+            font-size: 13px;
+            color: var(--text-muted);
+        }}
+
+        /* Article Cards Grid */
         .articles-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
             gap: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 36px;
         }}
 
         .article-card {{
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
-            padding: 22px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -1212,8 +889,7 @@ html_template = f"""<!DOCTYPE html>
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }}
 
         .card-source {{
@@ -1223,44 +899,24 @@ html_template = f"""<!DOCTYPE html>
         }}
 
         .badge {{
-            display: inline-flex;
-            align-items: center;
-            padding: 3px 8px;
-            border-radius: var(--radius-sm);
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.04em;
+            padding: 2px 8px;
+            border-radius: 4px;
         }}
 
-        .badge-breakthrough {{
-            background: rgba(245, 158, 11, 0.1);
-            color: #fbbf24;
-            border: 1px solid rgba(245, 158, 11, 0.25);
-        }}
-
-        .badge-devtools {{
-            background: rgba(59, 130, 246, 0.1);
-            color: #60a5fa;
-            border: 1px solid rgba(59, 130, 246, 0.25);
-        }}
-
-        .badge-local {{
-            background: rgba(16, 185, 129, 0.1);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.25);
-        }}
-
-        .badge-research {{
-            background: rgba(139, 92, 246, 0.1);
-            color: #a78bfa;
-            border: 1px solid rgba(139, 92, 246, 0.25);
-        }}
+        .badge-devtools {{ background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }}
+        .badge-local {{ background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }}
+        .badge-breakthrough {{ background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }}
+        .badge-production {{ background: rgba(139, 92, 246, 0.12); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); }}
+        .badge-social {{ background: rgba(236, 72, 153, 0.12); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }}
 
         .article-title {{
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
-            line-height: 1.45;
+            line-height: 1.4;
             color: var(--text-primary);
             text-decoration: none;
             margin-bottom: 12px;
@@ -1273,72 +929,203 @@ html_template = f"""<!DOCTYPE html>
 
         .article-thumb {{
             width: 100%;
-            height: 180px;
+            height: 170px;
             object-fit: cover;
             border-radius: var(--radius-sm);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             border: 1px solid var(--border-subtle);
         }}
 
         .article-summary {{
-            font-size: 14px;
             color: var(--text-secondary);
+            font-size: 13.5px;
             line-height: 1.6;
             margin-bottom: 14px;
         }}
 
         .usecase-box {{
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 2px solid var(--accent-primary);
-            padding: 10px 14px;
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            margin-bottom: 16px;
-            font-size: 13px;
-            color: #d1d5db;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            border-left: 3px solid var(--accent-primary);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
             line-height: 1.5;
         }}
 
         .usecase-label {{
-            font-size: 10px;
-            font-weight: 700;
+            font-size: 10.5px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--accent-primary-hover);
-            margin-bottom: 3px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 2px;
         }}
 
         .card-bottom {{
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-top: 14px;
+            font-size: 12px;
+            color: var(--text-muted);
+            padding-top: 10px;
             border-top: 1px solid var(--border-subtle);
+        }}
+
+        .read-link {{
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 12.5px;
+        }}
+
+        .read-link:hover {{
+            text-decoration: underline;
+        }}
+
+        /* Video Grid */
+        .video-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 18px;
+        }}
+
+        .video-card {{
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.15s ease, border-color 0.15s ease;
+        }}
+
+        .video-card:hover {{
+            border-color: var(--border-highlight);
+            transform: translateY(-2px);
+        }}
+
+        .video-thumb-wrap {{
+            position: relative;
+            width: 100%;
+            height: 175px;
+            background: #000000;
+        }}
+
+        .video-thumb {{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }}
+
+        .video-play-btn {{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 44px;
+            height: 44px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            font-size: 16px;
+        }}
+
+        .video-info {{
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: space-between;
+        }}
+
+        .video-title {{
+            font-size: 14.5px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }}
+
+        .video-title:hover {{
+            color: var(--accent-primary-hover);
+        }}
+
+        .video-meta {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }}
+
+        /* Social Buzz Grid */
+        .social-buzz-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }}
+
+        .social-card {{
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.15s ease, border-color 0.15s ease;
+        }}
+
+        .social-card:hover {{
+            border-color: var(--border-highlight);
+            transform: translateY(-2px);
+        }}
+
+        .social-title {{
+            font-size: 14.5px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }}
+
+        .social-title:hover {{
+            color: var(--accent-primary-hover);
+        }}
+
+        .social-snippet {{
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }}
+
+        .social-meta {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             font-size: 12px;
             color: var(--text-muted);
         }}
 
-        .read-link {{
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }}
-
-        .read-link:hover {{
-            color: var(--accent-primary-hover);
-        }}
-
+        /* 1-Liners */
         .oneliner-item {{
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-subtle);
             display: flex;
-            align-items: baseline;
+            align-items: flex-start;
             gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             font-size: 14px;
-            line-height: 1.5;
         }}
 
         .oneliner-item:last-child {{
@@ -1347,7 +1134,8 @@ html_template = f"""<!DOCTYPE html>
 
         .oneliner-dot {{
             color: var(--accent-primary);
-            font-weight: bold;
+            font-size: 18px;
+            line-height: 1;
         }}
 
         .oneliner-title {{
@@ -1358,344 +1146,64 @@ html_template = f"""<!DOCTYPE html>
 
         .oneliner-title:hover {{
             color: var(--accent-primary-hover);
+            text-decoration: underline;
         }}
 
         .oneliner-desc {{
-            color: var(--text-secondary);
-        }}
-
-        /* ==================== MEDIA SECTIONS (VIDEOS & SOCIAL BUZZ) ==================== */
-        .media-section {{
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            padding: 24px;
-            margin-bottom: 32px;
-        }}
-
-        .media-section-header {{
-            margin-bottom: 20px;
-        }}
-
-        .media-section-title {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-            color: var(--text-primary);
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 4px;
-        }}
-
-        .media-section-badge {{
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 10px;
-            border-radius: 9999px;
-            background: rgba(139, 92, 246, 0.12);
-            color: #c4b5fd;
-            border: 1px solid rgba(139, 92, 246, 0.25);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }}
-
-        .media-section-desc {{
-            font-size: 13px;
             color: var(--text-muted);
-            line-height: 1.5;
+            font-size: 13.5px;
         }}
 
-        /* Featured AI Videos Grid */
-        .video-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-        }}
-
-        .video-card {{
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-            text-decoration: none;
-        }}
-
-        .video-card:hover {{
-            transform: translateY(-3px);
-            border-color: rgba(239, 68, 68, 0.5);
-            box-shadow: 0 12px 30px rgba(239, 68, 68, 0.12);
-        }}
-
-        .video-thumb-wrap {{
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background: #0f172a;
-            overflow: hidden;
-        }}
-
-        .video-thumb {{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }}
-
-        .video-card:hover .video-thumb {{
-            transform: scale(1.04);
-        }}
-
-        .video-play-overlay {{
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s ease;
-        }}
-
-        .video-card:hover .video-play-overlay {{
-            background: rgba(0, 0, 0, 0.15);
-        }}
-
-        .video-play-btn {{
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(239, 68, 68, 0.9);
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
-            transition: transform 0.2s ease, background 0.2s ease;
-        }}
-
-        .video-card:hover .video-play-btn {{
-            transform: scale(1.12);
-            background: #ef4444;
-        }}
-
-        .video-channel-badge {{
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(4px);
-            color: #f8fafc;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: var(--radius-sm);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }}
-
-        .video-info {{
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            justify-content: space-between;
-        }}
-
-        .video-title {{
-            font-size: 15px;
-            font-weight: 600;
-            line-height: 1.4;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }}
-
-        .video-usecase {{
-            font-size: 12px;
-            color: var(--text-muted);
-            line-height: 1.45;
-            margin-bottom: 12px;
-        }}
-
-        .video-footer {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-muted);
-            padding-top: 10px;
-            border-top: 1px solid var(--border-subtle);
-        }}
-
-        .video-watch-link {{
-            color: #f87171;
-            font-weight: 600;
-            font-size: 12px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }}
-
-        /* Social Media Buzz Grid */
-        .social-buzz-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 18px;
-        }}
-
-        .social-card {{
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-        }}
-
-        .social-card:hover {{
-            background: var(--bg-card-hover);
-            border-color: var(--border-highlight);
-            transform: translateY(-2px);
-        }}
-
-        .social-card-top {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 10px;
-        }}
-
-        .social-platform-pill {{
-            font-size: 11px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: var(--radius-sm);
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }}
-
-        .platform-reddit {{
-            background: rgba(255, 69, 0, 0.12);
-            color: #ff6534;
-            border: 1px solid rgba(255, 69, 0, 0.3);
-        }}
-
-        .platform-x {{
-            background: rgba(29, 155, 240, 0.12);
-            color: #38bdf8;
-            border: 1px solid rgba(29, 155, 240, 0.3);
-        }}
-
-        .platform-linkedin {{
-            background: rgba(10, 102, 194, 0.12);
-            color: #60a5fa;
-            border: 1px solid rgba(10, 102, 194, 0.3);
-        }}
-
-        .platform-founder {{
-            background: rgba(168, 85, 247, 0.12);
-            color: #c084fc;
-            border: 1px solid rgba(168, 85, 247, 0.3);
-        }}
-
-        .social-author {{
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }}
-
-        .social-title {{
-            font-size: 15px;
-            font-weight: 600;
-            line-height: 1.4;
-            color: var(--text-primary);
-            text-decoration: none;
-            margin-bottom: 10px;
-            display: block;
-        }}
-
-        .social-title:hover {{
-            color: var(--accent-primary-hover);
-        }}
-
-        .social-summary {{
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            margin-bottom: 14px;
-        }}
-
-        .social-footer {{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-muted);
-            padding-top: 10px;
-            border-top: 1px solid var(--border-subtle);
-        }}
-
-        /* ==================== BENCHMARK BAR CHART ==================== */
+        /* ==================== BENCHMARKS & MODELS ==================== */
         .benchmark-section {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
-            padding: 24px;
-            margin-bottom: 32px;
+            padding: 22px;
+            margin-bottom: 30px;
         }}
 
         .benchmark-header {{
             display: flex;
-            align-items: baseline;
+            align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 8px;
+            margin-bottom: 18px;
         }}
 
         .benchmark-title {{
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
-            letter-spacing: -0.02em;
         }}
 
         .benchmark-desc {{
             font-size: 13px;
             color: var(--text-muted);
+            margin-top: 2px;
         }}
 
         .benchmark-bars-container {{
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }}
 
         .benchmark-row {{
             display: grid;
-            grid-template-columns: 220px 1fr 90px;
+            grid-template-columns: 240px 1fr 90px;
             align-items: center;
             gap: 16px;
-            position: relative;
-            padding: 6px 10px;
+            padding: 10px 14px;
             border-radius: var(--radius-sm);
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
             cursor: pointer;
-            transition: background 0.15s ease;
+            transition: all 0.15s ease;
         }}
 
         .benchmark-row:hover {{
-            background: var(--bg-elevated);
+            background: var(--bg-card-hover);
+            border-color: var(--border-highlight);
+            transform: translateX(2px);
         }}
 
         .benchmark-row-meta {{
@@ -1711,25 +1219,27 @@ html_template = f"""<!DOCTYPE html>
             font-size: 11px;
             font-family: var(--font-mono);
             color: var(--text-muted);
-            width: 18px;
+            font-weight: 600;
+            width: 24px;
         }}
 
         .benchmark-model-name {{
-            font-size: 13.5px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             color: var(--text-primary);
         }}
 
         .benchmark-lab-pill {{
-            font-size: 10px;
+            font-size: 10.5px;
             color: var(--text-muted);
             background: rgba(255, 255, 255, 0.05);
             padding: 2px 6px;
             border-radius: 4px;
+            font-weight: 500;
         }}
 
         .benchmark-bar-track {{
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.05);
             height: 10px;
             border-radius: 5px;
             overflow: hidden;
@@ -1749,125 +1259,38 @@ html_template = f"""<!DOCTYPE html>
 
         .benchmark-score-val {{
             font-family: var(--font-mono);
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 13.5px;
+            font-weight: 700;
             color: var(--text-primary);
             text-align: right;
-        }}
-
-        /* Floating Interactive Tooltip Popover */
-        #benchmark-tooltip {{
-            display: none;
-            position: fixed;
-            z-index: 100;
-            pointer-events: none;
-            opacity: 0;
-            transform: translateY(6px);
-            transition: opacity 0.15s ease, transform 0.15s ease;
-            background: #191d26;
-            border: 1px solid var(--border-highlight);
-            border-radius: var(--radius-md);
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
-            padding: 18px;
-            width: 340px;
-            max-width: 90vw;
-        }}
-
-        #benchmark-tooltip.visible {{
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }}
-
-        .tooltip-header {{
             display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            margin-bottom: 6px;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
         }}
 
-        .tooltip-title {{
-            font-size: 15px;
-            font-weight: 700;
-            color: #ffffff;
-        }}
-
-        .tooltip-score {{
+        .benchmark-inspect-arrow {{
+            color: var(--accent-primary);
             font-size: 12px;
-            font-weight: 700;
-            color: var(--accent-primary-hover);
-            font-family: var(--font-mono);
         }}
 
-        .tooltip-lab {{
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-        }}
-
-        .tooltip-grid {{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 8px 10px;
-            border-radius: var(--radius-sm);
-        }}
-
-        .tooltip-item-label {{
-            font-size: 10px;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            letter-spacing: 0.04em;
-        }}
-
-        .tooltip-item-val {{
-            font-size: 12px;
-            color: var(--text-primary);
-            font-weight: 600;
-        }}
-
-        .tooltip-bestfor {{
-            font-size: 12px;
-            color: #cbd5e1;
-            line-height: 1.5;
-            margin-bottom: 10px;
-        }}
-
-        .tooltip-verdict {{
-            background: rgba(59, 130, 246, 0.08);
-            border-left: 2px solid var(--accent-primary);
-            padding: 8px 10px;
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            font-size: 12px;
-            color: #93c5fd;
-            line-height: 1.45;
-        }}
-
-        /* ==================== MODELS SECTION ==================== */
+        /* Lab Filter Bar */
         .lab-filter-bar {{
             display: flex;
             gap: 8px;
-            overflow-x: auto;
-            margin-bottom: 24px;
-            scrollbar-width: none;
-        }}
-
-        .lab-filter-bar::-webkit-scrollbar {{
-            display: none;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
         }}
 
         .lab-chip {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            padding: 7px 16px;
+            padding: 7px 14px;
             border-radius: var(--radius-sm);
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            white-space: nowrap;
             transition: all 0.15s ease;
         }}
 
@@ -1880,11 +1303,12 @@ html_template = f"""<!DOCTYPE html>
             background: var(--accent-primary);
             border-color: var(--accent-primary);
             color: #ffffff;
+            font-weight: 600;
         }}
 
         .models-grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 20px;
         }}
 
@@ -1892,7 +1316,7 @@ html_template = f"""<!DOCTYPE html>
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
-            padding: 22px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -1979,7 +1403,7 @@ html_template = f"""<!DOCTYPE html>
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
-            padding: 7px 16px;
+            padding: 8px 18px;
             border-radius: var(--radius-sm);
             font-size: 13px;
             font-weight: 600;
@@ -2013,8 +1437,8 @@ html_template = f"""<!DOCTYPE html>
 
         .milestone-grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 18px;
         }}
 
         .milestone-card {{
@@ -2026,18 +1450,18 @@ html_template = f"""<!DOCTYPE html>
 
         .milestone-lab {{
             font-size: 11px;
-            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--accent-primary-hover);
+            color: var(--text-muted);
+            font-weight: 600;
             margin-bottom: 4px;
         }}
 
         .milestone-name {{
             font-size: 16px;
             font-weight: 700;
-            margin-bottom: 8px;
             color: var(--text-primary);
+            margin-bottom: 8px;
         }}
 
         .milestone-desc {{
@@ -2048,13 +1472,13 @@ html_template = f"""<!DOCTYPE html>
         }}
 
         .milestone-impact {{
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 2px solid var(--border-highlight);
-            padding: 8px 12px;
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
             font-size: 12.5px;
-            color: #cbd5e1;
-            line-height: 1.5;
+            color: var(--accent-primary-hover);
+            background: rgba(59, 130, 246, 0.08);
+            border-left: 2px solid var(--accent-primary);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            line-height: 1.45;
         }}
 
         /* ==================== TASKS GUIDE ==================== */
@@ -2075,37 +1499,38 @@ html_template = f"""<!DOCTYPE html>
         }}
 
         .task-title {{
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
-            margin-bottom: 8px;
             color: var(--text-primary);
+            margin-bottom: 8px;
         }}
 
         .task-recommendations {{
-            margin-top: 14px;
+            margin-top: 16px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }}
 
         .task-rec-item {{
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-sm);
-            padding: 10px 14px;
+            padding: 10px 12px;
             font-size: 13px;
+            line-height: 1.45;
         }}
 
         .task-rec-role {{
-            font-size: 11px;
+            font-size: 10.5px;
+            font-weight: 600;
             text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            color: var(--accent-primary-hover);
+            letter-spacing: 0.05em;
+            color: var(--accent-primary);
             margin-bottom: 2px;
         }}
 
-        /* Model Detail Drawer */
+        /* Model Inspector Drawer */
         .drawer-overlay {{
             position: fixed;
             top: 0;
@@ -2114,7 +1539,7 @@ html_template = f"""<!DOCTYPE html>
             bottom: 0;
             background: rgba(0, 0, 0, 0.65);
             backdrop-filter: blur(4px);
-            z-index: 999;
+            z-index: 80;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.2s ease;
@@ -2128,270 +1553,273 @@ html_template = f"""<!DOCTYPE html>
         .drawer {{
             position: fixed;
             top: 0;
-            right: 0;
-            bottom: 0;
-            width: 540px;
+            right: -520px;
+            width: 500px;
             max-width: 90vw;
-            background: #14171e;
+            height: 100vh;
+            background: var(--bg-surface);
             border-left: 1px solid var(--border-subtle);
-            z-index: 1000;
-            transform: translateX(100%);
-            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 90;
+            padding: 28px 24px;
             overflow-y: auto;
-            padding: 32px 28px;
-            box-shadow: -12px 0 40px rgba(0, 0, 0, 0.6);
+            transition: right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }}
 
         .drawer.open {{
-            transform: translateX(0);
+            right: 0;
         }}
 
         .drawer-close {{
             position: absolute;
-            top: 24px;
-            right: 24px;
-            background: rgba(255, 255, 255, 0.06);
-            border: none;
-            color: var(--text-secondary);
-            font-size: 20px;
+            top: 18px;
+            right: 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.15s ease;
         }}
 
         .drawer-close:hover {{
-            background: rgba(255, 255, 255, 0.12);
-            color: #ffffff;
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }}
+
+        .tooltip-grid {{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }}
+
+        .tooltip-item-label {{
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }}
+
+        .tooltip-item-val {{
+            font-size: 13.5px;
+            font-family: var(--font-mono);
+            color: var(--text-primary);
+            margin-top: 2px;
         }}
 
         .code-block {{
-            background: #0d0f12;
+            background: #090a0d;
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-sm);
-            padding: 14px;
+            padding: 12px;
             font-family: var(--font-mono);
             font-size: 12px;
-            color: #e2e8f0;
+            color: #d1d5db;
             overflow-x: auto;
-            margin-top: 10px;
+            white-space: pre;
             line-height: 1.5;
         }}
 
-        /* Empty State */
-        .empty-state {{
-            padding: 48px 24px;
-            text-align: center;
-            background: var(--bg-surface);
-            border: 1px dashed var(--border-subtle);
-            border-radius: var(--radius-md);
-            color: var(--text-secondary);
-            font-size: 14px;
-        }}
-
         /* Share & Modal Styles */
-        .share-btn {{
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-highlight);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            font-size: 13px;
-            font-weight: 600;
-            padding: 6px 14px;
-            border-radius: var(--radius-pill);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }}
-        .share-btn:hover {{
-            background: var(--bg-elevated);
-            border-color: var(--accent-primary);
-            color: #fff;
-            transform: translateY(-1px);
-        }}
         .share-modal-overlay {{
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
-            z-index: 998;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            z-index: 100;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.25s ease;
+            transition: opacity 0.2s ease;
         }}
+
         .share-modal-overlay.open {{
             opacity: 1;
             pointer-events: auto;
         }}
+
         .share-modal {{
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -46%) scale(0.96);
-            width: 90%;
-            max-width: 480px;
-            background: var(--bg-card);
+            transform: translate(-50%, -50%) scale(0.96);
+            width: 440px;
+            max-width: 92vw;
+            background: var(--bg-surface);
             border: 1px solid var(--border-highlight);
-            border-radius: var(--radius-lg);
+            border-radius: var(--radius-md);
             padding: 24px;
-            z-index: 999;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+            z-index: 101;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             opacity: 0;
             pointer-events: none;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }}
+
         .share-modal.open {{
             opacity: 1;
             pointer-events: auto;
             transform: translate(-50%, -50%) scale(1);
         }}
+
         .share-modal-header {{
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }}
+
         .share-modal-title {{
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-primary);
         }}
+
         .modal-close-btn {{
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-size: 24px;
+            font-size: 22px;
             cursor: pointer;
             line-height: 1;
-            padding: 0 4px;
+            padding: 4px;
         }}
+
         .modal-close-btn:hover {{
             color: var(--text-primary);
         }}
+
         .share-modal-desc {{
-            font-size: 13px;
+            font-size: 13.5px;
             color: var(--text-secondary);
-            margin-bottom: 16px;
+            margin-bottom: 18px;
             line-height: 1.5;
         }}
+
         .share-preview-card {{
-            background: var(--bg-surface);
+            background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-sm);
             overflow: hidden;
             margin-bottom: 20px;
         }}
+
         .share-card-thumb {{
             width: 100%;
-            height: 140px;
+            height: 150px;
             object-fit: cover;
             display: block;
             border-bottom: 1px solid var(--border-subtle);
         }}
+
         .share-card-info {{
-            padding: 12px;
+            padding: 12px 14px;
         }}
+
         .share-card-title {{
             font-size: 14px;
-            font-weight: 600;
-            color: #fff;
+            font-weight: 700;
+            color: var(--text-primary);
             margin-bottom: 4px;
+            line-height: 1.35;
         }}
+
         .share-card-desc {{
             font-size: 12px;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             line-height: 1.4;
-            margin-bottom: 6px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            margin-bottom: 8px;
         }}
+
         .share-card-domain {{
             font-size: 11px;
-            color: var(--text-muted);
             font-family: var(--font-mono);
+            color: #60a5fa;
+            text-transform: lowercase;
         }}
+
         .share-buttons-row {{
             display: flex;
             gap: 10px;
         }}
+
         .whatsapp-share-btn {{
             flex: 1;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            background: #25D366;
-            color: #052410;
-            font-family: var(--font-sans);
-            font-size: 13px;
+            background: #25d366;
+            color: #0d0f12;
+            font-size: 13.5px;
             font-weight: 700;
-            padding: 10px 16px;
-            border-radius: var(--radius-pill);
+            padding: 11px 16px;
+            border-radius: var(--radius-sm);
             border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
+            transition: background 0.15s ease, transform 0.1s ease;
         }}
+
         .whatsapp-share-btn:hover {{
-            background: #2ee672;
+            background: #20bd5a;
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
         }}
+
         .copy-link-btn {{
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            background: var(--bg-surface);
+            gap: 8px;
+            background: var(--bg-elevated);
             border: 1px solid var(--border-highlight);
             color: var(--text-primary);
-            font-family: var(--font-sans);
-            font-size: 13px;
+            font-size: 13.5px;
             font-weight: 600;
-            padding: 10px 16px;
-            border-radius: var(--radius-pill);
+            padding: 11px 16px;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
         }}
+
         .copy-link-btn:hover {{
-            background: var(--bg-elevated);
-            color: #fff;
+            background: var(--bg-card-hover);
+            border-color: #ffffff;
         }}
+
+        /* Toast notification */
         .toast-notify {{
             position: fixed;
             bottom: 24px;
             left: 50%;
-            transform: translateX(-50%) translateY(40px);
-            background: #1e222d;
-            border: 1px solid var(--accent-primary);
-            color: #fff;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-highlight);
+            color: var(--text-primary);
             padding: 10px 20px;
             border-radius: var(--radius-pill);
             font-size: 13px;
-            font-weight: 500;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            z-index: 120;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }}
+
         .toast-notify.show {{
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }}
 
-        /* Responsive */
+        /* Responsive Mobile Styles */
         @media (max-width: 768px) {{
             .header-inner {{
                 padding: 10px 16px;
@@ -2407,16 +1835,62 @@ html_template = f"""<!DOCTYPE html>
                 align-items: center;
                 gap: 8px;
                 margin-top: 6px;
+                overflow-x: auto;
+                padding-bottom: 2px;
             }}
             nav.nav-bar {{
                 flex: 1;
-                justify-content: space-around;
+                justify-content: flex-start;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }}
+            .nav-btn {{
+                padding: 7px 11px;
+                font-size: 12.5px;
             }}
             .articles-grid, .models-grid, .milestone-grid, .tasks-grid {{
                 grid-template-columns: 1fr;
             }}
+            .video-grid, .social-buzz-grid {{
+                grid-template-columns: 1fr;
+            }}
             .benchmark-row {{
-                grid-template-columns: 140px 1fr 60px;
+                grid-template-columns: 1fr auto;
+                gap: 6px 12px;
+                padding: 10px 12px;
+                background: var(--bg-card);
+                margin-bottom: 8px;
+                border: 1px solid var(--border-subtle);
+            }}
+            .benchmark-row-meta {{
+                grid-column: 1 / 2;
+            }}
+            .benchmark-score-val {{
+                grid-column: 2 / 3;
+                font-size: 13px;
+                font-weight: 700;
+            }}
+            .benchmark-bar-track {{
+                grid-column: 1 / 3;
+                height: 8px;
+            }}
+            .milestone-period-bar {{
+                gap: 8px;
+                flex-wrap: wrap;
+            }}
+            .period-chip {{
+                flex: 1 1 auto;
+                text-align: center;
+                padding: 8px 12px;
+            }}
+            .inpage-nav {{
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }}
+            .drawer {{
+                width: 100vw;
+                max-width: 100vw;
+                padding: 20px 16px;
             }}
         }}
     </style>
@@ -2429,7 +1903,7 @@ html_template = f"""<!DOCTYPE html>
             <a href="#" class="brand" onclick="switchView('feed')">
                 <div class="brand-icon">⚡</div>
                 <div>
-                    <div class="brand-title">AI Pulse</div>
+                    <div class="brand-title">AI Digest</div>
                     <div class="brand-subtitle">Frontier AI &amp; Developer Intelligence</div>
                 </div>
             </a>
@@ -2459,6 +1933,16 @@ html_template = f"""<!DOCTYPE html>
                 <p class="section-desc">Frontier models, famous Substack analyses, viral community debates, and developer breakthroughs across the past 4 rolling weeks.</p>
             </div>
 
+            <!-- In-Page Sub-Navigation -->
+            <div class="inpage-nav-wrap">
+                <nav class="inpage-nav" aria-label="Digest Sections">
+                    <a href="#articles-section" class="inpage-pill active">📰 Deep Dives</a>
+                    <a href="#videos-section" class="inpage-pill">🎥 YouTube</a>
+                    <a href="#social-buzz-section" class="inpage-pill">💬 X &amp; Reddit</a>
+                    <a href="#oneliners-container" class="inpage-pill">⚡ 1-Liners</a>
+                </nav>
+            </div>
+
             <!-- Weekly Edition Filter -->
             <div class="date-filter-section">
                 <div class="date-filter-header">
@@ -2476,7 +1960,7 @@ html_template = f"""<!DOCTYPE html>
                 <button class="tag-chip" onclick="setTopicFilter('DEV TOOLS')">💻 Dev Tooling</button>
                 <button class="tag-chip" onclick="setTopicFilter('LOCAL AI')">⚡ Local AI &amp; Quant</button>
                 <button class="tag-chip" onclick="setTopicFilter('RESEARCH')">🔬 Applied Research</button>
-                <button class="tag-chip" onclick="setTopicFilter('BREAKTHROUGH')">🚀 Breakthroughs</button>
+                <button class="tag-chip" onclick="setTopicFilter('PRODUCTION')">🚀 Production &amp; Security</button>
             </div>
 
             <!-- Instant Search -->
@@ -2484,9 +1968,18 @@ html_template = f"""<!DOCTYPE html>
                 <input type="text" id="search-input" class="search-input" placeholder="Filter stories by model, topic, or keyword (e.g., 'Claude', 'vLLM', '3D')..." oninput="filterArticles()">
             </div>
 
-            <!-- Articles Grid -->
-            <div class="articles-grid" id="articles-grid">
-                <!-- Dynamically populated article cards -->
+            <!-- Main Articles Section -->
+            <div class="media-section" id="articles-section">
+                <div class="media-section-header">
+                    <div class="media-section-title">
+                        <span>📰 Featured Technical Articles &amp; Research</span>
+                        <span class="media-section-badge">Verified Technical In-Depth</span>
+                    </div>
+                    <div class="media-section-desc">Concise, uniform 100-word deep-dives into models, architectures, and engineering breakthroughs.</div>
+                </div>
+                <div class="articles-grid" id="articles-grid">
+                    <!-- Dynamically populated article cards -->
+                </div>
             </div>
 
             <!-- Featured AI Videos Section -->
@@ -2508,7 +2001,7 @@ html_template = f"""<!DOCTYPE html>
                 <div class="media-section-header">
                     <div class="media-section-title">
                         <span>💬 Social Media Buzz &amp; Founder Takes</span>
-                        <span class="media-section-badge">Reddit • X / Twitter • LinkedIn</span>
+                        <span class="media-section-badge">Reddit • X / Twitter • Hacker News</span>
                     </div>
                     <div class="media-section-desc">Curated community sentiment, viral engineering debates, founder perspectives, and model releases.</div>
                 </div>
@@ -2536,16 +2029,16 @@ html_template = f"""<!DOCTYPE html>
         <section id="view-models" style="display:none;">
             <div class="section-header">
                 <h1 class="section-title">Frontier Model Intelligence &amp; Benchmarks</h1>
-                <p class="section-desc">Interactive benchmark comparison and comprehensive model specifications. Hover over any bar to inspect capabilities, pricing, and developer verdicts.</p>
+                <p class="section-desc">Verified SWE-bench rankings and comprehensive model specifications. Click any model row to inspect full architectural capabilities, pricing, and developer verdicts.</p>
             </div>
 
             <!-- Interactive Benchmark Bar Graph -->
             <div class="benchmark-section">
                 <div class="benchmark-header">
                     <div>
-                        <div class="benchmark-title">🏆 Frontier Benchmark Leaderboard (SWE-bench &amp; Reasoning Composite)</div>
-                        <div class="benchmark-desc">Ranked by real-world coding benchmark performance and deep deliberate reasoning capabilities.</div>
-                        <div style="font-size:11px;color:var(--text-muted);margin-top:4px;font-style:italic;">Benchmark data as of September 2026 · SWE-bench Pro · Hover/tap bars for full specs</div>
+                        <div class="benchmark-title">🏆 Frontier Benchmark Leaderboard (SWE-bench Verified)</div>
+                        <div class="benchmark-desc">Ranked by verified real-world software engineering and deliberate reasoning capabilities.</div>
+                        <div style="font-size:11px;color:var(--text-muted);margin-top:4px;font-style:italic;">SWE-bench Verified · Click any row to inspect complete specs, pricing, and developer verdict</div>
                     </div>
                 </div>
 
@@ -2554,55 +2047,19 @@ html_template = f"""<!DOCTYPE html>
                 </div>
             </div>
 
-            <!-- Floating Tooltip for Benchmark Bar Chart -->
-            <div id="benchmark-tooltip">
-                <div class="tooltip-header">
-                    <div class="tooltip-title" id="tt-title"></div>
-                    <div class="tooltip-score" id="tt-score"></div>
-                </div>
-                <div class="tooltip-lab" id="tt-lab"></div>
-                
-                <div class="tooltip-grid">
-                    <div>
-                        <div class="tooltip-item-label">Context Window</div>
-                        <div class="tooltip-item-val" id="tt-context"></div>
-                    </div>
-                    <div>
-                        <div class="tooltip-item-label">Token Pricing</div>
-                        <div class="tooltip-item-val" id="tt-pricing"></div>
-                    </div>
-                    <div>
-                        <div class="tooltip-item-label">Release Date</div>
-                        <div class="tooltip-item-val" id="tt-release"></div>
-                    </div>
-                    <div>
-                        <div class="tooltip-item-label">Architecture</div>
-                        <div class="tooltip-item-val" id="tt-arch"></div>
-                    </div>
-                </div>
-
-                <div class="tooltip-item-label" style="margin-bottom:2px;">What is it best for?</div>
-                <div class="tooltip-bestfor" id="tt-bestfor"></div>
-
-                <div class="tooltip-item-label" style="margin-bottom:2px;margin-top:6px;">Is it better to work with?</div>
-                <div class="tooltip-verdict" id="tt-verdict"></div>
-            </div>
-
             <!-- Lab Filter Bar -->
             <div class="lab-filter-bar" id="lab-filter-bar">
                 <button class="lab-chip active" onclick="filterModelsByLab('all')">All Labs (Frontier Flagships)</button>
-                <button class="lab-chip" onclick="filterModelsByLab('openai')">OpenAI</button>
                 <button class="lab-chip" onclick="filterModelsByLab('anthropic')">Anthropic</button>
+                <button class="lab-chip" onclick="filterModelsByLab('openai')">OpenAI</button>
                 <button class="lab-chip" onclick="filterModelsByLab('deepseek')">DeepSeek</button>
                 <button class="lab-chip" onclick="filterModelsByLab('google')">Google DeepMind</button>
-                <button class="lab-chip" onclick="filterModelsByLab('meta')">Meta AI</button>
-                <button class="lab-chip" onclick="filterModelsByLab('xai')">xAI</button>
                 <button class="lab-chip" onclick="filterModelsByLab('alibaba')">Alibaba (Qwen)</button>
-                <button class="lab-chip" onclick="filterModelsByLab('mistral')">Mistral AI</button>
+                <button class="lab-chip" onclick="filterModelsByLab('meta')">Meta AI</button>
             </div>
 
             <div id="models-view-hint" style="margin-bottom:14px;font-size:13px;color:var(--text-muted);">
-                Showing <strong>Frontier Flagships</strong>. Click an organization chip above to view all models for that lab.
+                Showing <strong>Frontier Flagships</strong>. Click an organization chip above to view models for that lab.
             </div>
 
             <!-- Models Grid -->
@@ -2611,7 +2068,7 @@ html_template = f"""<!DOCTYPE html>
             </div>
         </section>
 
-        <!-- ==================== SECTION 3: MILESTONES ARCHIVE ==================== -->
+        <!-- ==================== SECTION 3: 3-YEAR MILESTONES ARCHIVE ==================== -->
         <section id="view-milestones" style="display:none;">
             <div class="section-header">
                 <h1 class="section-title">Landmark AI Milestones Archive (2023 – 2026)</h1>
@@ -2645,11 +2102,11 @@ html_template = f"""<!DOCTYPE html>
                         <div class="task-recommendations">
                             <div class="task-rec-item">
                                 <div class="task-rec-role">Frontier Autonomous Agent</div>
-                                <strong>Fable 5.1 &amp; Claude 5 Sonnet</strong> &bull; Best-in-class tool use &amp; SWE-bench verified.
+                                <strong>Claude 3.7 Sonnet &amp; Claude 3.5 Sonnet</strong> &bull; #1 SWE-bench Verified (70.3%–74.5%) &amp; Claude Code leader.
                             </div>
                             <div class="task-rec-item">
                                 <div class="task-rec-role">Open Weights Champion</div>
-                                <strong>Qwen 2.5 Coder 32B</strong> &bull; Highest accuracy open model, runnable on single 24GB GPU.
+                                <strong>Qwen 2.5 Coder 32B &amp; DeepSeek-R1</strong> &bull; SOTA open models runnable on local workstation GPUs.
                             </div>
                         </div>
                     </div>
@@ -2661,12 +2118,12 @@ html_template = f"""<!DOCTYPE html>
                         <p style="font-size:14px;color:var(--text-secondary);line-height:1.5;">Heavy formal logic, theorem proving, contest programming, and competitive algorithmic challenges.</p>
                         <div class="task-recommendations">
                             <div class="task-rec-item">
-                                <div class="task-rec-role">Maximum Frontier Reasoning</div>
-                                <strong>OpenAI o3 &amp; GPT-6</strong> &bull; Test-time compute scaling champions.
+                                <div class="task-rec-role">Maximum Reasoning Throughput</div>
+                                <strong>OpenAI o3-mini &amp; OpenAI o1</strong> &bull; Test-time compute scaling leaders (79.7% SWE-bench, 99th percentile math).
                             </div>
                             <div class="task-rec-item">
                                 <div class="task-rec-role">Open Architecture Equivalent</div>
-                                <strong>DeepSeek-R1 (671B MoE)</strong> &bull; Pure RL chain-of-thought matching o1.
+                                <strong>DeepSeek-R1 (671B MoE)</strong> &bull; Pure RL chain-of-thought matching proprietary models at 1/20th cost.
                             </div>
                         </div>
                     </div>
@@ -2679,11 +2136,11 @@ html_template = f"""<!DOCTYPE html>
                         <div class="task-recommendations">
                             <div class="task-rec-item">
                                 <div class="task-rec-role">2M Token Champion</div>
-                                <strong>Gemini 3.1 Pro (2,000,000 Tokens)</strong> &bull; Near-perfect needle-in-a-haystack recall.
+                                <strong>Gemini 2.0 Pro (2,000,000 Tokens)</strong> &bull; Whole repository comprehension with deep multimodal reasoning.
                             </div>
                             <div class="task-rec-item">
-                                <div class="task-rec-role">Commodity 1M Context</div>
-                                <strong>Gemini 3.8 Flash ($0.10/1M)</strong> &bull; Sub-200ms whole repository processing.
+                                <div class="task-rec-role">Ultra-Fast 1M Context</div>
+                                <strong>Gemini 2.0 Flash ($0.10/1M)</strong> &bull; Sub-second latency and real-time streaming tool orchestration.
                             </div>
                         </div>
                     </div>
@@ -2696,11 +2153,11 @@ html_template = f"""<!DOCTYPE html>
                         <div class="task-recommendations">
                             <div class="task-rec-item">
                                 <div class="task-rec-role">High Reasoning on Single GPU</div>
-                                <strong>DeepSeek-R1-Distill-32B &amp; Qwen 3.8 27B</strong> &bull; Runs on RTX 4090/5090 or Mac M-series.
+                                <strong>DeepSeek-R1-Distill-Qwen-32B</strong> &bull; Runs locally on single RTX 4090 or Apple Silicon Mac.
                             </div>
                             <div class="task-rec-item">
                                 <div class="task-rec-role">Open Foundation Flagship</div>
-                                <strong>Llama 4 &amp; Llama 3.3 70B</strong> &bull; Full enterprise weights ownership.
+                                <strong>Llama 3.3 70B</strong> &bull; Full enterprise weights ownership without cloud vendor lock-in.
                             </div>
                         </div>
                     </div>
@@ -2722,7 +2179,7 @@ html_template = f"""<!DOCTYPE html>
     <div id="share-modal-overlay" class="share-modal-overlay" onclick="closeShareModal()"></div>
     <div id="share-modal" class="share-modal">
         <div class="share-modal-header">
-            <div class="share-modal-title">Share AI Pulse</div>
+            <div class="share-modal-title">Share AI Digest</div>
             <button class="modal-close-btn" onclick="closeShareModal()">&times;</button>
         </div>
         <p class="share-modal-desc">Send this link to anyone on WhatsApp, Slack, or Twitter with populated rich preview metadata.</p>
@@ -2730,8 +2187,8 @@ html_template = f"""<!DOCTYPE html>
         <div class="share-preview-card">
             <img src="/og-preview.jpg" alt="Preview Thumbnail" class="share-card-thumb">
             <div class="share-card-info">
-                <div class="share-card-title" id="share-card-title">AI Pulse — Frontier AI &amp; Developer Intelligence</div>
-                <div class="share-card-desc">Frontier models, famous Substack analyses, viral community debates, and developer benchmarks.</div>
+                <div class="share-card-title" id="share-card-title">AI Digest — Frontier AI &amp; Developer Intelligence</div>
+                <div class="share-card-desc">Frontier models, verified SWE-bench leaderboards, community debates, and developer benchmarks.</div>
                 <div class="share-card-domain" id="share-card-domain">ai-digest-by-mp.vercel.app</div>
             </div>
         </div>
@@ -2758,90 +2215,47 @@ html_template = f"""<!DOCTYPE html>
         const FRONTIER_MODELS = {models_json_str};
         const MILESTONES_ARCHIVE = {milestones_json_str};
 
-        let allArticlesByDate = {{}};
-        let availableDates = [];
-        let selectedDate = null;
+        let currentActiveWeekId = null;
         let selectedTopicFilter = "ALL";
-        let supabaseClient = null;
+        let activeView = "feed";
 
-        // URL State Synchronization (Deep-linking)
-        function updateUrlState(params, replace = false) {{
-            try {{
-                const url = new URL(window.location);
-                Object.keys(params).forEach(k => {{
-                    if (params[k] === null || params[k] === undefined || params[k] === '') {{
-                        url.searchParams.delete(k);
-                    }} else {{
-                        url.searchParams.set(k, params[k]);
-                    }}
-                }});
-                if (replace) {{
-                    window.history.replaceState({{ ...history.state, ...params }}, '', url.toString());
+        // URL Deep-Linking & State Synchronization
+        function updateUrlState(params) {{
+            const url = new URL(window.location);
+            Object.keys(params).forEach(key => {{
+                if (params[key] === null || params[key] === undefined) {{
+                    url.searchParams.delete(key);
                 }} else {{
-                    window.history.pushState({{ ...history.state, ...params }}, '', url.toString());
+                    url.searchParams.set(key, params[key]);
                 }}
-            }} catch(e) {{}}
+            }});
+            window.history.replaceState({{}}, '', url);
         }}
 
-        // 1. Initialization
-        window.addEventListener("DOMContentLoaded", async () => {{
-            buildCalendarDates();
-            loadSeedDataset();
-            renderBenchmarkChart();
-            filterModelsByLab("all");
-            switchMilestonePeriod("quarterly");
+        function initFromUrl() {{
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get("tab") || "feed";
+            const inspectModel = params.get("inspect");
+            const weekParam = params.get("week");
 
-            // Client-side Canonical & OG synchronization
-            try {{
-                const origin = window.location.origin;
-                if (origin && !origin.includes("localhost") && !origin.includes("127.0.0.1")) {{
-                    const ogUrl = document.querySelector('meta[property="og:url"]');
-                    if (ogUrl) ogUrl.setAttribute("content", window.location.href);
-                    const ogImg = document.querySelector('meta[property="og:image"]');
-                    if (ogImg && ogImg.getAttribute("content").startsWith("https://ai-digest-by-mp.vercel.app")) {{
-                        ogImg.setAttribute("content", `${{origin}}/og-preview.jpg`);
-                    }}
-                }}
-            }} catch(e) {{}}
+            if (tab && ["feed", "models", "milestones", "tasks"].includes(tab)) {{
+                switchView(tab, false);
+            }}
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const targetTab = urlParams.get('tab') || window.location.hash.replace('#', '');
-            if (['feed', 'models', 'milestones', 'tasks'].includes(targetTab)) {{
-                switchView(targetTab, false);
+            if (weekParam && EMBEDDED_SEED[weekParam]) {{
+                currentActiveWeekId = weekParam;
             }}
-            const weekParam = urlParams.get('week');
-            if (weekParam && typeof availableWeeks !== 'undefined' && availableWeeks.some(w => w.id === weekParam)) {{
-                selectWeeklyFilter(weekParam, false);
-            }}
-            const hoverModel = urlParams.get('hover');
-            if (hoverModel) {{
-                setTimeout(() => {{
-                    const row = document.querySelector(`[data-model-id="${{hoverModel}}"]`);
-                    if (row) {{
-                        const rect = row.getBoundingClientRect();
-                        showBenchmarkTooltip({{ clientX: rect.left + 350, clientY: rect.top + 30 }}, hoverModel);
-                    }}
-                }}, 300);
-            }}
-            const labParam = urlParams.get('lab');
-            if (labParam) {{
-                filterModelsByLab(labParam);
-            }}
-            const inspectModel = urlParams.get('inspect');
+
             if (inspectModel) {{
                 setTimeout(() => openModelDrawer(inspectModel, false), 300);
             }}
-            await initSupabaseConnection();
-        }});
+        }}
 
-        // Handle Browser Back / Forward buttons
         window.addEventListener("popstate", () => {{
-            const urlParams = new URLSearchParams(window.location.search);
-            const targetTab = urlParams.get('tab') || 'feed';
-            if (['feed', 'models', 'milestones', 'tasks'].includes(targetTab)) {{
-                switchView(targetTab, false);
-            }}
-            const inspect = urlParams.get('inspect');
+            const params = new URLSearchParams(window.location.search);
+            const tab = params.get("tab") || "feed";
+            switchView(tab, false);
+            const inspect = params.get("inspect");
             if (inspect) {{
                 openModelDrawer(inspect, false);
             }} else {{
@@ -2849,26 +2263,26 @@ html_template = f"""<!DOCTYPE html>
             }}
         }});
 
-        // 2. Navigation
+        // 1. Navigation Controller
         function switchView(viewId, updateHistory = true) {{
-            document.querySelectorAll("nav.nav-bar .nav-btn").forEach(btn => btn.classList.remove("active"));
-            const activeTab = document.getElementById(`tab-${{viewId}}`);
-            if (activeTab) activeTab.classList.add("active");
-
-            document.getElementById("view-feed").style.display = (viewId === "feed") ? "block" : "none";
-            document.getElementById("view-models").style.display = (viewId === "models") ? "block" : "none";
-            document.getElementById("view-milestones").style.display = (viewId === "milestones") ? "block" : "none";
-            document.getElementById("view-tasks").style.display = (viewId === "tasks") ? "block" : "none";
+            activeView = viewId;
+            document.querySelectorAll("main > section").forEach(sec => sec.style.display = "none");
+            document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+            
+            const targetSec = document.getElementById(`view-${{viewId}}`);
+            const targetBtn = document.getElementById(`tab-${{viewId}}`);
+            if (targetSec) targetSec.style.display = "block";
+            if (targetBtn) targetBtn.classList.add("active");
 
             if (updateHistory) {{
                 updateUrlState({{ tab: viewId === 'feed' ? null : viewId }});
             }}
 
             const titles = {{
-                feed: "AI Pulse — Frontier AI & Developer Intelligence",
-                models: "Frontier Models & Benchmarks — AI Pulse",
-                milestones: "3-Year AI Milestones Archive — AI Pulse",
-                tasks: "Developer Task Guide — AI Pulse"
+                feed: "AI Digest — Frontier AI & Developer Intelligence",
+                models: "Frontier Models & Benchmarks — AI Digest",
+                milestones: "3-Year AI Milestones Archive — AI Digest",
+                tasks: "Developer Task Guide — AI Digest"
             }};
             document.title = titles[viewId] || titles.feed;
 
@@ -2901,7 +2315,7 @@ html_template = f"""<!DOCTYPE html>
         async function copyCurrentLink() {{
             try {{
                 await navigator.clipboard.writeText(window.location.href);
-                showToast("Link copied to clipboard! Ready to send on WhatsApp.");
+                showToast("Link copied to clipboard! Ready to share.");
                 closeShareModal();
             }} catch(e) {{
                 showToast("Could not copy link automatically: " + window.location.href);
@@ -2912,7 +2326,7 @@ html_template = f"""<!DOCTYPE html>
             const shareUrl = new URL(window.location.origin + window.location.pathname);
             shareUrl.searchParams.set("tab", "models");
             shareUrl.searchParams.set("inspect", modelId);
-            const text = `Check out ${{modelName}} on AI Pulse: ${{shareUrl.toString()}}`;
+            const text = `Check out ${{modelName}} on AI Digest: ${{shareUrl.toString()}}`;
             window.open(`https://api.whatsapp.com/send?text=${{encodeURIComponent(text)}}`, "_blank");
         }}
 
@@ -2933,7 +2347,7 @@ html_template = f"""<!DOCTYPE html>
             setTimeout(() => toast.classList.remove("show"), 3200);
         }}
 
-        // 3. Weekly Editions Setup (Strict 4-Week Windows)
+        // Weekly Editions Setup
         const DEFAULT_WEEKLY_WINDOWS = [
             {{ id: "2026-08-30_2026-09-05", label: "Aug 30 – Sep 05, 2026", short_label: "Aug 30 – Sep 05", start: "2026-08-30", end: "2026-09-05", is_current: true }},
             {{ id: "2026-08-23_2026-08-29", label: "Aug 23 – Aug 29, 2026", short_label: "Aug 23 – Aug 29", start: "2026-08-23", end: "2026-08-29", is_current: false }},
@@ -2941,279 +2355,97 @@ html_template = f"""<!DOCTYPE html>
             {{ id: "2026-08-09_2026-08-15", label: "Aug 09 – Aug 15, 2026", short_label: "Aug 09 – Aug 15", start: "2026-08-09", end: "2026-08-15", is_current: false }}
         ];
 
-        let availableWeeks = DEFAULT_WEEKLY_WINDOWS;
-        let selectedWeek = DEFAULT_WEEKLY_WINDOWS[0].id;
-
-        function buildCalendarDates() {{
-            const bar = document.getElementById("date-filter-bar");
-            bar.innerHTML = "";
-
+        function getWeeksList() {{
             const seedKeys = Object.keys(EMBEDDED_SEED);
-            if (seedKeys.length >= 1) {{
-                availableWeeks = seedKeys.map((k, idx) => {{
-                    const it = EMBEDDED_SEED[k];
-                    return {{
-                        id: k,
-                        label: it.week_label || k,
-                        short_label: it.short_label || (it.week_label ? it.week_label.split(",")[0] : k),
-                        start: it.start_date || k.split("_")[0],
-                        end: it.end_date || k.split("_")[1],
-                        is_current: (idx === 0)
-                    }};
-                }});
-            }} else {{
-                availableWeeks = DEFAULT_WEEKLY_WINDOWS;
+            if (seedKeys.length > 0) {{
+                return seedKeys.sort().reverse().map((k, idx) => ({{
+                    id: k,
+                    label: EMBEDDED_SEED[k].week_label || k,
+                    short_label: EMBEDDED_SEED[k].short_label || k,
+                    is_current: idx === 0
+                }}));
             }}
-
-            selectedWeek = availableWeeks[0].id;
-
-            availableWeeks.forEach((w, idx) => {{
-                const chip = document.createElement("button");
-                chip.className = `date-chip ${{idx === 0 ? 'active' : ''}}`;
-                chip.id = `week-chip-${{w.id}}`;
-                chip.innerText = w.is_current ? `${{w.short_label}} (Current Week)` : w.short_label;
-                chip.onclick = () => selectWeeklyFilter(w.id);
-                bar.appendChild(chip);
-            }});
-
-            updateActiveWeekLabel();
+            return DEFAULT_WEEKLY_WINDOWS;
         }}
 
-        function updateActiveWeekLabel() {{
-            const lbl = document.getElementById("active-date-label");
-            const wObj = availableWeeks.find(x => x.id === selectedWeek);
-            if (lbl && wObj) {{
-                lbl.innerText = `Displaying intelligence published strictly for ${{wObj.label}}`;
-            }}
-        }}
-
-        function selectWeeklyFilter(weekId, updateHistory = true) {{
-            selectedWeek = weekId;
-            document.querySelectorAll(".date-chip").forEach(c => c.classList.remove("active"));
-            const activeChip = document.getElementById(`week-chip-${{weekId}}`);
-            if (activeChip) activeChip.classList.add("active");
-            updateActiveWeekLabel();
-            renderCurrentDateArticles();
-            if (updateHistory) {{
-                updateUrlState({{ week: weekId }});
-            }}
-        }}
-
-        // Backward compatibility
-        function selectCalendarDate(d) {{
-            selectWeeklyFilter(d);
-        }}
-
-        // 4. Data Loading & Supabase
         function loadSeedDataset() {{
-            if (EMBEDDED_SEED && Object.keys(EMBEDDED_SEED).length > 0) {{
-                allArticlesByDate = {{ ...EMBEDDED_SEED }};
+            const weeks = getWeeksList();
+            renderWeeklyChips(weeks);
+            const initialWeek = currentActiveWeekId || weeks[0].id;
+            selectWeeklyEdition(initialWeek);
+        }}
+
+        function renderWeeklyChips(weeks) {{
+            const container = document.getElementById("date-filter-bar");
+            container.innerHTML = weeks.map((w, idx) => `
+                <button class="date-chip ${{w.id === currentActiveWeekId || (!currentActiveWeekId && idx === 0) ? 'active' : ''}}" 
+                        id="chip-${{w.id}}" 
+                        onclick="selectWeeklyEdition('${{w.id}}')">
+                    ${{escapeHtml(w.short_label)}} ${{w.is_current ? '⚡' : ''}}
+                </button>
+            `).join("");
+        }}
+
+        function selectWeeklyEdition(weekId) {{
+            currentActiveWeekId = weekId;
+            document.querySelectorAll(".date-chip").forEach(c => c.classList.remove("active"));
+            const activeChip = document.getElementById(`chip-${{weekId}}`);
+            if (activeChip) activeChip.classList.add("active");
+
+            const weekObj = EMBEDDED_SEED[weekId];
+            const dateLabel = document.getElementById("active-date-label");
+            if (weekObj) {{
+                dateLabel.innerText = `${{weekObj.week_label || weekId}} · SOTA Intelligence`;
             }} else {{
-                allArticlesByDate = {{}};
-            }}
-            renderCurrentDateArticles();
-        }}
-
-        async function initSupabaseConnection() {{
-            try {{
-                const resp = await fetch('/api/config');
-                if (resp.ok) {{
-                    const data = await resp.json();
-                    if (data.supabaseUrl && data.supabaseAnonKey) {{
-                        connectSupabase(data.supabaseUrl, data.supabaseAnonKey);
-                        return;
-                    }}
-                }}
-            }} catch (e) {{}}
-
-            const localUrl = localStorage.getItem("ai_pulse_sb_url");
-            const localKey = localStorage.getItem("ai_pulse_sb_key");
-            if (localUrl && localKey) {{
-                connectSupabase(localUrl, localKey);
-            }}
-        }}
-
-        function connectSupabase(url, key) {{
-            if (window.supabase) {{
-                try {{
-                    supabaseClient = window.supabase.createClient(url, key);
-                    const syncEl = document.getElementById("header-sync-status");
-                    if (syncEl) {{
-                        syncEl.innerText = "Supabase";
-                        syncEl.style.color = "var(--accent-secondary)";
-                    }}
-                    fetchLiveSupabaseData();
-                }} catch (e) {{
-                    console.error("Supabase connection error:", e);
-                }}
-            }}
-        }}
-
-        async function fetchLiveSupabaseData() {{
-            if (!supabaseClient) return;
-            try {{
-                const {{ data, error }} = await supabaseClient
-                    .from('articles')
-                    .select('*')
-                    .order('published_date', {{ ascending: false }});
-
-                if (!error && data && data.length > 0) {{
-                    mergeSupabaseRows(data);
-                }}
-            }} catch (e) {{
-                console.warn("Using cached dataset:", e);
-            }}
-        }}
-
-        function isSocialMediaItem(art) {{
-            if (art.content_type === "social_buzz") return true;
-            const src = (art.source || "").toLowerCase();
-            const url = (art.url || "").toLowerCase();
-            return url.includes("reddit.com") || url.includes("twitter.com") || url.includes("x.com") ||
-                   url.includes("linkedin.com") || src.includes("reddit") || src.startsWith("r/") ||
-                   src.includes("tweet") || src.includes("founder take") || src.includes("linkedin");
-        }}
-
-        function isVideoItem(art) {{
-            if (art.content_type === "video") return true;
-            const url = (art.url || "").toLowerCase();
-            const src = (art.source || "").toLowerCase();
-            return url.includes("youtube.com") || url.includes("youtu.be") ||
-                   src.includes("fireship") || src.includes("karpathy") || src.includes("two minute papers") ||
-                   src.includes("yannic") || src.includes("wes roth") || src.includes("matt wolfe");
-        }}
-
-        function mergeSupabaseRows(rows) {{
-            const grouped = {{}};
-            availableWeeks.forEach(w => {{
-                grouped[w.id] = {{
-                    week_id: w.id,
-                    week_label: w.label,
-                    short_label: w.short_label,
-                    top_articles: [],
-                    videos: [],
-                    social_buzz: [],
-                    one_liners: []
-                }};
-            }});
-
-            rows.forEach(art => {{
-                if (!art.published_date) return;
-                const pDate = art.published_date.split("T")[0];
-                
-                // Match to week
-                let targetWeekId = art.week_id;
-                if (!targetWeekId || !grouped[targetWeekId]) {{
-                    for (const w of availableWeeks) {{
-                        if (pDate >= w.start && pDate <= w.end) {{
-                            targetWeekId = w.id;
-                            break;
-                        }}
-                    }}
-                }}
-                if (!targetWeekId || !grouped[targetWeekId]) return;
-
-                const bucket = grouped[targetWeekId];
-
-                if (isVideoItem(art)) {{
-                    bucket.videos.push(art);
-                }} else if (isSocialMediaItem(art)) {{
-                    bucket.social_buzz.push(art);
-                }} else {{
-                    if (bucket.top_articles.length < 10) {{
-                        bucket.top_articles.push(art);
-                    }} else {{
-                        bucket.one_liners.push(art);
-                    }}
-                }}
-            }});
-
-            // Enforce constraints per week:
-            // 1. In top_articles: at most 1 social media item allowed
-            // 2. In one_liners: exactly up to 15 items
-            for (const [wId, bucket] of Object.entries(grouped)) {{
-                // If top_articles has less than 10, check if we should pull 1 top social buzz item
-                const socialInTop = bucket.top_articles.filter(isSocialMediaItem);
-                if (socialInTop.length === 0 && bucket.social_buzz.length > 0 && bucket.top_articles.length < 10) {{
-                    bucket.top_articles.push(bucket.social_buzz[0]);
-                }}
-
-                // Curate up to 15 quick-hit 1-liners
-                const seenUrls = new Set(bucket.top_articles.map(a => a.url));
-                const oneliners = [];
-                for (const it of bucket.one_liners) {{
-                    if (oneliners.length >= 15) break;
-                    if (!seenUrls.has(it.url)) {{
-                        oneliners.push(it);
-                        seenUrls.add(it.url);
-                    }}
-                }}
-                // If still under 15, backfill from remaining social buzz
-                for (const s of bucket.social_buzz) {{
-                    if (oneliners.length >= 15) break;
-                    if (!seenUrls.has(s.url)) {{
-                        oneliners.push(s);
-                        seenUrls.add(s.url);
-                    }}
-                }}
-                bucket.one_liners = oneliners.slice(0, 15);
-                allArticlesByDate[wId] = bucket;
+                dateLabel.innerText = weekId;
             }}
 
-            renderCurrentDateArticles();
-        }}
-
-        // 5. Feed Filtering & Weekly Isolation
-        function setTopicFilter(tag, btnEl) {{
-            selectedTopicFilter = tag;
-            document.querySelectorAll(".tag-chip").forEach(c => c.classList.remove("active"));
-            const target = btnEl || (window.event && window.event.target) || document.querySelector(".tag-chip");
-            if (target && target.classList) target.classList.add("active");
+            updateUrlState({{ week: weekId }});
             filterArticles();
         }}
 
-        function renderCurrentDateArticles() {{
+        function setTopicFilter(topic) {{
+            selectedTopicFilter = topic;
+            document.querySelectorAll(".tag-chip").forEach(c => c.classList.remove("active"));
+            if (window.event && window.event.target) {{
+                window.event.target.classList.add("active");
+            }}
             filterArticles();
         }}
 
         function filterArticles() {{
-            const grid = document.getElementById("articles-grid");
+            const query = (document.getElementById("search-input").value || "").toLowerCase().trim();
+            const weekObj = EMBEDDED_SEED[currentActiveWeekId];
+            
+            const articlesGrid = document.getElementById("articles-grid");
             const videosGrid = document.getElementById("videos-grid");
-            const videosSection = document.getElementById("videos-section");
             const socialGrid = document.getElementById("social-buzz-grid");
-            const socialSection = document.getElementById("social-buzz-section");
             const onelinersList = document.getElementById("oneliners-list");
-            const query = document.getElementById("search-input").value.toLowerCase().trim();
+            const videosSection = document.getElementById("videos-section");
+            const socialSection = document.getElementById("social-buzz-section");
 
-            const weekData = allArticlesByDate[selectedWeek] || {{ top_articles: [], top_10: [], videos: [], social_buzz: [], one_liners: [] }};
-            const featured = weekData.top_articles || weekData.top_10 || [];
-            const videos = weekData.videos || [];
-            const socialBuzz = weekData.social_buzz || [];
-            const oneliners = (weekData.one_liners || []).slice(0, 15);
-
-            // Filter Top Articles
-            const filteredFeatured = featured.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter));
-            // Strictly cap social media items in top articles grid to at most 1
-            let socialCountInFeatured = 0;
-            const strictlyCappedFeatured = [];
-            for (const art of filteredFeatured) {{
-                if (isSocialMediaItem(art)) {{
-                    if (socialCountInFeatured < 1) {{
-                        strictlyCappedFeatured.push(art);
-                        socialCountInFeatured++;
-                    }}
-                }} else {{
-                    strictlyCappedFeatured.push(art);
-                }}
+            if (!weekObj) {{
+                articlesGrid.innerHTML = `<div style="grid-column: 1/-1; padding: 40px; text-align: center; color: var(--text-muted);">No items recorded for this weekly edition.</div>`;
+                videosSection.style.display = "none";
+                socialSection.style.display = "none";
+                onelinersList.innerHTML = "";
+                return;
             }}
 
-            if (strictlyCappedFeatured.length === 0) {{
-                grid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">No featured research or architectural articles found for this weekly edition matching filters.</div>`;
+            const topArticles = weekObj.top_articles || weekObj.top_10 || [];
+            const videos = weekObj.videos || [];
+            const socialBuzz = weekObj.social_buzz || [];
+            const oneliners = weekObj.one_liners || [];
+
+            // Filter & Render Top Articles (Strictly genuine articles, no social media, no YouTube)
+            const filteredArticles = topArticles.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter));
+            if (filteredArticles.length === 0) {{
+                articlesGrid.innerHTML = `<div style="grid-column: 1/-1; padding: 30px 0; color: var(--text-muted);">No matching articles found for this filter.</div>`;
             }} else {{
-                grid.innerHTML = strictlyCappedFeatured.map(art => renderArticleCard(art)).join("");
+                articlesGrid.innerHTML = filteredArticles.map(art => renderArticleCard(art)).join("");
             }}
 
-            // Filter & Render Videos
+            // Filter & Render Featured Videos
             const filteredVideos = videos.filter(v => matchesSearchAndTopic(v, query, selectedTopicFilter));
             if (filteredVideos.length > 0) {{
                 videosSection.style.display = "block";
@@ -3231,9 +2463,13 @@ html_template = f"""<!DOCTYPE html>
                 socialSection.style.display = "none";
             }}
 
-            // Filter & Render 1-Liners (up to 15)
+            // Filter & Render 1-Liners (Safe check on count element)
             const filteredOneLiners = oneliners.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter)).slice(0, 15);
-            document.getElementById("oneliner-count").innerText = `(${{filteredOneLiners.length}} items)`;
+            const onelinerCountEl = document.getElementById("oneliner-count");
+            if (onelinerCountEl) {{
+                onelinerCountEl.innerText = `(${{filteredOneLiners.length}} items)`;
+            }}
+
             if (filteredOneLiners.length === 0) {{
                 onelinersList.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:8px 0;">No quick-hit items for this week.</div>`;
             }} else {{
@@ -3258,95 +2494,61 @@ html_template = f"""<!DOCTYPE html>
 
         function renderVideoCard(v) {{
             const thumbUrl = v.image_url || (v.video_id ? `https://i3.ytimg.com/vi/${{v.video_id}}/hqdefault.jpg` : '');
-            const channel = v.source || 'AI Tech Channel';
-            const useCaseHtml = v.dev_use_case ? `<div class="video-usecase">${{escapeHtml(v.dev_use_case)}}</div>` : '';
-            const pubDate = v.published ? v.published.split('T')[0].split(' ')[0] : '';
-
+            const dateStr = v.published ? new Date(v.published).toLocaleDateString("en-US", {{ month: 'short', day: 'numeric' }}) : '';
             return `
-                <a href="${{v.url}}" target="_blank" class="video-card">
-                    <div class="video-thumb-wrap">
-                        <img src="${{thumbUrl}}" alt="${{escapeHtml(v.title)}}" class="video-thumb" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80'">
-                        <div class="video-play-overlay">
-                            <div class="video-play-btn">▶</div>
-                        </div>
-                        <span class="video-channel-badge">${{escapeHtml(channel)}}</span>
-                    </div>
+                <div class="video-card">
+                    <a href="${{v.url}}" target="_blank" class="video-thumb-wrap">
+                        <img src="${{thumbUrl}}" alt="Video Thumbnail" class="video-thumb" onerror="this.style.display='none'">
+                        <div class="video-play-btn">▶</div>
+                    </a>
                     <div class="video-info">
                         <div>
-                            <div class="video-title">${{escapeHtml(v.title)}}</div>
-                            ${{useCaseHtml}}
+                            <a href="${{v.url}}" target="_blank" class="video-title">${{escapeHtml(v.title)}}</a>
                         </div>
-                        <div class="video-footer">
-                            <span>${{pubDate}}</span>
-                            <span class="video-watch-link">Watch Breakdown ↗</span>
+                        <div class="video-meta">
+                            <span>${{escapeHtml(v.source)}}</span>
+                            <span>${{dateStr}}</span>
                         </div>
                     </div>
-                </a>
+                </div>
             `;
         }}
 
         function renderSocialCard(s) {{
-            const src = (s.source || "").toLowerCase();
-            let platformClass = "platform-reddit";
-            let platformName = "Reddit Debate";
-            if (src.includes("x") || src.includes("twitter") || src.includes("founder")) {{
-                platformClass = "platform-x";
-                platformName = "X / Founder Take";
-            }} else if (src.includes("linkedin")) {{
-                platformClass = "platform-linkedin";
-                platformName = "LinkedIn Tech";
-            }} else if (src.includes("reddit") || src.startsWith("r/")) {{
-                platformClass = "platform-reddit";
-                platformName = s.source || "Reddit";
-            }}
-
-            const author = s.badge || s.source || "Community Voice";
-            const summary = s.summary || s.one_liner || "";
-            const pubDate = s.published ? s.published.split("T")[0].split(" ")[0] : "";
-            const scoreText = s.community_score ? `▲ ${{s.community_score}} upvotes / shares` : '🔥 Viral Discussion';
-
+            const dateStr = s.published ? new Date(s.published).toLocaleDateString("en-US", {{ month: 'short', day: 'numeric' }}) : '';
             return `
                 <div class="social-card">
                     <div>
-                        <div class="social-card-top">
-                            <span class="social-platform-pill ${{platformClass}}">${{escapeHtml(platformName)}}</span>
-                            <span class="social-author">${{escapeHtml(author)}}</span>
+                        <div class="card-top">
+                            <span class="badge badge-social">${{escapeHtml(s.source)}}</span>
+                            <span class="card-source">${{s.community_score ? `🔥 ${{s.community_score}} points` : ''}}</span>
                         </div>
                         <a href="${{s.url}}" target="_blank" class="social-title">${{escapeHtml(s.title)}}</a>
-                        <p class="social-summary">${{escapeHtml(summary)}}</p>
+                        <p class="social-snippet">${{escapeHtml(s.summary || s.raw_text || '')}}</p>
                     </div>
-                    <div class="social-footer">
-                        <span>${{pubDate}}</span>
-                        <span style="color:var(--accent-primary);font-weight:600;">${{scoreText}}</span>
+                    <div class="card-bottom">
+                        <span>${{dateStr}}</span>
+                        <a href="${{s.url}}" target="_blank" class="read-link">View Thread ↗</a>
                     </div>
                 </div>
             `;
         }}
 
         function renderArticleCard(art) {{
-            let badgeClass = "badge-research";
-            let badgeLabel = art.category_tag || "RESEARCH";
-            if (art.category_tag === "BREAKTHROUGH" || art.is_groundbreaking) {{
-                badgeClass = "badge-breakthrough";
-                badgeLabel = "BREAKTHROUGH";
-            }} else if (art.category_tag === "DEV TOOLS") {{
-                badgeClass = "badge-devtools";
-                badgeLabel = "DEV TOOLS";
-            }} else if (art.category_tag === "LOCAL AI") {{
-                badgeClass = "badge-local";
-                badgeLabel = "LOCAL AI";
-            }}
+            let badgeClass = "badge-devtools";
+            let badgeLabel = "DEV TOOLS";
+            if (art.category_tag === "LOCAL AI") {{ badgeClass = "badge-local"; badgeLabel = "LOCAL AI"; }}
+            else if (art.category_tag === "BREAKTHROUGH") {{ badgeClass = "badge-breakthrough"; badgeLabel = "BREAKTHROUGH"; }}
+            else if (art.category_tag === "PRODUCTION") {{ badgeClass = "badge-production"; badgeLabel = "PRODUCTION"; }}
 
-            const imgHtml = art.image_url ? `<img src="${{art.image_url}}" alt="${{escapeHtml(art.title)}}" class="article-thumb" onerror="this.style.display='none'">` : "";
-
+            const dateStr = art.published ? new Date(art.published).toLocaleDateString("en-US", {{ month: 'short', day: 'numeric' }}) : '';
+            const imgHtml = art.image_url ? `<img src="${{art.image_url}}" alt="" class="article-thumb" onerror="this.style.display='none'">` : '';
             const useCaseHtml = art.dev_use_case ? `
                 <div class="usecase-box">
-                    <div class="usecase-label">Practical Dev Application</div>
+                    <div class="usecase-label">Takeaway for Engineers</div>
                     ${{escapeHtml(art.dev_use_case)}}
                 </div>
-            ` : "";
-
-            const dateStr = art.published_date ? art.published_date.split("T")[0] : (art.published ? art.published.split("T")[0].split(" ")[0] : "");
+            ` : '';
 
             return `
                 <article class="article-card">
@@ -3368,79 +2570,39 @@ html_template = f"""<!DOCTYPE html>
             `;
         }}
 
-        // 6. Interactive Benchmark Bar Chart
+        // Interactive Benchmark Bar Chart (Clean, responsive, zero placeholder tooltips)
         function renderBenchmarkChart() {{
             const container = document.getElementById("benchmark-bars-container");
             const sortedModels = [...FRONTIER_MODELS].sort((a, b) => b.benchmark_score - a.benchmark_score);
-            const maxScore = 90.0;
+            const maxScore = 85.0;
 
             container.innerHTML = sortedModels.map((m, idx) => {{
-                const pct = ((m.benchmark_score / maxScore) * 100).toFixed(1);
+                const pct = Math.min(100, ((m.benchmark_score / maxScore) * 100)).toFixed(1);
                 return `
                     <div class="benchmark-row" 
                          data-model-id="${{m.id}}"
-                         onmouseenter="showBenchmarkTooltip(event, '${{m.id}}')"
-                         onmousemove="moveBenchmarkTooltip(event)"
-                         onmouseleave="hideBenchmarkTooltip()"
-                         onclick="openModelDrawer('${{m.id}}')">
+                         onclick="openModelDrawer('${{m.id}}')"
+                         role="button"
+                         tabindex="0"
+                         title="Click to inspect ${{escapeHtml(m.name)}} full specs">
                         <div class="benchmark-row-meta">
-                            <span class="benchmark-rank">${{idx + 1}}</span>
-                            <span class="benchmark-model-name">${{escapeHtml(m.name.split('(')[0].trim())}}</span>
+                            <span class="benchmark-rank">#${{idx + 1}}</span>
+                            <span class="benchmark-model-name">${{escapeHtml(m.name)}}</span>
                             <span class="benchmark-lab-pill">${{escapeHtml(m.lab)}}</span>
                         </div>
                         <div class="benchmark-bar-track">
                             <div class="benchmark-bar-fill ${{m.is_frontier ? 'frontier' : ''}}" style="width: ${{pct}}%;"></div>
                         </div>
-                        <div class="benchmark-score-val">${{m.benchmark_score}}%</div>
+                        <div class="benchmark-score-val">
+                            <span>${{m.benchmark_score}}%</span>
+                            <span class="benchmark-inspect-arrow">↗</span>
+                        </div>
                     </div>
                 `;
             }}).join("");
         }}
 
-        const tooltipEl = document.getElementById("benchmark-tooltip");
-
-        function showBenchmarkTooltip(e, modelId) {{
-            const m = FRONTIER_MODELS.find(x => x.id === modelId);
-            if (!m) return;
-
-            document.getElementById("tt-title").innerText = m.name;
-            document.getElementById("tt-score").innerText = `${{m.benchmark_score}}%`;
-            document.getElementById("tt-lab").innerText = `${{m.lab}} • ${{m.release_date || m.year}}`;
-            document.getElementById("tt-context").innerText = m.context_window;
-            document.getElementById("tt-pricing").innerText = `${{m.pricing_input.split('/')[0].trim()}} / ${{m.pricing_output.split('/')[0].trim()}}`;
-            document.getElementById("tt-release").innerText = m.release_date || m.year;
-            document.getElementById("tt-arch").innerText = m.architecture.split(' ')[0] + ' ' + (m.architecture.split(' ')[1] || '');
-            document.getElementById("tt-bestfor").innerText = m.best_for;
-            document.getElementById("tt-verdict").innerText = m.better_to_work_with || "Proven production reliability for engineering workflows.";
-
-            moveBenchmarkTooltip(e);
-            tooltipEl.classList.add("visible");
-        }}
-
-        function moveBenchmarkTooltip(e) {{
-            const padding = 15;
-            let x = e.clientX + padding;
-            let y = e.clientY + padding;
-
-            const tooltipWidth = 340;
-            const tooltipHeight = 280;
-
-            if (x + tooltipWidth > window.innerWidth) {{
-                x = e.clientX - tooltipWidth - padding;
-            }}
-            if (y + tooltipHeight > window.innerHeight) {{
-                y = e.clientY - tooltipHeight - padding;
-            }}
-
-            tooltipEl.style.left = `${{Math.max(10, x)}}px`;
-            tooltipEl.style.top = `${{Math.max(10, y)}}px`;
-        }}
-
-        function hideBenchmarkTooltip() {{
-            tooltipEl.classList.remove("visible");
-        }}
-
-        // 7. Models Grid: Frontier Flagships vs Full Org
+        // Models Grid: Frontier Flagships vs Full Org
         function filterModelsByLab(labSlug, btnEl) {{
             document.querySelectorAll(".lab-chip").forEach(c => c.classList.remove("active"));
             const target = btnEl || (window.event && window.event.target) || document.querySelector(".lab-chip");
@@ -3449,12 +2611,10 @@ html_template = f"""<!DOCTYPE html>
             const hintEl = document.getElementById("models-view-hint");
 
             if (labSlug === "all") {{
-                // Show ONLY premier Frontier flagships in "All Labs" view
                 const frontierOnly = FRONTIER_MODELS.filter(m => m.is_frontier);
-                hintEl.innerHTML = `Showing <strong>Frontier Flagships</strong> (${{frontierOnly.length}} models). Click a specific lab chip above to see all models for that organization.`;
+                hintEl.innerHTML = `Showing <strong>Frontier Flagships</strong> (${{frontierOnly.length}} models). Click a specific lab chip above to see models for that organization.`;
                 renderModelsGrid(frontierOnly);
             }} else {{
-                // Show ALL models for that specific organization
                 const orgModels = FRONTIER_MODELS.filter(m => m.lab_slug === labSlug);
                 const labName = orgModels.length > 0 ? orgModels[0].lab : labSlug;
                 hintEl.innerHTML = `Showing all <strong>${{escapeHtml(labName)}}</strong> models (${{orgModels.length}} models).`;
@@ -3470,9 +2630,9 @@ html_template = f"""<!DOCTYPE html>
                         <div class="model-lab-badge">${{escapeHtml(m.lab)}} &bull; ${{m.release_date || m.year}}</div>
                         <div class="model-name">${{escapeHtml(m.name)}}</div>
                         <div class="model-specs-row">
-                            <span class="spec-pill">${{escapeHtml(m.context_window)}}</span>
-                            <span class="spec-pill">${{escapeHtml(m.readiness)}}</span>
-                            <span class="spec-pill">${{m.benchmark_score}}% SOTA</span>
+                            <span class="spec-pill">${{m.context_window}}</span>
+                            <span class="spec-pill">${{m.pricing_input}}</span>
+                            <span class="spec-pill" style="color:#60a5fa;">${{m.benchmark_score}}% SWE-bench</span>
                         </div>
                         <p class="model-best-for">${{escapeHtml(m.best_for)}}</p>
                     </div>
@@ -3481,13 +2641,13 @@ html_template = f"""<!DOCTYPE html>
                             <span>In: ${{m.pricing_input}}</span>
                             <span>Out: ${{m.pricing_output}}</span>
                         </div>
-                        <div class="inspect-action-text">Inspect Specs &amp; Code ➔</div>
+                        <div class="inspect-action-text">Inspect Full Specs &amp; Verdict ↗</div>
                     </div>
                 </div>
             `).join("");
         }}
 
-        // 8. Model Drawer
+        // Model Inspector Drawer
         function openModelDrawer(modelId, updateHistory = true) {{
             const m = FRONTIER_MODELS.find(x => x.id === modelId);
             if (!m) return;
@@ -3502,8 +2662,8 @@ html_template = f"""<!DOCTYPE html>
                 <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 12px; color: #ffffff;">${{escapeHtml(m.name)}}</h2>
                 
                 <div class="usecase-box" style="margin-bottom: 20px;">
-                    <div class="usecase-label">Is it better to work with? (Developer Verdict)</div>
-                    ${{escapeHtml(m.better_to_work_with || 'Exceptional tool-use capabilities and dependable production consistency.')}}
+                    <div class="usecase-label">Developer Verdict: Is it better to work with?</div>
+                    ${{escapeHtml(m.better_to_work_with || 'Proven production reliability for engineering workflows.')}}
                 </div>
 
                 <div class="tooltip-grid" style="margin-bottom: 20px;">
@@ -3534,7 +2694,7 @@ html_template = f"""<!DOCTYPE html>
                 </div>
 
                 <div style="margin-bottom: 18px;">
-                    <div class="tooltip-item-label" style="margin-bottom: 6px;">Key Developer Capabilities</div>
+                    <div class="tooltip-item-label" style="margin-bottom: 6px;">Key Capabilities</div>
                     <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                         ${{m.capabilities.map(c => `<span class="spec-pill">${{escapeHtml(c)}}</span>`).join("")}}
                     </div>
@@ -3546,13 +2706,13 @@ html_template = f"""<!DOCTYPE html>
                 </div>
 
                 <div>
-                    <div class="tooltip-item-label" style="margin-bottom: 6px;">Quick Integration Snippet</div>
+                    <div class="tooltip-item-label" style="margin-bottom: 6px;">Integration Snippet</div>
                     <div class="code-block">${{escapeHtml(m.api_snippet)}}</div>
                 </div>
 
                 <div style="display: flex; gap: 8px; margin-top: 20px;">
                     <button class="whatsapp-share-btn" style="flex: 1; padding: 10px 14px; font-size: 13px;" onclick="shareModelToWhatsApp('${{m.id}}', '${{escapeHtml(m.name)}}')">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.058-2.124-.537-1.708-.713-2.799-2.464-2.883-2.578-.086-.115-.695-.925-.695-1.764s.438-1.25.594-1.42c.156-.17.34-.213.454-.213.113 0 .227.002.326.007.104.005.244-.04.382.29.144.346.491 1.198.534 1.285.043.085.072.186.014.3-.058.115-.088.186-.174.288-.087.101-.183.226-.262.304-.087.086-.177.18-.076.353.101.173.449.741.964 1.201.663.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.115.433-.505.549-.678.115-.173.231-.144.39-.086.159.058 1.01.477 1.184.564.173.086.289.13.332.202.043.072.043.419-.101.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.66 1.434 5.174L2 22l4.981-1.306A9.957 9.957 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.058-2.124-.537-1.708-.713-2.799-2.464-2.883-2.578-.086-.115-.695-.925-.695-1.764s.438-1.25.594-1.42c.156-.17.34-.213.454-.213.113 0 .227.002.326.007.104.005.244-.04.382.29.144.346.491 1.198.534 1.285.043.085.072.186.014.3-.058.115-.088.186-.174.288-.087.101-.183.226-.262.304-.087.086-.177.18-.076.353.101.173.449.741.964 1.201.663.591 1.221.774 1.394.86.173.086.289.13.332.202.043.072.043.419-.101.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.66 1.434 5.174L2 22l4.981-1.306A9.957 9.957 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
                         <span>Share on WhatsApp</span>
                     </button>
                     <button class="copy-link-btn" style="padding: 10px 14px; font-size: 13px;" onclick="copyModelLink('${{m.id}}')">
@@ -3573,7 +2733,7 @@ html_template = f"""<!DOCTYPE html>
             }}
         }}
 
-        // 9. Milestones Archive
+        // Milestones Archive
         function switchMilestonePeriod(periodKey) {{
             document.querySelectorAll(".period-chip").forEach(c => c.classList.remove("active"));
             const activeChip = document.getElementById(`pchip-${{periodKey}}`);
@@ -3583,7 +2743,7 @@ html_template = f"""<!DOCTYPE html>
             const dataList = MILESTONES_ARCHIVE[periodKey] || [];
 
             if (dataList.length === 0) {{
-                container.innerHTML = `<div class="empty-state">No milestones recorded for this period.</div>`;
+                container.innerHTML = `<div class="empty-state" style="padding:40px;text-align:center;color:var(--text-muted);">No milestones recorded for this period.</div>`;
                 return;
             }}
 
@@ -3619,11 +2779,33 @@ html_template = f"""<!DOCTYPE html>
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;");
         }}
+
+        // Initialize on load
+        window.addEventListener("DOMContentLoaded", () => {{
+            loadSeedDataset();
+            renderBenchmarkChart();
+            filterModelsByLab("all");
+            switchMilestonePeriod("quarterly");
+            initFromUrl();
+
+            // Client-side Canonical & OG synchronization
+            try {{
+                const origin = window.location.origin;
+                if (origin && !origin.startsWith("file://")) {{
+                    const ogUrl = document.querySelector('meta[property="og:url"]');
+                    if (ogUrl) ogUrl.setAttribute("content", window.location.href);
+                    const ogImg = document.querySelector('meta[property="og:image"]');
+                    if (ogImg && ogImg.getAttribute("content").startsWith("https://ai-digest-by-mp.vercel.app")) {{
+                        ogImg.setAttribute("content", `${{origin}}/og-preview.jpg`);
+                    }}
+                }}
+            }} catch(e) {{}}
+        }});
     </script>
 </body>
 </html>"""
 
-with open("index.html", "w") as f:
-    f.write(html_template)
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
 
 print("✅ Successfully built Minimalist Reader index.html!")

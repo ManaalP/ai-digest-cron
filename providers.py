@@ -22,13 +22,11 @@ raw excerpt, respond with ONLY a JSON object, no preamble, no markdown fences:
 {"summary": "...", "entities": ["...", "..."]}
 
 Rules for "summary":
-- 100 to 200 words, plain prose, no headers or bullet points.
-- Write it yourself in your own words; never copy sentences verbatim from \
-the excerpt.
-- Be concrete: what was released/claimed/found, by whom, and why it matters \
-to an ML practitioner. Skip marketing language.
-- If the excerpt is too thin to summarize meaningfully, say so plainly in \
-under 40 words instead of padding.
+- Exactly 90 to 110 words (target uniform 100 words), plain prose, no headers or bullet points.
+- Uniform technical format: 1) What was released/discovered and by whom, 2) Core architecture/mechanics, 3) Concrete engineering impact.
+- Write it yourself in your own words; never copy sentences verbatim from the excerpt.
+- Skip promotional and marketing fluff; focus on technical substance, benchmarks, and practical developer takeaways.
+- If the excerpt is too thin to summarize meaningfully, state that plainly in under 40 words instead of padding.
 
 Rules for "entities":
 - 2 to 6 short strings identifying the specific things this item is about: \

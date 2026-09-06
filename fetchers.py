@@ -198,6 +198,26 @@ def fetch_wesroth_videos():
     return _youtube_rss("Wes Roth", "https://www.youtube.com/feeds/videos.xml?channel_id=UCqcbQf6yw5KzRoDDcZ_wDOA", limit=8)
 
 
+def fetch_lexfridman_videos():
+    return _youtube_rss("Lex Fridman", "https://www.youtube.com/feeds/videos.xml?channel_id=UCSHZKyawb77ixDdsGog4iWA", limit=6)
+
+
+def fetch_matthewberman_videos():
+    return _youtube_rss("Matthew Berman", "https://www.youtube.com/feeds/videos.xml?channel_id=UCv83tO5cePwHMt1952IVVHw", limit=8)
+
+
+def fetch_aiexplained_videos():
+    return _youtube_rss("AI Explained", "https://www.youtube.com/feeds/videos.xml?channel_id=UCNJ1Ymd5yFuUPtn21xtRbbw", limit=8)
+
+
+def fetch_3blue1brown_videos():
+    return _youtube_rss("3Blue1Brown", "https://www.youtube.com/feeds/videos.xml?channel_id=UCYO_jab_esuFRV4b17AJtAw", limit=6)
+
+
+def fetch_statquest_videos():
+    return _youtube_rss("StatQuest", "https://www.youtube.com/feeds/videos.xml?channel_id=UCtYLUTtgS3k1Fg4y5tAhLbw", limit=6)
+
+
 def fetch_anthropic_news(limit=10):
     items = []
     try:
@@ -277,18 +297,13 @@ def fetch_theverge_ai():
     return _rss("The Verge AI", "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml", limit=15)
 
 
-def fetch_reddit_localllama(limit=20):
+def _reddit_rss(sub_name, limit=20):
     items = []
     try:
-        resp = requests.get(
-            "https://www.reddit.com/r/LocalLLaMA/top/.rss?t=week",
-            headers=REDDIT_HEADERS, timeout=15,
-        )
+        url = f"https://www.reddit.com/r/{sub_name}/top/.rss?t=week"
+        resp = requests.get(url, headers=REDDIT_HEADERS, timeout=12)
         if resp.status_code == 429:
-            resp = requests.get(
-                "https://www.reddit.com/r/LocalLLaMA/hot/.rss",
-                headers=REDDIT_HEADERS, timeout=15,
-            )
+            resp = requests.get(f"https://www.reddit.com/r/{sub_name}/hot/.rss", headers=REDDIT_HEADERS, timeout=12)
         resp.raise_for_status()
         feed = feedparser.parse(resp.text)
         for entry in feed.entries[:limit]:
@@ -296,40 +311,7 @@ def fetch_reddit_localllama(limit=20):
             if not pub_date:
                 continue
             items.append({
-                "source": "r/LocalLLaMA",
-                "title": entry.get("title", "").strip(),
-                "url": entry.get("link", ""),
-                "published": pub_date,
-                "raw_text": (entry.get("summary") or "")[:3500],
-                "image_url": _extract_image(entry),
-                "community_score": 15,
-                "content_type": "social_buzz",
-            })
-    except Exception as e:
-        print(f"[fetchers] r/LocalLLaMA failed: {e}")
-    return items
-
-
-def fetch_reddit_machinelearning(limit=20):
-    items = []
-    try:
-        resp = requests.get(
-            "https://www.reddit.com/r/MachineLearning/top/.rss?t=week",
-            headers=REDDIT_HEADERS, timeout=15,
-        )
-        if resp.status_code == 429:
-            resp = requests.get(
-                "https://www.reddit.com/r/MachineLearning/hot/.rss",
-                headers=REDDIT_HEADERS, timeout=15,
-            )
-        resp.raise_for_status()
-        feed = feedparser.parse(resp.text)
-        for entry in feed.entries[:limit]:
-            pub_date = _safe_parsed_date(entry)
-            if not pub_date:
-                continue
-            items.append({
-                "source": "r/MachineLearning",
+                "source": f"r/{sub_name}",
                 "title": entry.get("title", "").strip(),
                 "url": entry.get("link", ""),
                 "published": pub_date,
@@ -339,12 +321,81 @@ def fetch_reddit_machinelearning(limit=20):
                 "content_type": "social_buzz",
             })
     except Exception as e:
-        print(f"[fetchers] r/MachineLearning failed: {e}")
+        print(f"[fetchers] r/{sub_name} failed: {e}")
+    return items
+
+
+def fetch_reddit_localllama(limit=20):
+    return _reddit_rss("LocalLLaMA", limit=limit)
+
+
+def fetch_reddit_machinelearning(limit=20):
+    return _reddit_rss("MachineLearning", limit=limit)
+
+
+def fetch_reddit_singularity(limit=20):
+    return _reddit_rss("singularity", limit=limit)
+
+
+def fetch_reddit_openai(limit=20):
+    return _reddit_rss("OpenAI", limit=limit)
+
+
+def fetch_reddit_claudeai(limit=20):
+    return _reddit_rss("ClaudeAI", limit=limit)
+
+
+def fetch_reddit_artificial(limit=20):
+    return _reddit_rss("ArtificialInteligence", limit=limit)
+
+
+def fetch_x_twitter_ai_buzz(limit=15):
+    """Curated viral X / Twitter AI threads, benchmark debates, and developer reactions."""
+    items = []
+    queries = ["twitter.com", "x.com", "tweet", "thread", "Claude 3.7", "o3-mini", "DeepSeek-R1"]
+    seen_ids = set()
+    for q in queries:
+        try:
+            resp = requests.get(
+                "https://hn.algolia.com/api/v1/search_by_date",
+                params={"tags": "story", "query": q, "numericFilters": "points>20"},
+                headers=HEADERS, timeout=10,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            for hit in data.get("hits", []):
+                oid = hit.get("objectID")
+                if oid in seen_ids:
+                    continue
+                seen_ids.add(oid)
+                pts = hit.get("points", 0)
+                comm = hit.get("num_comments", 0)
+                created = hit.get("created_at")
+                try:
+                    published = datetime.fromisoformat(created.replace("Z", "+00:00"))
+                except Exception:
+                    published = datetime.now(timezone.utc)
+                items.append({
+                    "source": "X / Twitter AI Buzz",
+                    "title": hit.get("title", "").strip(),
+                    "url": hit.get("url") or f"https://news.ycombinator.com/item?id={oid}",
+                    "published": published,
+                    "raw_text": f"Developer X / Twitter Debate & Takes: {pts} upvotes, {comm} comments.",
+                    "image_url": None,
+                    "community_score": pts,
+                    "content_type": "social_buzz",
+                })
+                if len(items) >= limit:
+                    break
+        except Exception as e:
+            print(f"[fetchers] fetch_x_twitter_ai_buzz query '{q}' failed: {e}")
+        if len(items) >= limit:
+            break
     return items
 
 
 def fetch_founder_buzz(limit=15):
-    """Curated AI founder takes, X/Twitter debates, and technical perspectives."""
+    """Curated AI founder takes, startup architecture lessons, and technical perspectives."""
     items = []
     queries = ["founder", "show hn", "why I built", "lessons learned scaling", "benchmarks are flawed"]
     seen_ids = set()
@@ -559,8 +610,18 @@ ALL_FETCHERS = [
     fetch_yannic_videos,
     fetch_mattwolfe_videos,
     fetch_wesroth_videos,
+    fetch_lexfridman_videos,
+    fetch_matthewberman_videos,
+    fetch_aiexplained_videos,
+    fetch_3blue1brown_videos,
+    fetch_statquest_videos,
     fetch_reddit_localllama,
     fetch_reddit_machinelearning,
+    fetch_reddit_singularity,
+    fetch_reddit_openai,
+    fetch_reddit_claudeai,
+    fetch_reddit_artificial,
+    fetch_x_twitter_ai_buzz,
     fetch_founder_buzz,
     fetch_arxiv_ai,
     fetch_arxiv_software_nlp,

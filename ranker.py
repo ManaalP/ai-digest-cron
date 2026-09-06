@@ -386,41 +386,35 @@ def rank_and_structure_weekly_digest(raw_items: list, start_date: str = None, en
     scored = [score_and_classify_article(it) for it in verified_items]
     scored.sort(key=lambda x: (x["score"], x["published"] or datetime.min.replace(tzinfo=timezone.utc)), reverse=True)
 
-    # 2. Segregate Videos
+    # 2. Segregate Videos (Increased capacity for YouTube deep dives)
     videos = [a for a in scored if is_video(a)]
     videos.sort(key=lambda x: x["published"] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
-    selected_videos = videos[:8]
+    selected_videos = videos[:12]
     video_urls = {v["url"] for v in selected_videos}
 
-    # 3. Segregate Social Media Buzz & Founder Takes
+    # 3. Segregate Social Media Buzz, X / Twitter & Reddit (Increased capacity)
     social_items = [a for a in scored if is_social_media(a) and a["url"] not in video_urls]
     social_items.sort(key=lambda x: (x.get("community_score", 0), x["score"]), reverse=True)
-    selected_social_buzz = social_items[:10]
+    selected_social_buzz = social_items[:16]
 
     # 4. Pick Top 10 Featured Articles:
-    # RULE: strictly at most 1 Reddit / social media item in top_articles!
+    # STRICT RULE: ONLY genuine in-depth technical articles, papers, official announcements, and newsletters.
+    # Absolutely NO YouTube videos, NO tweets/X, and NO Reddit posts in the main articles section!
     top_articles = []
     top_article_urls = set()
-    social_in_top = 0
 
-    groundbreaking = [a for a in scored if a["is_groundbreaking"] and not is_social_media(a) and a["url"] not in video_urls]
-    for g in groundbreaking[:2]:
+    groundbreaking = [a for a in scored if a["is_groundbreaking"] and not is_social_media(a) and not is_video(a)]
+    for g in groundbreaking[:3]:
         top_articles.append(g)
         top_article_urls.add(g["url"])
 
     for a in scored:
         if len(top_articles) >= 10:
             break
-        if a["url"] in top_article_urls or a["url"] in video_urls:
+        if a["url"] in top_article_urls or is_video(a) or is_social_media(a):
             continue
-        if is_social_media(a):
-            if social_in_top < 1:  # At most 1 social media / Reddit post in main articles
-                top_articles.append(a)
-                top_article_urls.add(a["url"])
-                social_in_top += 1
-        else:
-            top_articles.append(a)
-            top_article_urls.add(a["url"])
+        top_articles.append(a)
+        top_article_urls.add(a["url"])
 
     # 5. Pick Quick-Hit 1-Liners (15 items)
     # Here, more Reddit, founder takes, and short tech updates are permitted and prioritized
