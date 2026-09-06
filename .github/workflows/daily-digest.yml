@@ -1,11 +1,10 @@
-name: Daily AI Digest
+name: Weekly AI Digest
 
 on:
   schedule:
-    # 7:13 AM UTC daily. Deliberately off the hour/half-hour -- GitHub
-    # deprioritizes scheduled runs at round times (00, 15, 30, 45) under load.
-    - cron: "13 7 * * *"
-  workflow_dispatch: {}   # lets you click "Run workflow" manually to test
+    # 7:13 AM UTC every Sunday (12:43 PM IST Sunday). Off the hour to avoid runner congestion.
+    - cron: "13 7 * * 0"
+  workflow_dispatch: {}   # lets you click "Run workflow" manually to test remotely
 
 jobs:
   digest:
@@ -23,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run digest
+      - name: Run weekly digest
         env:
           PROVIDER_PRIORITY: ${{ vars.PROVIDER_PRIORITY || 'google,anthropic,openai' }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -33,16 +32,8 @@ jobs:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           GOOGLE_MODEL: ${{ vars.GOOGLE_MODEL || 'gemini-3.6-flash' }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+          RETENTION_DAYS: "28"
           MAX_ARTICLES_PER_RUN: "15"
-          LOOKBACK_HOURS: "26"
-          CONTINUATION_LOOKBACK_DAYS: "21"
-          CONTINUATION_SIMILARITY_THRESHOLD: "0.34"
         run: python main.py
 
       - name: Commit and push updated web app & seed dataset
@@ -50,5 +41,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add seed_7days.json index.html
-          git diff --staged --quiet || (git commit -m "Auto-update 7-day digest and web app [skip ci]" && git push || echo "Push skipped or branch protected")
+          git diff --staged --quiet || (git commit -m "Auto-update weekly AI digest and web app [skip ci]" && git push || echo "Push skipped or branch protected")
 

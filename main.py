@@ -15,7 +15,6 @@ from dotenv import load_dotenv
 from db import get_db
 from fetchers import fetch_all
 from summarizer import MultiProviderSummarizer
-from emailer import send_email
 
 load_dotenv()
 
@@ -89,12 +88,11 @@ def main():
         print("[main] --reset requested: Purging old database records...")
         db.purge_all_articles()
 
-    # Configurable retention window (defaults to 1 day when --yesterday or --one-day-only is passed)
-    retention_days_default = "1" if "--yesterday" in sys.argv or "--one-day-only" in sys.argv else "7"
+    # Retention window defaults to 28 days (4 full rolling weeks)
     try:
-        retention_days = int(env("RETENTION_DAYS", retention_days_default))
+        retention_days = int(env("RETENTION_DAYS", "28"))
     except (TypeError, ValueError):
-        retention_days = 7
+        retention_days = 28
 
     for arg in sys.argv:
         if arg.startswith("--retention-days="):
@@ -116,50 +114,47 @@ def main():
     else:
         print("[main] No LLM API keys configured -- using built-in extractive ranking & developer impact engine.")
 
-    from ranker import rank_and_structure_digest
+    from ranker import get_weekly_windows, rank_and_structure_weekly_digest, is_social_media, is_video
 
     raw_items = fetch_all()
-    print(f"[main] Fetched {len(raw_items)} raw items across all sources.")
+    print(f"[main] Fetched {len(raw_items)} raw items across all news, research, video, and social sources.")
 
-    # Filter out URLs already stored in DB using high-speed batch check
+    # High-speed batch unseen URL check
     all_urls = [it["url"] for it in raw_items if it.get("url")]
     unseen_set = db.filter_unseen_urls(all_urls) if hasattr(db, "filter_unseen_urls") else {u for u in all_urls if not db.url_exists(u)}
     fresh_unseen = [it for it in raw_items if it.get("url") in unseen_set]
 
-    # Parse command line date targets if specified
-    target_date = None
-    if "--yesterday" in sys.argv:
-        target_date = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
-        print(f"[main] Target date set to completed previous day: {target_date}")
-    elif "--today" in sys.argv:
-        target_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        print(f"[main] Target date set to today: {target_date}")
-    else:
-        for arg in sys.argv:
-            if arg.startswith("--date="):
-                target_date = arg.split("=", 1)[1].strip()
-                print(f"[main] Target date explicitly set to: {target_date}")
-                break
+    # Calculate weekly windows (Week 1 = Aug 30 - Sep 05, 2026 for reference date 2026-09-06)
+    weekly_windows = get_weekly_windows()
+    target_week = weekly_windows[0]
+    for arg in sys.argv:
+        if arg.startswith("--week-index="):
+            try:
+                idx = int(arg.split("=", 1)[1])
+                if 0 <= idx < len(weekly_windows):
+                    target_week = weekly_windows[idx]
+            except ValueError:
+                pass
 
-    # If no target date specified, default strictly to today's date for 1-day isolation
-    if not target_date and "--all-recent" not in sys.argv:
-        target_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        print(f"[main] Defaulting strictly to current calendar day: {target_date}")
+    print(f"[main] Target weekly edition: {target_week['short_label']} ({target_week['start']} to {target_week['end']})")
 
-    # Structure into Highlights, Top 10, and 1-Liners (strict 24h window or target date)
-    digest_data = rank_and_structure_digest(fresh_unseen, lookback_hours=lookback_hours, target_date=target_date)
-    top_articles = digest_data["top_10"]
+    # Structure weekly digest
+    digest_data = rank_and_structure_weekly_digest(
+        fresh_unseen,
+        start_date=target_week["start"],
+        end_date=target_week["end"]
+    )
+
+    top_articles = digest_data.get("top_articles", [])
+    videos = digest_data.get("videos", [])
+    social_buzz = digest_data.get("social_buzz", [])
     one_liners = digest_data.get("one_liners", [])
 
-    if not top_articles and not one_liners:
-        print("[main] Database is already up to date with latest 24h articles.")
-        return
+    print(f"[main] Storing {len(top_articles)} articles, {len(videos)} videos, {len(social_buzz)} social items, {len(one_liners)} quick-hits in database...")
 
-    print(f"[main] Storing {len(top_articles)} featured and {len(one_liners)} quick-hit articles in database...")
-
-    # Process and store featured top articles
+    # 1. Process and store Top Articles (with optional LLM summarization)
     for item in top_articles:
-        if summarizer:
+        if summarizer and not is_social_media(item):
             try:
                 result = summarizer.summarize(item["title"], item.get("raw_text", ""), item["source"])
                 item["summary"] = result.get("summary") or item.get("summary")
@@ -186,9 +181,59 @@ def main():
             image_url=item.get("image_url"),
             dev_use_case=item.get("dev_use_case"),
             one_liner=item.get("one_liner"),
+            content_type=item.get("content_type", "article"),
+            week_id=target_week["id"],
+            week_label=target_week["label"],
+            video_id=item.get("video_id"),
         )
 
-    # Also store remaining quick-hit 1-liners so the web app has full coverage for the day
+    # 2. Process and store Videos
+    for item in videos:
+        db.insert_article(
+            source=item["source"],
+            title=item["title"],
+            url=item["url"],
+            published_date=item["published"].isoformat() if item.get("published") else "",
+            summary=item.get("raw_text", ""),
+            entities=item.get("entities", []),
+            parent_id=None,
+            category="🎥 AI Video Breakdown",
+            category_tag="VIDEO",
+            dev_impact_score=item.get("dev_impact_score", 80),
+            is_groundbreaking=False,
+            image_url=item.get("image_url"),
+            dev_use_case=item.get("dev_use_case", "Watch technical breakdown and architecture walkthrough."),
+            one_liner=item.get("one_liner", item.get("title")),
+            content_type="video",
+            week_id=target_week["id"],
+            week_label=target_week["label"],
+            video_id=item.get("video_id"),
+        )
+
+    # 3. Process and store Social Media Buzz & Founder Takes
+    for item in social_buzz:
+        db.insert_article(
+            source=item["source"],
+            title=item["title"],
+            url=item["url"],
+            published_date=item["published"].isoformat() if item.get("published") else "",
+            summary=item.get("raw_text", ""),
+            entities=item.get("entities", []),
+            parent_id=None,
+            category="💬 Community Buzz & Founder Takes",
+            category_tag="SOCIAL",
+            dev_impact_score=item.get("dev_impact_score", 70),
+            is_groundbreaking=False,
+            image_url=item.get("image_url"),
+            dev_use_case="Real-world practitioner discussions, model quirks, and founder perspectives.",
+            one_liner=item.get("one_liner", item.get("title")),
+            content_type="social_buzz",
+            week_id=target_week["id"],
+            week_label=target_week["label"],
+            video_id=None,
+        )
+
+    # 4. Process and store Quick-Hit 1-Liners (up to 15)
     for item in one_liners:
         db.insert_article(
             source=item["source"],
@@ -205,9 +250,14 @@ def main():
             image_url=item.get("image_url"),
             dev_use_case=item.get("dev_use_case"),
             one_liner=item.get("one_liner"),
+            content_type=item.get("content_type", "article"),
+            week_id=target_week["id"],
+            week_label=target_week["label"],
+            video_id=item.get("video_id"),
         )
 
-    print(f"[main] Database successfully updated with {len(top_articles) + len(one_liners)} fresh articles.")
+    total_added = len(top_articles) + len(videos) + len(social_buzz) + len(one_liners)
+    print(f"[main] Database successfully updated with {total_added} weekly items.")
 
     # Automatically sync seed_7days.json and rebuild index.html
     try:
@@ -215,20 +265,9 @@ def main():
         export_db_to_seed(db)
         import subprocess
         subprocess.run([sys.executable, "build_webapp.py"], check=True)
-        print("[main] Automatically refreshed seed_7days.json and rebuilt index.html.")
+        print("[main] Automatically refreshed 4-week seed dataset and rebuilt index.html.")
     except Exception as e:
-        print(f"[main] Web app auto-build warning: {e}")
-
-    # Email notification (if SMTP credentials are provided)
-    if smtp_host and smtp_username and smtp_password and email_from and email_to:
-        try:
-            send_email(smtp_host, smtp_port, smtp_username, smtp_password,
-                       email_from, email_to, digest_data)
-            print(f"[main] Sent email digest to {email_to}.")
-        except Exception as e:
-            print(f"[main] Email delivery skipped/failed: {e}")
-    else:
-        print("[main] SMTP credentials not provided; skipping email delivery. Database updated for web app.")
+        print(f"[main] Web app auto-build notice: {e}")
 
 
 if __name__ == "__main__":
@@ -238,9 +277,10 @@ if __name__ == "__main__":
     else:
         main()
 
-# Top-level handler for Vercel/serverless environments if inspected
+
 def handler(request=None, response=None):
-    return {"status": "ok", "message": "AI Pulse Cron CLI"}
+    return {"status": "ok", "message": "Weekly AI Digest Cron"}
+
 
 app = handler
 

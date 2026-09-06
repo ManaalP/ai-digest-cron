@@ -19,14 +19,20 @@ CREATE TABLE IF NOT EXISTS articles (
     image_url TEXT,
     entities JSONB DEFAULT '[]'::jsonb,
     parent_id INTEGER REFERENCES articles (id) ON DELETE SET NULL,
-    sent_at TIMESTAMPTZ
+    sent_at TIMESTAMPTZ,
+    content_type TEXT DEFAULT 'article',
+    week_id TEXT,
+    week_label TEXT,
+    video_id TEXT
 );
 
--- 2. Indexes for fast 7-day calendar querying and continuation tracking
+-- 2. Indexes for fast calendar & weekly querying and continuation tracking
 CREATE INDEX IF NOT EXISTS idx_articles_published_date ON articles (published_date DESC);
 CREATE INDEX IF NOT EXISTS idx_articles_fetched_at ON articles (fetched_at DESC);
 CREATE INDEX IF NOT EXISTS idx_articles_category ON articles (category_tag);
 CREATE INDEX IF NOT EXISTS idx_articles_groundbreaking ON articles (is_groundbreaking);
+CREATE INDEX IF NOT EXISTS idx_articles_content_type ON articles (content_type);
+CREATE INDEX IF NOT EXISTS idx_articles_week_id ON articles (week_id);
 
 -- GIN index for fast JSONB entity intersection matching (continuation linking)
 CREATE INDEX IF NOT EXISTS idx_articles_entities_gin ON articles USING gin (entities);
@@ -41,22 +47,21 @@ CREATE POLICY "Allow anonymous read access"
     TO anon, authenticated
     USING (true);
 
--- 4. Automatic 7-day retention cleanup function
--- Automatically deletes articles older than 7 days to maintain a clean 7-day rolling window
-CREATE OR REPLACE FUNCTION purge_articles_older_than_7_days()
+-- 4. Automatic 28-day retention cleanup function (4 full rolling weeks)
+CREATE OR REPLACE FUNCTION purge_articles_older_than_28_days()
 RETURNS INTEGER AS $$
 DECLARE
     deleted_count INTEGER;
 BEGIN
     DELETE FROM articles
-    WHERE published_date < (NOW() - INTERVAL '7 days');
+    WHERE published_date < (NOW() - INTERVAL '28 days');
     GET DIAGNOSTICS deleted_count = ROW_COUNT;
     RETURN deleted_count;
 END;
 $$ LANGUAGE plpgsql;
 
--- 5. Helper view for frontend past 7 days calendar feed
-CREATE OR REPLACE VIEW recent_7_days_articles AS
+-- 5. Helper view for frontend past 4 weeks feed
+CREATE OR REPLACE VIEW recent_4_weeks_articles AS
 SELECT 
     id,
     source,
@@ -73,7 +78,15 @@ SELECT
     is_groundbreaking,
     image_url,
     entities,
-    parent_id
+    parent_id,
+    content_type,
+    week_id,
+    week_label,
+    video_id
 FROM articles
-WHERE published_date >= (NOW() - INTERVAL '7 days')
+WHERE published_date >= (NOW() - INTERVAL '28 days')
 ORDER BY is_groundbreaking DESC, dev_impact_score DESC, published_date DESC;
+
+-- Backward-compatibility view alias
+CREATE OR REPLACE VIEW recent_7_days_articles AS
+SELECT * FROM recent_4_weeks_articles;

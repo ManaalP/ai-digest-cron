@@ -27,7 +27,10 @@ load_dotenv()
 
 from fetchers import fetch_all, ALL_FETCHERS
 from ranker import rank_and_structure_digest
-from emailer import build_digest_html
+
+def build_digest_html(digest_data):
+    top = "".join(f"<li><a href='{a.get('url')}'><b>{a.get('title')}</b></a> ({a.get('source')})<p>{a.get('summary')}</p></li>" for a in digest_data.get("top_articles", []))
+    return f"<ul>{top}</ul>"
 
 
 class InMemoryDigestDB:

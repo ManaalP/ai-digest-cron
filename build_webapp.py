@@ -14,7 +14,7 @@ Features:
       * Release Date
       * Developer Verdict: "Is it better to work with?"
   - Frontier vs Full Org filtering:
-      * "All Labs": Shows ONLY true Frontier flagships (GPT-6, Fable 5.1, OpenAI o3, Claude 3.7 Sonnet, Gemini 3.8 Flash, DeepSeek-R1, Llama 4, Grok 3 Think).
+      * "All Labs": Shows ONLY true Frontier flagships (GPT-6, Fable 5.1, OpenAI o3, Claude 5 Sonnet, Gemini 3.8 Flash, DeepSeek-R1, Llama 4, Grok 3 Think).
       * Org chips (OpenAI, Anthropic, Google, DeepSeek, Meta, xAI, Alibaba, Mistral): Shows ALL models for that organization.
   - Completely unbiased 3-Year Milestones Archive (2023–2026) across OpenAI, Anthropic, DeepSeek, Meta, Open Source, and Google.
   - Supabase live synchronization with clean auto-detection.
@@ -47,10 +47,10 @@ MILESTONES_ARCHIVE = {
                     "impact": "Sets new SOTA across SWE-bench Verified and competitive algorithmic benchmarks."
                 },
                 {
-                    "title": "Claude 3.7 Sonnet & Fable 5.1 Autonomous Engineering",
+                    "title": "Claude 5 Sonnet & Fable 5.1 Autonomous Engineering",
                     "lab": "Anthropic",
-                    "capability": "Introduces continuous dynamic thinking budgets and end-to-end autonomous terminal repository refactoring.",
-                    "date": "Early-Mid 2026",
+                    "capability": "Introduces 88.6% SWE-bench Verified coding SOTA and continuous dynamic thinking budgets for autonomous terminal refactoring.",
+                    "date": "August 2026",
                     "impact": "Software engineering moves from code autocomplete to autonomous agent pair-programmers."
                 },
                 {
@@ -143,10 +143,18 @@ MILESTONES_ARCHIVE = {
     ],
     "half_yearly": [
         {
+            "period": "2026 H2",
+            "top3": [
+                { "title": "Claude 5 Sonnet & Frontier Autonomous Coding", "lab": "Anthropic", "capability": "88.6% SWE-bench Verified coding flagship with dynamic thinking budget.", "date": "Aug 2026" },
+                { "title": "GPT-6 Frontier Multimodal GA", "lab": "OpenAI", "capability": "Massive dense multimodal scaling across vision, voice, and code.", "date": "Aug 2026" },
+                { "title": "Scal3R Zero-Shot Spatial Reconstruction", "lab": "Research / HF", "capability": "Instant uncalibrated 3D multi-view reconstruction.", "date": "Sep 2026" }
+            ]
+        },
+        {
             "period": "2026 H1",
             "top3": [
                 { "title": "GPT-6 Frontier Architecture Preview", "lab": "OpenAI", "capability": "Native multi-hour reasoning and autonomous code synthesis.", "date": "May 2026" },
-                { "title": "Claude 3.7 Sonnet Dynamic Extended Thinking", "lab": "Anthropic", "capability": "Hybrid deliberate reasoning budget in production APIs.", "date": "Feb 2026" },
+                { "title": "Claude 5 Sonnet Preview & Extended Thinking", "lab": "Anthropic", "capability": "Hybrid deliberate reasoning budget in production APIs.", "date": "Jun 2026" },
                 { "title": "DeepSeek-R1 Open MoE 671B Weights Release", "lab": "DeepSeek", "capability": "Open reasoning parity with closed US models.", "date": "Jan 2026" }
             ]
         },
@@ -185,9 +193,17 @@ MILESTONES_ARCHIVE = {
     ],
     "quarterly": [
         {
+            "period": "2026 Q3",
+            "top3": [
+                { "title": "Claude 5 Sonnet Frontier Coding Launch", "lab": "Anthropic", "capability": "88.6% SWE-bench Verified with dynamic thinking dial.", "date": "Aug 2026" },
+                { "title": "GPT-6 Frontier Architecture Release", "lab": "OpenAI", "capability": "Native multi-hour reasoning and autonomous code synthesis.", "date": "Aug 2026" },
+                { "title": "Base-3 Ternary GGUF Packing (-22% VRAM)", "lab": "LocalLLaMA", "capability": "Lossless ternary quantization running 27B models on 12GB VRAM.", "date": "Sep 2026" }
+            ]
+        },
+        {
             "period": "2026 Q1",
             "top3": [
-                { "title": "Claude 3.7 Sonnet (Hybrid Thinking)", "lab": "Anthropic", "capability": "Developer-tunable thinking tokens from 0 to 64K.", "date": "Feb 2026" },
+                { "title": "Claude 3.7 Sonnet (Hybrid Thinking)", "lab": "Anthropic", "capability": "Early 2026 developer-tunable thinking tokens from 0 to 64K.", "date": "Feb 2026" },
                 { "title": "DeepSeek-R1 Open MoE Launch", "lab": "DeepSeek", "capability": "Open weights reasoning at $0.55/1M.", "date": "Jan 2026" },
                 { "title": "Grok 3 Colossus Supercluster Deployment", "lab": "xAI", "capability": "Trained on 100K H100/H200 cluster with high throughput.", "date": "Feb 2026" }
             ]
@@ -226,6 +242,11 @@ MILESTONES_ARCHIVE = {
         }
     ],
     "monthly": [
+        { "period": "2026-08", "top3": [
+            { "title": "Claude 5 Sonnet Frontier GA", "lab": "Anthropic", "capability": "88.6% SWE-bench Verified with dynamic thinking dial.", "date": "2026-08-20" },
+            { "title": "GPT-6 Multimodal Frontier Launch", "lab": "OpenAI", "capability": "Massive multimodal model with multi-hour autonomy.", "date": "2026-08-15" },
+            { "title": "Fable 5.1 Autonomous DevOps Core", "lab": "Anthropic", "capability": "Repo-wide autonomous debugging and self-healing tests.", "date": "2026-08-05" }
+        ]},
         { "period": "2026-03", "top3": [
             { "title": "Gemini 3.8 Flash General Availability", "lab": "Google DeepMind", "capability": "Sub-200ms 1M context multimodal reasoning.", "date": "2026-03-01" },
             { "title": "Qwen 3.8 27B Workstation Optimization", "lab": "Alibaba", "capability": "Ternary base-3 packing reducing VRAM by 22%.", "date": "2026-03-04" },
@@ -403,28 +424,28 @@ FRONTIER_MODELS = [
         "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='fable-5.1',\n    max_tokens=64000,\n    messages=[{'role': 'user', 'content': 'Resolve issues in PR #402'}]\n)"
     },
     {
-        "id": "claude-3-7-sonnet",
-        "name": "Claude 3.7 Sonnet",
+        "id": "claude-5-sonnet",
+        "name": "Claude 5 Sonnet",
         "lab": "Anthropic",
         "lab_slug": "anthropic",
         "is_frontier": True,
         "year": "2026",
-        "release_date": "February 2026",
-        "benchmark_score": 82.5,
-        "benchmark_label": "82.5% SWE-bench Verified",
+        "release_date": "August 2026",
+        "benchmark_score": 88.6,
+        "benchmark_label": "88.6% SWE-bench Verified SOTA",
         "license": "Proprietary API",
-        "context_window": "200,000 tokens",
+        "context_window": "500,000 tokens",
         "max_output": "64,000 tokens",
         "pricing_input": "$3.00 / 1M",
         "pricing_output": "$15.00 / 1M",
         "pricing_cached": "$0.30 / 1M",
-        "architecture": "Hybrid Extended Thinking Dense",
+        "architecture": "Frontier Hybrid Reasoning & Autonomous Tool Grounding",
         "readiness": "Frontier SOTA",
-        "tag": "HYBRID REASONING",
-        "best_for": "Autonomous coding agents (Claude Code, Cursor), whole-repository refactoring, difficult debugging.",
-        "better_to_work_with": "Top-tier daily driver. Switching between 0-budget fast tokens and extended thinking on demand makes it the most flexible and practical model for real-world engineering.",
-        "capabilities": ["Dynamic Thinking Budget (0-64K)", "SWE-bench Verified Leader", "Agentic Terminal Tool Use", "Computer Control"],
-        "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='claude-3-7-sonnet-20260219',\n    max_tokens=64000,\n    thinking={'type': 'enabled', 'budget_tokens': 16000},\n    messages=[{'role': 'user', 'content': 'Write full compiler test suite'}]\n)"
+        "tag": "FRONTIER SOTA CODING",
+        "best_for": "Autonomous terminal agents (Claude Code, Cursor), whole-repository refactoring, complex mathematical proofs.",
+        "better_to_work_with": "Top-tier daily driver. Dynamic deliberate thinking budget (0-128K tokens) with instant sub-200ms first token. Unmatched tool grounding and zero hallucinated file paths.",
+        "capabilities": ["Dynamic Thinking Budget (0-128K)", "SWE-bench Verified Leader (88.6%)", "Agentic Terminal Tool Use", "Computer Control"],
+        "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='claude-5-sonnet-20260820',\n    max_tokens=64000,\n    thinking={'type': 'enabled', 'budget_tokens': 32000},\n    messages=[{'role': 'user', 'content': 'Write full compiler test suite'}]\n)"
     },
     {
         "id": "claude-opus-5",
@@ -1337,6 +1358,289 @@ html_template = f"""<!DOCTYPE html>
             color: var(--text-secondary);
         }}
 
+        /* ==================== MEDIA SECTIONS (VIDEOS & SOCIAL BUZZ) ==================== */
+        .media-section {{
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 32px;
+        }}
+
+        .media-section-header {{
+            margin-bottom: 20px;
+        }}
+
+        .media-section-title {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--text-primary);
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 4px;
+        }}
+
+        .media-section-badge {{
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            background: rgba(139, 92, 246, 0.12);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }}
+
+        .media-section-desc {{
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }}
+
+        /* Featured AI Videos Grid */
+        .video-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }}
+
+        .video-card {{
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+        }}
+
+        .video-card:hover {{
+            transform: translateY(-3px);
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 12px 30px rgba(239, 68, 68, 0.12);
+        }}
+
+        .video-thumb-wrap {{
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #0f172a;
+            overflow: hidden;
+        }}
+
+        .video-thumb {{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }}
+
+        .video-card:hover .video-thumb {{
+            transform: scale(1.04);
+        }}
+
+        .video-play-overlay {{
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }}
+
+        .video-card:hover .video-play-overlay {{
+            background: rgba(0, 0, 0, 0.15);
+        }}
+
+        .video-play-btn {{
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(239, 68, 68, 0.9);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }}
+
+        .video-card:hover .video-play-btn {{
+            transform: scale(1.12);
+            background: #ef4444;
+        }}
+
+        .video-channel-badge {{
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            color: #f8fafc;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }}
+
+        .video-info {{
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            justify-content: space-between;
+        }}
+
+        .video-title {{
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }}
+
+        .video-usecase {{
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.45;
+            margin-bottom: 12px;
+        }}
+
+        .video-footer {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            padding-top: 10px;
+            border-top: 1px solid var(--border-subtle);
+        }}
+
+        .video-watch-link {{
+            color: #f87171;
+            font-weight: 600;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }}
+
+        /* Social Media Buzz Grid */
+        .social-buzz-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 18px;
+        }}
+
+        .social-card {{
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+        }}
+
+        .social-card:hover {{
+            background: var(--bg-card-hover);
+            border-color: var(--border-highlight);
+            transform: translateY(-2px);
+        }}
+
+        .social-card-top {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 10px;
+        }}
+
+        .social-platform-pill {{
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }}
+
+        .platform-reddit {{
+            background: rgba(255, 69, 0, 0.12);
+            color: #ff6534;
+            border: 1px solid rgba(255, 69, 0, 0.3);
+        }}
+
+        .platform-x {{
+            background: rgba(29, 155, 240, 0.12);
+            color: #38bdf8;
+            border: 1px solid rgba(29, 155, 240, 0.3);
+        }}
+
+        .platform-linkedin {{
+            background: rgba(10, 102, 194, 0.12);
+            color: #60a5fa;
+            border: 1px solid rgba(10, 102, 194, 0.3);
+        }}
+
+        .platform-founder {{
+            background: rgba(168, 85, 247, 0.12);
+            color: #c084fc;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }}
+
+        .social-author {{
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }}
+
+        .social-title {{
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+        }}
+
+        .social-title:hover {{
+            color: var(--accent-primary-hover);
+        }}
+
+        .social-summary {{
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }}
+
+        .social-footer {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+            padding-top: 10px;
+            border-top: 1px solid var(--border-subtle);
+        }}
+
         /* ==================== BENCHMARK BAR CHART ==================== */
         .benchmark-section {{
             background: var(--bg-surface);
@@ -1918,7 +2222,7 @@ html_template = f"""<!DOCTYPE html>
             </a>
 
             <nav class="nav-bar">
-                <button class="nav-btn active" id="tab-feed" onclick="switchView('feed')">Daily Feed</button>
+                <button class="nav-btn active" id="tab-feed" onclick="switchView('feed')">Weekly Digest</button>
                 <button class="nav-btn" id="tab-models" onclick="switchView('models')">Models &amp; Benchmarks</button>
                 <button class="nav-btn" id="tab-milestones" onclick="switchView('milestones')">3-Year Milestones</button>
                 <button class="nav-btn" id="tab-tasks" onclick="switchView('tasks')">Task Guide</button>
@@ -1928,21 +2232,21 @@ html_template = f"""<!DOCTYPE html>
 
     <!-- Main Content Area -->
     <main>
-        <!-- ==================== SECTION 1: DAILY FEED ==================== -->
+        <!-- ==================== SECTION 1: WEEKLY DIGEST ==================== -->
         <section id="view-feed">
             <div class="section-header">
-                <h1 class="section-title">Daily AI Engineering Feed</h1>
-                <p class="section-desc">Curated breakthroughs, agentic tooling, and local AI releases strictly isolated for each calendar day.</p>
+                <h1 class="section-title">Weekly AI Intelligence Digest</h1>
+                <p class="section-desc">Frontier models, famous Substack analyses, viral community debates, and developer breakthroughs across the past 4 rolling weeks.</p>
             </div>
 
-            <!-- Strict Date Picker -->
+            <!-- Weekly Edition Filter -->
             <div class="date-filter-section">
                 <div class="date-filter-header">
-                    <span class="date-filter-label">Calendar Date</span>
+                    <span class="date-filter-label">Weekly Edition (Past 4 Weeks)</span>
                     <span id="active-date-label" style="font-size:12px;color:var(--text-muted);font-family:var(--font-mono);"></span>
                 </div>
                 <div class="date-filter-bar" id="date-filter-bar">
-                    <!-- Dynamically populated date chips -->
+                    <!-- Dynamically populated weekly chips -->
                 </div>
             </div>
 
@@ -1963,6 +2267,34 @@ html_template = f"""<!DOCTYPE html>
             <!-- Articles Grid -->
             <div class="articles-grid" id="articles-grid">
                 <!-- Dynamically populated article cards -->
+            </div>
+
+            <!-- Featured AI Videos Section -->
+            <div class="media-section" id="videos-section">
+                <div class="media-section-header">
+                    <div class="media-section-title">
+                        <span>🎥 Featured AI Videos &amp; Tech Breakdowns</span>
+                        <span class="media-section-badge">Fireship, Karpathy &amp; Creators</span>
+                    </div>
+                    <div class="media-section-desc">Hand-picked high-signal video breakdowns, architectural deep dives, and creator tutorials from the past week.</div>
+                </div>
+                <div class="video-grid" id="videos-grid">
+                    <!-- Dynamically populated video cards -->
+                </div>
+            </div>
+
+            <!-- Social Media Buzz & Founder Takes Section -->
+            <div class="media-section" id="social-buzz-section">
+                <div class="media-section-header">
+                    <div class="media-section-title">
+                        <span>💬 Social Media Buzz &amp; Founder Takes</span>
+                        <span class="media-section-badge">Reddit • X / Twitter • LinkedIn</span>
+                    </div>
+                    <div class="media-section-desc">Curated community sentiment, viral engineering debates, founder perspectives, and model releases.</div>
+                </div>
+                <div class="social-buzz-grid" id="social-buzz-grid">
+                    <!-- Dynamically populated social buzz cards -->
+                </div>
             </div>
 
             <!-- Quick-Hit 1-Liners -->
@@ -2092,7 +2424,7 @@ html_template = f"""<!DOCTYPE html>
                         <div class="task-recommendations">
                             <div class="task-rec-item">
                                 <div class="task-rec-role">Frontier Autonomous Agent</div>
-                                <strong>Fable 5.1 &amp; Claude 3.7 Sonnet</strong> &bull; Best-in-class tool use &amp; SWE-bench verified.
+                                <strong>Fable 5.1 &amp; Claude 5 Sonnet</strong> &bull; Best-in-class tool use &amp; SWE-bench verified.
                             </div>
                             <div class="task-rec-item">
                                 <div class="task-rec-role">Open Weights Champion</div>
@@ -2225,46 +2557,72 @@ html_template = f"""<!DOCTYPE html>
             window.scrollTo({{ top: 0, behavior: 'smooth' }});
         }}
 
-        // 3. Calendar Dates Setup (Strict 1-Day Windows)
+        // 3. Weekly Editions Setup (Strict 4-Week Windows)
+        const DEFAULT_WEEKLY_WINDOWS = [
+            {{ id: "2026-08-30_2026-09-05", label: "Aug 30 – Sep 05, 2026", short_label: "Aug 30 – Sep 05", start: "2026-08-30", end: "2026-09-05", is_current: true }},
+            {{ id: "2026-08-23_2026-08-29", label: "Aug 23 – Aug 29, 2026", short_label: "Aug 23 – Aug 29", start: "2026-08-23", end: "2026-08-29", is_current: false }},
+            {{ id: "2026-08-16_2026-08-22", label: "Aug 16 – Aug 22, 2026", short_label: "Aug 16 – Aug 22", start: "2026-08-16", end: "2026-08-22", is_current: false }},
+            {{ id: "2026-08-09_2026-08-15", label: "Aug 09 – Aug 15, 2026", short_label: "Aug 09 – Aug 15", start: "2026-08-09", end: "2026-08-15", is_current: false }}
+        ];
+
+        let availableWeeks = DEFAULT_WEEKLY_WINDOWS;
+        let selectedWeek = DEFAULT_WEEKLY_WINDOWS[0].id;
+
         function buildCalendarDates() {{
             const bar = document.getElementById("date-filter-bar");
             bar.innerHTML = "";
-            availableDates = [];
 
-            const now = new Date();
-            for (let i = 0; i < 7; i++) {{
-                const d = new Date(now);
-                d.setDate(d.getDate() - i);
-                const isoStr = d.toISOString().split("T")[0];
-                availableDates.push(isoStr);
+            const seedKeys = Object.keys(EMBEDDED_SEED);
+            if (seedKeys.length >= 1) {{
+                availableWeeks = seedKeys.map((k, idx) => {{
+                    const it = EMBEDDED_SEED[k];
+                    return {{
+                        id: k,
+                        label: it.week_label || k,
+                        short_label: it.short_label || (it.week_label ? it.week_label.split(",")[0] : k),
+                        start: it.start_date || k.split("_")[0],
+                        end: it.end_date || k.split("_")[1],
+                        is_current: (idx === 0)
+                    }};
+                }});
+            }} else {{
+                availableWeeks = DEFAULT_WEEKLY_WINDOWS;
+            }}
 
+            selectedWeek = availableWeeks[0].id;
+
+            availableWeeks.forEach((w, idx) => {{
                 const chip = document.createElement("button");
-                chip.className = `date-chip ${{i === 0 ? 'active' : ''}}`;
-                chip.id = `date-chip-${{isoStr}}`;
-                const label = (i === 0) ? "Today" : (i === 1) ? "Yesterday" : d.toLocaleDateString("en-US", {{ month: "short", day: "numeric", timeZone: "UTC" }});
-                chip.innerText = `${{label}} (${{isoStr}})`;
-                chip.onclick = () => selectCalendarDate(isoStr);
+                chip.className = `date-chip ${{idx === 0 ? 'active' : ''}}`;
+                chip.id = `week-chip-${{w.id}}`;
+                chip.innerText = w.is_current ? `${{w.short_label}} (Current Week)` : w.short_label;
+                chip.onclick = () => selectWeeklyFilter(w.id);
                 bar.appendChild(chip);
-            }}
+            }});
 
-            selectedDate = availableDates[0];
-            updateActiveDateLabel();
+            updateActiveWeekLabel();
         }}
 
-        function updateActiveDateLabel() {{
+        function updateActiveWeekLabel() {{
             const lbl = document.getElementById("active-date-label");
-            if (lbl && selectedDate) {{
-                lbl.innerText = `Displaying articles published strictly on ${{selectedDate}}`;
+            const wObj = availableWeeks.find(x => x.id === selectedWeek);
+            if (lbl && wObj) {{
+                lbl.innerText = `Displaying intelligence published strictly for ${{wObj.label}}`;
             }}
         }}
 
-        function selectCalendarDate(dateStr) {{
-            selectedDate = dateStr;
+        function selectWeeklyFilter(weekId) {{
+            selectedWeek = weekId;
             document.querySelectorAll(".date-chip").forEach(c => c.classList.remove("active"));
-            const activeChip = document.getElementById(`date-chip-${{dateStr}}`);
+            const activeChip = document.getElementById(`week-chip-${{weekId}}`);
             if (activeChip) activeChip.classList.add("active");
-            updateActiveDateLabel();
+            updateActiveWeekLabel();
             renderCurrentDateArticles();
+        }}
+
+        // Backward compatibility
+        function selectCalendarDate(d) {{
+            selectWeeklyFilter(d);
         }}
 
         // 4. Data Loading & Supabase
@@ -2274,17 +2632,7 @@ html_template = f"""<!DOCTYPE html>
             }} else {{
                 allArticlesByDate = {{}};
             }}
-            // If today's edition has not arrived yet, automatically select the latest date that has articles
-            const datesWithData = Object.keys(allArticlesByDate).filter(d => {{
-                const day = allArticlesByDate[d];
-                return (day.top_10 && day.top_10.length > 0) || (day.one_liners && day.one_liners.length > 0);
-            }});
-            if (datesWithData.length > 0 && (!allArticlesByDate[selectedDate] || (allArticlesByDate[selectedDate].top_10.length === 0 && allArticlesByDate[selectedDate].one_liners.length === 0))) {{
-                datesWithData.sort().reverse();
-                selectCalendarDate(datesWithData[0]);
-            }} else {{
-                renderCurrentDateArticles();
-            }}
+            renderCurrentDateArticles();
         }}
 
         async function initSupabaseConnection() {{
@@ -2338,68 +2686,105 @@ html_template = f"""<!DOCTYPE html>
             }}
         }}
 
-        function isRedditArticle(art) {{
+        function isSocialMediaItem(art) {{
+            if (art.content_type === "social_buzz") return true;
             const src = (art.source || "").toLowerCase();
             const url = (art.url || "").toLowerCase();
-            return url.includes("reddit.com") || src.includes("reddit") || src.startsWith("r/");
+            return url.includes("reddit.com") || url.includes("twitter.com") || url.includes("x.com") ||
+                   url.includes("linkedin.com") || src.includes("reddit") || src.startsWith("r/") ||
+                   src.includes("tweet") || src.includes("founder take") || src.includes("linkedin");
+        }}
+
+        function isVideoItem(art) {{
+            if (art.content_type === "video") return true;
+            const url = (art.url || "").toLowerCase();
+            const src = (art.source || "").toLowerCase();
+            return url.includes("youtube.com") || url.includes("youtu.be") ||
+                   src.includes("fireship") || src.includes("karpathy") || src.includes("two minute papers") ||
+                   src.includes("yannic") || src.includes("wes roth") || src.includes("matt wolfe");
         }}
 
         function mergeSupabaseRows(rows) {{
             const grouped = {{}};
+            availableWeeks.forEach(w => {{
+                grouped[w.id] = {{
+                    week_id: w.id,
+                    week_label: w.label,
+                    short_label: w.short_label,
+                    top_articles: [],
+                    videos: [],
+                    social_buzz: [],
+                    one_liners: []
+                }};
+            }});
+
             rows.forEach(art => {{
                 if (!art.published_date) return;
-                const dStr = art.published_date.split("T")[0];
-                if (!grouped[dStr]) {{
-                    grouped[dStr] = {{ top_10: [], one_liners: [] }};
+                const pDate = art.published_date.split("T")[0];
+                
+                // Match to week
+                let targetWeekId = art.week_id;
+                if (!targetWeekId || !grouped[targetWeekId]) {{
+                    for (const w of availableWeeks) {{
+                        if (pDate >= w.start && pDate <= w.end) {{
+                            targetWeekId = w.id;
+                            break;
+                        }}
+                    }}
                 }}
-                const isReddit = isRedditArticle(art);
-                // Reddit articles are never permitted in top_10 (main articles)
-                if (!isReddit && (art.is_groundbreaking || art.category_tag === "BREAKTHROUGH" || grouped[dStr].top_10.length < 10)) {{
-                    grouped[dStr].top_10.push(art);
+                if (!targetWeekId || !grouped[targetWeekId]) return;
+
+                const bucket = grouped[targetWeekId];
+
+                if (isVideoItem(art)) {{
+                    bucket.videos.push(art);
+                }} else if (isSocialMediaItem(art)) {{
+                    bucket.social_buzz.push(art);
                 }} else {{
-                    grouped[dStr].one_liners.push(art);
+                    if (bucket.top_articles.length < 10) {{
+                        bucket.top_articles.push(art);
+                    }} else {{
+                        bucket.one_liners.push(art);
+                    }}
                 }}
             }});
 
-            // Curate exactly up to 15 items for Quick-Hit 1-Liners, ensuring Reddit discussions are included
-            for (const [dStr, payload] of Object.entries(grouped)) {{
-                const redditItems = payload.one_liners.filter(isRedditArticle);
-                const otherItems = payload.one_liners.filter(a => !isRedditArticle(a));
-                const seenUrls = new Set();
-                const curated = [];
-                // Prioritize top Reddit items
-                for (const r of redditItems) {{
-                    if (curated.length >= 15) break;
-                    if (!seenUrls.has(r.url)) {{
-                        curated.push(r);
-                        seenUrls.add(r.url);
+            // Enforce constraints per week:
+            // 1. In top_articles: at most 1 social media item allowed
+            // 2. In one_liners: exactly up to 15 items
+            for (const [wId, bucket] of Object.entries(grouped)) {{
+                // If top_articles has less than 10, check if we should pull 1 top social buzz item
+                const socialInTop = bucket.top_articles.filter(isSocialMediaItem);
+                if (socialInTop.length === 0 && bucket.social_buzz.length > 0 && bucket.top_articles.length < 10) {{
+                    bucket.top_articles.push(bucket.social_buzz[0]);
+                }}
+
+                // Curate up to 15 quick-hit 1-liners
+                const seenUrls = new Set(bucket.top_articles.map(a => a.url));
+                const oneliners = [];
+                for (const it of bucket.one_liners) {{
+                    if (oneliners.length >= 15) break;
+                    if (!seenUrls.has(it.url)) {{
+                        oneliners.push(it);
+                        seenUrls.add(it.url);
                     }}
                 }}
-                // Fill up to 15 with remaining items
-                for (const o of otherItems) {{
-                    if (curated.length >= 15) break;
-                    if (!seenUrls.has(o.url)) {{
-                        curated.push(o);
-                        seenUrls.add(o.url);
+                // If still under 15, backfill from remaining social buzz
+                for (const s of bucket.social_buzz) {{
+                    if (oneliners.length >= 15) break;
+                    if (!seenUrls.has(s.url)) {{
+                        oneliners.push(s);
+                        seenUrls.add(s.url);
                     }}
                 }}
-                payload.one_liners = curated;
+                bucket.one_liners = oneliners.slice(0, 15);
+                allArticlesByDate[wId] = bucket;
             }}
 
-            for (const [dateKey, payload] of Object.entries(grouped)) {{
-                allArticlesByDate[dateKey] = payload;
-            }}
-
-            // If selectedDate has 0 articles but grouped has dates, select the newest date with articles
-            const datesWithData = Object.keys(grouped);
-            if (datesWithData.length > 0 && (!allArticlesByDate[selectedDate] || allArticlesByDate[selectedDate].top_10.length === 0)) {{
-                selectCalendarDate(datesWithData[0]);
-            }} else {{
-                renderCurrentDateArticles();
-            }}
+            renderCurrentDateArticles();
         }}
 
-        // 5. Feed Filtering & Strict Date Isolation
+        // 5. Feed Filtering & Weekly Isolation
         function setTopicFilter(tag, btnEl) {{
             selectedTopicFilter = tag;
             document.querySelectorAll(".tag-chip").forEach(c => c.classList.remove("active"));
@@ -2414,28 +2799,64 @@ html_template = f"""<!DOCTYPE html>
 
         function filterArticles() {{
             const grid = document.getElementById("articles-grid");
+            const videosGrid = document.getElementById("videos-grid");
+            const videosSection = document.getElementById("videos-section");
+            const socialGrid = document.getElementById("social-buzz-grid");
+            const socialSection = document.getElementById("social-buzz-section");
             const onelinersList = document.getElementById("oneliners-list");
             const query = document.getElementById("search-input").value.toLowerCase().trim();
 
-            const dateData = allArticlesByDate[selectedDate] || {{ top_10: [], one_liners: [] }};
-            const featured = dateData.top_10 || [];
-            const oneliners = (dateData.one_liners || []).slice(0, 15);
+            const weekData = allArticlesByDate[selectedWeek] || {{ top_articles: [], top_10: [], videos: [], social_buzz: [], one_liners: [] }};
+            const featured = weekData.top_articles || weekData.top_10 || [];
+            const videos = weekData.videos || [];
+            const socialBuzz = weekData.social_buzz || [];
+            const oneliners = (weekData.one_liners || []).slice(0, 15);
 
-            // Strict single-day isolation: NO cross-date fallback!
+            // Filter Top Articles
             const filteredFeatured = featured.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter));
-            const filteredOneLiners = oneliners.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter));
-
-            // Render Featured Cards
-            if (filteredFeatured.length === 0) {{
-                grid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">No articles recorded for this calendar date (${{selectedDate}}). Run sync to fetch today's feed.</div>`;
-            }} else {{
-                grid.innerHTML = filteredFeatured.map(art => renderArticleCard(art)).join("");
+            // Strictly cap social media items in top articles grid to at most 1
+            let socialCountInFeatured = 0;
+            const strictlyCappedFeatured = [];
+            for (const art of filteredFeatured) {{
+                if (isSocialMediaItem(art)) {{
+                    if (socialCountInFeatured < 1) {{
+                        strictlyCappedFeatured.push(art);
+                        socialCountInFeatured++;
+                    }}
+                }} else {{
+                    strictlyCappedFeatured.push(art);
+                }}
             }}
 
-            // Render 1-Liners
+            if (strictlyCappedFeatured.length === 0) {{
+                grid.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">No featured research or architectural articles found for this weekly edition matching filters.</div>`;
+            }} else {{
+                grid.innerHTML = strictlyCappedFeatured.map(art => renderArticleCard(art)).join("");
+            }}
+
+            // Filter & Render Videos
+            const filteredVideos = videos.filter(v => matchesSearchAndTopic(v, query, selectedTopicFilter));
+            if (filteredVideos.length > 0) {{
+                videosSection.style.display = "block";
+                videosGrid.innerHTML = filteredVideos.map(v => renderVideoCard(v)).join("");
+            }} else {{
+                videosSection.style.display = "none";
+            }}
+
+            // Filter & Render Social Media Buzz & Founder Takes
+            const filteredSocial = socialBuzz.filter(s => matchesSearchAndTopic(s, query, selectedTopicFilter));
+            if (filteredSocial.length > 0) {{
+                socialSection.style.display = "block";
+                socialGrid.innerHTML = filteredSocial.map(s => renderSocialCard(s)).join("");
+            }} else {{
+                socialSection.style.display = "none";
+            }}
+
+            // Filter & Render 1-Liners (up to 15)
+            const filteredOneLiners = oneliners.filter(art => matchesSearchAndTopic(art, query, selectedTopicFilter)).slice(0, 15);
             document.getElementById("oneliner-count").innerText = `(${{filteredOneLiners.length}} items)`;
             if (filteredOneLiners.length === 0) {{
-                onelinersList.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:8px 0;">No quick-hit items for this day.</div>`;
+                onelinersList.innerHTML = `<div style="color:var(--text-muted);font-size:13px;padding:8px 0;">No quick-hit items for this week.</div>`;
             }} else {{
                 onelinersList.innerHTML = filteredOneLiners.map(art => `
                     <div class="oneliner-item">
@@ -2454,6 +2875,73 @@ html_template = f"""<!DOCTYPE html>
             if (!query) return true;
             const fullStr = `${{art.title || ''}} ${{art.summary || ''}} ${{art.source || ''}} ${{art.dev_use_case || ''}}`.toLowerCase();
             return fullStr.includes(query);
+        }}
+
+        function renderVideoCard(v) {{
+            const thumbUrl = v.image_url || (v.video_id ? `https://i3.ytimg.com/vi/${{v.video_id}}/hqdefault.jpg` : '');
+            const channel = v.source || 'AI Tech Channel';
+            const useCaseHtml = v.dev_use_case ? `<div class="video-usecase">${{escapeHtml(v.dev_use_case)}}</div>` : '';
+            const pubDate = v.published ? v.published.split('T')[0].split(' ')[0] : '';
+
+            return `
+                <a href="${{v.url}}" target="_blank" class="video-card">
+                    <div class="video-thumb-wrap">
+                        <img src="${{thumbUrl}}" alt="${{escapeHtml(v.title)}}" class="video-thumb" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80'">
+                        <div class="video-play-overlay">
+                            <div class="video-play-btn">▶</div>
+                        </div>
+                        <span class="video-channel-badge">${{escapeHtml(channel)}}</span>
+                    </div>
+                    <div class="video-info">
+                        <div>
+                            <div class="video-title">${{escapeHtml(v.title)}}</div>
+                            ${{useCaseHtml}}
+                        </div>
+                        <div class="video-footer">
+                            <span>${{pubDate}}</span>
+                            <span class="video-watch-link">Watch Breakdown ↗</span>
+                        </div>
+                    </div>
+                </a>
+            `;
+        }}
+
+        function renderSocialCard(s) {{
+            const src = (s.source || "").toLowerCase();
+            let platformClass = "platform-reddit";
+            let platformName = "Reddit Debate";
+            if (src.includes("x") || src.includes("twitter") || src.includes("founder")) {{
+                platformClass = "platform-x";
+                platformName = "X / Founder Take";
+            }} else if (src.includes("linkedin")) {{
+                platformClass = "platform-linkedin";
+                platformName = "LinkedIn Tech";
+            }} else if (src.includes("reddit") || src.startsWith("r/")) {{
+                platformClass = "platform-reddit";
+                platformName = s.source || "Reddit";
+            }}
+
+            const author = s.badge || s.source || "Community Voice";
+            const summary = s.summary || s.one_liner || "";
+            const pubDate = s.published ? s.published.split("T")[0].split(" ")[0] : "";
+            const scoreText = s.community_score ? `▲ ${{s.community_score}} upvotes / shares` : '🔥 Viral Discussion';
+
+            return `
+                <div class="social-card">
+                    <div>
+                        <div class="social-card-top">
+                            <span class="social-platform-pill ${{platformClass}}">${{escapeHtml(platformName)}}</span>
+                            <span class="social-author">${{escapeHtml(author)}}</span>
+                        </div>
+                        <a href="${{s.url}}" target="_blank" class="social-title">${{escapeHtml(s.title)}}</a>
+                        <p class="social-summary">${{escapeHtml(summary)}}</p>
+                    </div>
+                    <div class="social-footer">
+                        <span>${{pubDate}}</span>
+                        <span style="color:var(--accent-primary);font-weight:600;">${{scoreText}}</span>
+                    </div>
+                </div>
+            `;
         }}
 
         function renderArticleCard(art) {{
@@ -2479,7 +2967,7 @@ html_template = f"""<!DOCTYPE html>
                 </div>
             ` : "";
 
-            const dateStr = art.published_date ? art.published_date.split("T")[0] : selectedDate;
+            const dateStr = art.published_date ? art.published_date.split("T")[0] : (art.published ? art.published.split("T")[0].split(" ")[0] : "");
 
             return `
                 <article class="article-card">

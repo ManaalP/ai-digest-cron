@@ -243,27 +243,70 @@ def is_ai_relevant(item: dict) -> bool:
     return any(re.search(pat, content, re.IGNORECASE) for pat in AI_RELEVANCE_PATTERNS)
 
 
-def is_reddit_article(item: dict) -> bool:
+def is_social_media(item: dict) -> bool:
     source = (item.get("source") or "").lower()
     url = (item.get("url") or "").lower()
-    return "reddit.com" in url or "reddit" in source or source.startswith("r/")
+    content_type = item.get("content_type", "")
+    if content_type == "social_buzz":
+        return True
+    return any(x in url for x in ["reddit.com", "twitter.com", "x.com", "linkedin.com"]) or source.startswith("r/") or "reddit" in source or "founder" in source.lower()
 
 
-def rank_and_structure_digest(raw_items: list, lookback_hours: int = 24, target_date: str = None) -> dict:
+def is_video(item: dict) -> bool:
+    content_type = item.get("content_type", "")
+    url = (item.get("url") or "").lower()
+    return content_type == "video" or "youtube.com" in url or "youtu.be" in url
+
+
+def is_reddit_article(item: dict) -> bool:
+    return is_social_media(item)
+
+
+def get_weekly_windows(ref_date=None) -> list:
+    """Calculate the 4 rolling 7-day calendar weeks for historical chips."""
+    if ref_date is None:
+        ref_date = datetime(2026, 9, 6, tzinfo=timezone.utc).date()
+    elif isinstance(ref_date, datetime):
+        ref_date = ref_date.date()
+    elif isinstance(ref_date, str):
+        ref_date = datetime.fromisoformat(ref_date).date()
+
+    weeks = []
+    for i in range(4):
+        end_d = ref_date - timedelta(days=1 + (i * 7))
+        start_d = end_d - timedelta(days=6)
+        w_label = f"{start_d.strftime('%b %d')} – {end_d.strftime('%b %d, %Y')}"
+        w_id = f"{start_d.strftime('%Y-%m-%d')}_{end_d.strftime('%Y-%m-%d')}"
+        weeks.append({
+            "index": i + 1,
+            "id": w_id,
+            "label": w_label,
+            "short_label": f"Week {i + 1} ({start_d.strftime('%b %d')}–{end_d.strftime('%b %d')})",
+            "start": start_d.isoformat(),
+            "end": end_d.isoformat(),
+        })
+    return weeks
+
+
+def rank_and_structure_weekly_digest(raw_items: list, start_date: str = None, end_date: str = None, ref_date=None) -> dict:
     now = datetime.now(timezone.utc)
-    cutoff = now - timedelta(hours=lookback_hours)
+    weekly_windows = get_weekly_windows(ref_date)
+    curr_week = weekly_windows[0]
 
-    # 1. Filter strictly by target date or <= lookback_hours AND require AI relevance
-    if target_date:
-        fresh_items = [
-            it for it in raw_items
-            if it.get("published") and it["published"].strftime("%Y-%m-%d") == target_date and it.get("url") and is_ai_relevant(it)
-        ]
-    else:
-        fresh_items = [
-            it for it in raw_items
-            if it.get("published") and it["published"] >= cutoff and it.get("url") and is_ai_relevant(it)
-        ]
+    target_start = start_date or curr_week["start"]
+    target_end = end_date or curr_week["end"]
+
+    start_dt = datetime.fromisoformat(target_start).replace(tzinfo=timezone.utc)
+    end_dt = datetime.fromisoformat(target_end).replace(hour=23, minute=59, second=59, tzinfo=timezone.utc)
+
+    # 1. Strictly filter by weekly date boundaries and require AI relevance
+    fresh_items = []
+    for it in raw_items:
+        pub = it.get("published")
+        if not pub:
+            continue
+        if start_dt <= pub <= end_dt and it.get("url") and is_ai_relevant(it):
+            fresh_items.append(it)
 
     # Deduplicate by URL and normalized title
     seen_urls = set()
@@ -278,76 +321,108 @@ def rank_and_structure_digest(raw_items: list, lookback_hours: int = 24, target_
         seen_titles.add(norm_title)
         deduped.append(it)
 
-    # Score and classify each article
+    # Score and classify each item
     scored = [score_and_classify_article(it) for it in deduped]
-
-    # Sort descending by score, then published date
     scored.sort(key=lambda x: (x["score"], x["published"] or datetime.min.replace(tzinfo=timezone.utc)), reverse=True)
 
-    # Identify groundbreaking articles (non-Reddit only for Top 10)
-    groundbreaking = [a for a in scored if a["is_groundbreaking"] and not is_reddit_article(a)]
+    # 2. Segregate Videos
+    videos = [a for a in scored if is_video(a)]
+    videos.sort(key=lambda x: x["published"] or datetime.min.replace(tzinfo=timezone.utc), reverse=True)
+    selected_videos = videos[:8]
+    video_urls = {v["url"] for v in selected_videos}
 
-    # Pick Top 10 articles (main articles):
-    # Reddit articles are strictly barred from Top 10
-    top_10 = []
-    top_10_urls = set()
+    # 3. Segregate Social Media Buzz & Founder Takes
+    social_items = [a for a in scored if is_social_media(a) and a["url"] not in video_urls]
+    social_items.sort(key=lambda x: (x.get("community_score", 0), x["score"]), reverse=True)
+    selected_social_buzz = social_items[:10]
 
+    # 4. Pick Top 10 Featured Articles:
+    # RULE: strictly at most 1 Reddit / social media item in top_articles!
+    top_articles = []
+    top_article_urls = set()
+    social_in_top = 0
+
+    groundbreaking = [a for a in scored if a["is_groundbreaking"] and not is_social_media(a) and a["url"] not in video_urls]
     for g in groundbreaking[:2]:
-        top_10.append(g)
-        top_10_urls.add(g["url"])
+        top_articles.append(g)
+        top_article_urls.add(g["url"])
 
     for a in scored:
-        if len(top_10) >= 10:
+        if len(top_articles) >= 10:
             break
-        if not is_reddit_article(a) and a["url"] not in top_10_urls:
-            top_10.append(a)
-            top_10_urls.add(a["url"])
+        if a["url"] in top_article_urls or a["url"] in video_urls:
+            continue
+        if is_social_media(a):
+            if social_in_top < 1:  # At most 1 social media / Reddit post in main articles
+                top_articles.append(a)
+                top_article_urls.add(a["url"])
+                social_in_top += 1
+        else:
+            top_articles.append(a)
+            top_article_urls.add(a["url"])
 
-    # Remaining items go to Quick Hits (1-liners)
-    # Curate exactly 15 items for Quick-Hit 1-Liners:
-    # Ensure Reddit discussions are featured here instead of main articles
-    remaining_candidates = [a for a in scored if a["url"] not in top_10_urls]
-    reddit_candidates = [a for a in remaining_candidates if is_reddit_article(a)]
-    other_candidates = [a for a in remaining_candidates if not is_reddit_article(a)]
+    # 5. Pick Quick-Hit 1-Liners (15 items)
+    # Here, more Reddit, founder takes, and short tech updates are permitted and prioritized
+    remaining = [a for a in scored if a["url"] not in top_article_urls and a["url"] not in video_urls]
+    reddit_remaining = [a for a in remaining if is_social_media(a)]
+    other_remaining = [a for a in remaining if not is_social_media(a)]
 
     max_quick_hits = 15
     selected_one_liners = []
-    selected_urls = set()
+    one_liner_urls = set()
 
-    # Prioritize top Reddit discussions into Quick-Hits
-    for r in reddit_candidates[:6]:
+    # Include up to 6 engaging community discussions
+    for r in reddit_remaining[:6]:
         selected_one_liners.append(r)
-        selected_urls.add(r["url"])
+        one_liner_urls.add(r["url"])
 
-    # Fill remaining slots up to 15 with highest-scoring other candidates
-    for o in other_candidates:
+    # Fill remaining slots up to 15 with technical news/research
+    for o in other_remaining:
         if len(selected_one_liners) >= max_quick_hits:
             break
-        if o["url"] not in selected_urls:
+        if o["url"] not in one_liner_urls:
             selected_one_liners.append(o)
-            selected_urls.add(o["url"])
+            one_liner_urls.add(o["url"])
 
-    # If still under 15, add any remaining Reddit candidates
-    for r in reddit_candidates[6:]:
+    # If still under 15, pull remaining social discussions
+    for r in reddit_remaining[6:]:
         if len(selected_one_liners) >= max_quick_hits:
             break
-        if r["url"] not in selected_urls:
+        if r["url"] not in one_liner_urls:
             selected_one_liners.append(r)
-            selected_urls.add(r["url"])
+            one_liner_urls.add(r["url"])
 
-    # Sort the 15 one-liners by score descending
     selected_one_liners.sort(key=lambda x: (x["score"], x["published"] or datetime.min.replace(tzinfo=timezone.utc)), reverse=True)
-    one_liners = selected_one_liners
+    one_liners = selected_one_liners[:max_quick_hits]
 
-    # Generate executive highlights summary from top 10 main articles
-    highlights = generate_executive_highlights(top_10)
+    # Generate executive weekly highlights from top articles
+    highlights = generate_executive_highlights(top_articles)
+
+    week_label = f"{start_dt.strftime('%b %d')} – {end_dt.strftime('%b %d, %Y')}"
+    week_id = f"{target_start}_{target_end}"
 
     return {
+        "week_id": week_id,
+        "week_label": week_label,
+        "start_date": target_start,
+        "end_date": target_end,
+        "weekly_windows": weekly_windows,
         "total_scanned": len(raw_items),
-        "total_fresh_24h": len(deduped),
+        "total_fresh": len(deduped),
         "groundbreaking_count": len(groundbreaking),
         "highlights": highlights,
-        "top_10": top_10,
+        "top_articles": top_articles,
+        "top_10": top_articles,  # Alias for backward compatibility
+        "videos": selected_videos,
+        "social_buzz": selected_social_buzz,
         "one_liners": one_liners,
         "generated_at": now,
     }
+
+
+def rank_and_structure_digest(raw_items: list, lookback_hours: int = 168, target_date: str = None) -> dict:
+    """Wrapper ensuring backward compatibility with main.py calls."""
+    if target_date and "_" in target_date:
+        s, e = target_date.split("_", 1)
+        return rank_and_structure_weekly_digest(raw_items, start_date=s, end_date=e)
+    return rank_and_structure_weekly_digest(raw_items)

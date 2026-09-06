@@ -59,6 +59,10 @@ class SQLiteDigestDB:
                 ("dev_impact_score", "INTEGER DEFAULT 75"),
                 ("is_groundbreaking", "INTEGER DEFAULT 0"),
                 ("image_url", "TEXT"),
+                ("content_type", "TEXT DEFAULT 'article'"),
+                ("week_id", "TEXT"),
+                ("week_label", "TEXT"),
+                ("video_id", "TEXT"),
             ]:
                 try:
                     conn.execute(f"ALTER TABLE articles ADD COLUMN {col} {col_type};")
@@ -95,8 +99,8 @@ class SQLiteDigestDB:
                     existing.add(r[0])
         return set(urls) - existing
 
-    def cleanup_older_than(self, days=7):
-        """Purge articles older than N days to maintain strict rolling retention."""
+    def cleanup_older_than(self, days=28):
+        """Purge articles older than N days to maintain strict rolling retention (4 weeks)."""
         cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
         with self._conn() as conn:
             cur = conn.execute("DELETE FROM articles WHERE published_date < ?", (cutoff,))
@@ -104,7 +108,7 @@ class SQLiteDigestDB:
         print(f"[db] Pruned {count} articles older than {days} days.")
         return count
 
-    def get_all_recent_articles(self, days=7):
+    def get_all_recent_articles(self, days=28):
         cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
         with self._conn() as conn:
             rows = conn.execute(
@@ -138,7 +142,8 @@ class SQLiteDigestDB:
                        entities, parent_id=None, mark_sent=True,
                        category=None, category_tag=None, dev_impact_score=75,
                        is_groundbreaking=False, image_url=None,
-                       dev_use_case=None, one_liner=None):
+                       dev_use_case=None, one_liner=None,
+                       content_type="article", week_id=None, week_label=None, video_id=None):
         now = datetime.now(timezone.utc).isoformat()
         with self._conn() as conn:
             cur = conn.execute(
@@ -146,12 +151,13 @@ class SQLiteDigestDB:
                    (source, title, url, published_date, fetched_at, summary,
                     dev_use_case, one_liner, category, category_tag,
                     dev_impact_score, is_groundbreaking, image_url,
-                    entities, parent_id, sent_at)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    entities, parent_id, sent_at, content_type, week_id, week_label, video_id)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (source, title, url, published_date, now, summary,
                  dev_use_case, one_liner, category, category_tag,
                  dev_impact_score, 1 if is_groundbreaking else 0, image_url,
-                 json.dumps(entities), parent_id, now if mark_sent else None),
+                 json.dumps(entities), parent_id, now if mark_sent else None,
+                 content_type, week_id, week_label, video_id),
             )
             return cur.lastrowid
 
@@ -214,6 +220,10 @@ class PostgresDigestDB:
                 ("dev_impact_score", "INTEGER DEFAULT 75"),
                 ("is_groundbreaking", "BOOLEAN DEFAULT false"),
                 ("image_url", "TEXT"),
+                ("content_type", "TEXT DEFAULT 'article'"),
+                ("week_id", "TEXT"),
+                ("week_label", "TEXT"),
+                ("video_id", "TEXT"),
             ]:
                 try:
                     cur.execute(f"ALTER TABLE articles ADD COLUMN IF NOT EXISTS {col} {col_type};")
@@ -246,8 +256,8 @@ class PostgresDigestDB:
             existing = {r[0] for r in cur.fetchall()}
             return set(urls) - existing
 
-    def cleanup_older_than(self, days=7):
-        """Delete articles older than N days to maintain strict rolling retention."""
+    def cleanup_older_than(self, days=28):
+        """Delete articles older than N days to maintain strict rolling retention (4 weeks)."""
         cutoff = datetime.now(timezone.utc) - timedelta(days=days)
         with self._conn() as conn, conn.cursor() as cur:
             cur.execute("DELETE FROM articles WHERE published_date < %s", (cutoff,))
@@ -256,12 +266,13 @@ class PostgresDigestDB:
         print(f"[db] Supabase: Pruned {count} articles older than {days} days.")
         return count
 
-    def get_all_recent_articles(self, days=7):
+    def get_all_recent_articles(self, days=28):
         cutoff = datetime.now(timezone.utc) - timedelta(days=days)
         with self._conn() as conn, conn.cursor() as cur:
             cur.execute(
-                "SELECT * FROM articles WHERE published_date >= %s ORDER BY published_date DESC, dev_impact_score DESC",
-                (cutoff,)
+                "SELECT * FROM articles WHERE published_date >= %s "
+                "ORDER BY published_date DESC, dev_impact_score DESC",
+                (cutoff,),
             )
             cols = [desc[0] for desc in cur.description]
             return [dict(zip(cols, row)) for row in cur.fetchall()]
@@ -290,7 +301,8 @@ class PostgresDigestDB:
                        entities, parent_id=None, mark_sent=True,
                        category=None, category_tag=None, dev_impact_score=75,
                        is_groundbreaking=False, image_url=None,
-                       dev_use_case=None, one_liner=None):
+                       dev_use_case=None, one_liner=None,
+                       content_type="article", week_id=None, week_label=None, video_id=None):
         from psycopg2.extras import Json
         now = datetime.now(timezone.utc)
         with self._conn() as conn, conn.cursor() as cur:
@@ -299,14 +311,15 @@ class PostgresDigestDB:
                    (source, title, url, published_date, fetched_at, summary,
                     dev_use_case, one_liner, category, category_tag,
                     dev_impact_score, is_groundbreaking, image_url,
-                    entities, parent_id, sent_at)
-                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    entities, parent_id, sent_at, content_type, week_id, week_label, video_id)
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                    ON CONFLICT (url) DO NOTHING
                    RETURNING id""",
                 (source, title, url, published_date, now, summary,
                  dev_use_case, one_liner, category, category_tag,
                  dev_impact_score, is_groundbreaking, image_url,
-                 Json(entities), parent_id, now if mark_sent else None),
+                 Json(entities), parent_id, now if mark_sent else None,
+                 content_type, week_id, week_label, video_id),
             )
             row = cur.fetchone()
             conn.commit()
@@ -346,12 +359,29 @@ def _best_match(entities, index, threshold):
     return best
 
 
-def export_db_to_seed(db, output_file="seed_7days.json"):
-    """Export recent database articles directly to seed_7days.json so static builds match live DB."""
-    from ranker import generate_executive_highlights
+def export_db_to_seed(db, output_file="seed_7days.json", ref_date=None):
+    """Export database records structured into 4 rolling weekly editions for the web app."""
+    from ranker import get_weekly_windows, generate_executive_highlights, is_social_media, is_video
 
-    rows = db.get_all_recent_articles(days=7)
+    weekly_windows = get_weekly_windows(ref_date)
+    rows = db.get_all_recent_articles(days=28)
+
     grouped = {}
+    for w in weekly_windows:
+        grouped[w["id"]] = {
+            "week_id": w["id"],
+            "week_label": w["label"],
+            "short_label": w["short_label"],
+            "start_date": w["start"],
+            "end_date": w["end"],
+            "highlights": [],
+            "top_articles": [],
+            "top_10": [],
+            "videos": [],
+            "social_buzz": [],
+            "one_liners": []
+        }
+
     for r in rows:
         p_date = r.get("published_date")
         if not p_date:
@@ -361,19 +391,16 @@ def export_db_to_seed(db, output_file="seed_7days.json"):
         else:
             d_str = str(p_date)[:10]
 
-        if d_str not in grouped:
-            try:
-                dt_obj = datetime.strptime(d_str, "%Y-%m-%d")
-                day_name = dt_obj.strftime("%a, %b %d")
-            except Exception:
-                day_name = d_str
-            grouped[d_str] = {
-                "date": d_str,
-                "day_name": day_name,
-                "highlights": [],
-                "top_10": [],
-                "one_liners": []
-            }
+        # Find which of the 4 weekly windows this article falls into
+        target_week_id = r.get("week_id")
+        if not target_week_id:
+            for w in weekly_windows:
+                if w["start"] <= d_str <= w["end"]:
+                    target_week_id = w["id"]
+                    break
+
+        if not target_week_id or target_week_id not in grouped:
+            continue
 
         entities_val = r.get("entities")
         if isinstance(entities_val, str):
@@ -383,6 +410,8 @@ def export_db_to_seed(db, output_file="seed_7days.json"):
                 entities_val = []
         elif not isinstance(entities_val, list):
             entities_val = []
+
+        c_type = r.get("content_type") or ("video" if is_video(r) else ("social_buzz" if is_social_media(r) else "article"))
 
         art = {
             "source": r.get("source"),
@@ -397,21 +426,37 @@ def export_db_to_seed(db, output_file="seed_7days.json"):
             "dev_impact_score": r.get("dev_impact_score", 75),
             "is_groundbreaking": bool(r.get("is_groundbreaking")),
             "entities": entities_val,
-            "image_url": r.get("image_url")
+            "image_url": r.get("image_url"),
+            "content_type": c_type,
+            "video_id": r.get("video_id"),
         }
 
-        # Separate into Top 10 main articles vs Quick Hits
-        if art["is_groundbreaking"] or len(grouped[d_str]["top_10"]) < 10:
-            grouped[d_str]["top_10"].append(art)
-        else:
-            grouped[d_str]["one_liners"].append(art)
+        w_obj = grouped[target_week_id]
 
-    # Generate executive highlights for each date
-    for d_str, day_data in grouped.items():
-        all_day_items = day_data["top_10"] + day_data["one_liners"]
-        day_data["highlights"] = generate_executive_highlights(all_day_items)
+        if c_type == "video" or is_video(art):
+            if len(w_obj["videos"]) < 8:
+                w_obj["videos"].append(art)
+        elif c_type == "social_buzz" or is_social_media(art):
+            if len(w_obj["social_buzz"]) < 10:
+                w_obj["social_buzz"].append(art)
+            # Allow up to 1 social post in top_articles
+            social_in_top = sum(1 for a in w_obj["top_articles"] if is_social_media(a))
+            if social_in_top < 1 and len(w_obj["top_articles"]) < 10:
+                w_obj["top_articles"].append(art)
+            elif len(w_obj["one_liners"]) < 15:
+                w_obj["one_liners"].append(art)
+        else:
+            if len(w_obj["top_articles"]) < 10:
+                w_obj["top_articles"].append(art)
+            elif len(w_obj["one_liners"]) < 15:
+                w_obj["one_liners"].append(art)
+
+    # Finalize aliases, highlights, and defaults for each week
+    for w_id, w_data in grouped.items():
+        w_data["top_10"] = w_data["top_articles"]
+        w_data["highlights"] = generate_executive_highlights(w_data["top_articles"])
 
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(grouped, f, indent=2)
-    print(f"[export] Successfully exported {len(rows)} articles across {len(grouped)} dates to {output_file}")
+    print(f"[export] Successfully exported 4 weekly editions to {output_file}")
     return grouped
