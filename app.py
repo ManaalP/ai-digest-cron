@@ -1,5 +1,6 @@
 import os
 import json
+import re
 
 def app(environ, start_response):
     path = environ.get("PATH_INFO", "/")
@@ -17,21 +18,83 @@ def app(environ, start_response):
         return [body]
 
     # Serve static assets or index.html
-    file_to_serve = "index.html"
-    if path.startswith("/seed_7days.json"):
-        file_to_serve = "seed_7days.json"
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    if path == "/og-preview.jpg":
+        file_path = os.path.join(base_dir, "og-preview.jpg")
+        content_type = "image/jpeg"
+        cache_ctrl = "public, max-age=86400, s-maxage=86400"
+    elif path == "/favicon.svg":
+        file_path = os.path.join(base_dir, "favicon.svg")
+        content_type = "image/svg+xml"
+        cache_ctrl = "public, max-age=86400, s-maxage=86400"
+    elif path.startswith("/seed_7days.json"):
+        file_path = os.path.join(base_dir, "seed_7days.json")
         content_type = "application/json"
+        cache_ctrl = "public, max-age=60, must-revalidate"
     else:
+        file_path = os.path.join(base_dir, "index.html")
         content_type = "text/html; charset=utf-8"
+        cache_ctrl = "public, max-age=0, must-revalidate"
 
     try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(base_dir, file_to_serve)
-        with open(file_path, "rb") as f:
-            content = f.read()
+        if content_type.startswith("image/"):
+            with open(file_path, "rb") as f:
+                content = f.read()
+        else:
+            with open(file_path, "r", encoding="utf-8") as f:
+                html = f.read()
+
+            # Dynamic Host & Open Graph Metadata Injection
+            if file_path.endswith("index.html"):
+                host = environ.get("HTTP_X_FORWARDED_HOST") or environ.get("HTTP_HOST") or "ai-pulse.vercel.app"
+                proto = environ.get("HTTP_X_FORWARDED_PROTO") or environ.get("wsgi.url_scheme") or "https"
+                base_url = f"{proto}://{host}"
+                query_str = environ.get("QUERY_STRING", "")
+                
+                full_current_url = f"{base_url}{path}"
+                if query_str:
+                    full_current_url += f"?{query_str}"
+
+                # Update canonical host URLs
+                html = html.replace("https://ai-pulse.vercel.app/og-preview.jpg", f"{base_url}/og-preview.jpg")
+                html = html.replace('content="https://ai-pulse.vercel.app"', f'content="{full_current_url}"')
+
+                # Dynamic customization for WhatsApp, Twitter, and Social crawlers
+                if "tab=models" in query_str:
+                    model_match = re.search(r'inspect=([a-zA-Z0-9\-_]+)', query_str)
+                    if model_match:
+                        model_name = model_match.group(1).replace("-", " ").title()
+                        new_title = f"{model_name} — AI Pulse Model Inspector"
+                        new_desc = f"Deep dive into {model_name}: architecture, benchmark scores, token pricing, context window, and production developer verdict."
+                    else:
+                        new_title = "Frontier Models & Benchmarks — AI Pulse"
+                        new_desc = "Compare frontier models (Claude 5 Sonnet, GPT-6, DeepSeek-R1, Gemini 3.8 Flash) with real-world developer benchmarks, pricing, and specs."
+                    
+                    html = html.replace("<title>AI Pulse — Frontier AI &amp; Developer Intelligence</title>", f"<title>{new_title}</title>")
+                    html = html.replace('content="AI Pulse — Frontier AI &amp; Developer Intelligence"', f'content="{new_title}"')
+                    html = html.replace('content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons."', f'content="{new_desc}"')
+                
+                elif "tab=milestones" in query_str:
+                    new_title = "3-Year AI Milestones Archive (2024–2026) — AI Pulse"
+                    new_desc = "Explore the definitive timeline of frontier AI breakthroughs from GPT-4 and AlphaFold 3 to Claude 5 Sonnet and DeepSeek-R1."
+                    html = html.replace("<title>AI Pulse — Frontier AI &amp; Developer Intelligence</title>", f"<title>{new_title}</title>")
+                    html = html.replace('content="AI Pulse — Frontier AI &amp; Developer Intelligence"', f'content="{new_title}"')
+                    html = html.replace('content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons."', f'content="{new_desc}"')
+                
+                elif "tab=tasks" in query_str:
+                    new_title = "Developer AI Task & Model Selector Guide — AI Pulse"
+                    new_desc = "Actionable engineering guide mapping specific software workflows to the optimal frontier AI models."
+                    html = html.replace("<title>AI Pulse — Frontier AI &amp; Developer Intelligence</title>", f"<title>{new_title}</title>")
+                    html = html.replace('content="AI Pulse — Frontier AI &amp; Developer Intelligence"', f'content="{new_title}"')
+                    html = html.replace('content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons."', f'content="{new_desc}"')
+
+            content = html.encode("utf-8")
+
         headers = [
             ("Content-Type", content_type),
-            ("Cache-Control", "public, max-age=0, must-revalidate")
+            ("Cache-Control", cache_ctrl),
+            ("Access-Control-Allow-Origin", "*")
         ]
         start_response("200 OK", headers)
         return [content]

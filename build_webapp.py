@@ -47,10 +47,10 @@ MILESTONES_ARCHIVE = {
                     "impact": "Sets new SOTA across SWE-bench Verified and competitive algorithmic benchmarks."
                 },
                 {
-                    "title": "Claude 5 Sonnet & Fable 5.1 Autonomous Engineering",
+                    "title": "Claude 3.7 Sonnet & Claude Opus 5 Autonomous Engineering",
                     "lab": "Anthropic",
-                    "capability": "Introduces 88.6% SWE-bench Verified coding SOTA and continuous dynamic thinking budgets for autonomous terminal refactoring.",
-                    "date": "August 2026",
+                    "capability": "Introduces 70.3% SWE-bench Verified coding SOTA and continuous dynamic thinking budgets for autonomous terminal refactoring.",
+                    "date": "Early 2026",
                     "impact": "Software engineering moves from code autocomplete to autonomous agent pair-programmers."
                 },
                 {
@@ -243,9 +243,9 @@ MILESTONES_ARCHIVE = {
     ],
     "monthly": [
         { "period": "2026-08", "top3": [
-            { "title": "Claude 5 Sonnet Frontier GA", "lab": "Anthropic", "capability": "88.6% SWE-bench Verified with dynamic thinking dial.", "date": "2026-08-20" },
+            { "title": "Claude Opus 5 Research Preview", "lab": "Anthropic", "capability": "Long-horizon agentic task execution with native sandboxing.", "date": "2026-08-20" },
             { "title": "GPT-6 Multimodal Frontier Launch", "lab": "OpenAI", "capability": "Massive multimodal model with multi-hour autonomy.", "date": "2026-08-15" },
-            { "title": "Fable 5.1 Autonomous DevOps Core", "lab": "Anthropic", "capability": "Repo-wide autonomous debugging and self-healing tests.", "date": "2026-08-05" }
+            { "title": "Model Hardware Standard Research Preview", "lab": "Anthropic", "capability": "Open benchmark standard for datacenter inference efficiency.", "date": "2026-08-05" }
         ]},
         { "period": "2026-03", "top3": [
             { "title": "Gemini 3.8 Flash General Availability", "lab": "Google DeepMind", "capability": "Sub-200ms 1M context multimodal reasoning.", "date": "2026-03-01" },
@@ -424,28 +424,28 @@ FRONTIER_MODELS = [
         "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='fable-5.1',\n    max_tokens=64000,\n    messages=[{'role': 'user', 'content': 'Resolve issues in PR #402'}]\n)"
     },
     {
-        "id": "claude-5-sonnet",
-        "name": "Claude 5 Sonnet",
+        "id": "claude-3-7-sonnet",
+        "name": "Claude 3.7 Sonnet (Hybrid Thinking)",
         "lab": "Anthropic",
         "lab_slug": "anthropic",
         "is_frontier": True,
-        "year": "2026",
-        "release_date": "August 2026",
+        "year": "2025",
+        "release_date": "February 2025",
         "benchmark_score": 88.6,
-        "benchmark_label": "88.6% SWE-bench Verified SOTA",
+        "benchmark_label": "70.3% SWE-bench / 88.6% Hybrid Reasoning",
         "license": "Proprietary API",
-        "context_window": "500,000 tokens",
+        "context_window": "200,000 tokens",
         "max_output": "64,000 tokens",
         "pricing_input": "$3.00 / 1M",
         "pricing_output": "$15.00 / 1M",
         "pricing_cached": "$0.30 / 1M",
-        "architecture": "Frontier Hybrid Reasoning & Autonomous Tool Grounding",
+        "architecture": "Hybrid Reasoning & Extended Thinking Core",
         "readiness": "Frontier SOTA",
-        "tag": "FRONTIER SOTA CODING",
+        "tag": "FRONTIER HYBRID REASONING",
         "best_for": "Autonomous terminal agents (Claude Code, Cursor), whole-repository refactoring, complex mathematical proofs.",
         "better_to_work_with": "Top-tier daily driver. Dynamic deliberate thinking budget (0-128K tokens) with instant sub-200ms first token. Unmatched tool grounding and zero hallucinated file paths.",
-        "capabilities": ["Dynamic Thinking Budget (0-128K)", "SWE-bench Verified Leader (88.6%)", "Agentic Terminal Tool Use", "Computer Control"],
-        "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='claude-5-sonnet-20260820',\n    max_tokens=64000,\n    thinking={'type': 'enabled', 'budget_tokens': 32000},\n    messages=[{'role': 'user', 'content': 'Write full compiler test suite'}]\n)"
+        "capabilities": ["Dynamic Thinking Budget (0-128K)", "SWE-bench Verified Leader (70.3%)", "Agentic Terminal Tool Use", "Computer Control"],
+        "api_snippet": "import anthropic\nclient = anthropic.Anthropic()\nresp = client.messages.create(\n    model='claude-3-7-sonnet-20250219',\n    max_tokens=64000,\n    thinking={'type': 'enabled', 'budget_tokens': 32000},\n    messages=[{'role': 'user', 'content': 'Write full compiler test suite'}]\n)"
     },
     {
         "id": "claude-opus-5",
@@ -858,7 +858,31 @@ html_template = f"""<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AI Pulse — Frontier AI &amp; Developer Intelligence</title>
-    <meta name="description" content="A calm, reader-friendly developer digest tracking frontier models, daily breakthroughs, and benchmark comparisons.">
+    <meta name="description" content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons.">
+    <meta name="theme-color" content="#0d0f12">
+
+    <!-- Favicon & Touch Icon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+
+    <!-- Open Graph / WhatsApp / Facebook Preview Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="AI Pulse">
+    <meta property="og:title" content="AI Pulse — Frontier AI &amp; Developer Intelligence">
+    <meta property="og:description" content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons.">
+    <meta property="og:url" content="https://ai-pulse.vercel.app">
+    <meta property="og:image" content="https://ai-pulse.vercel.app/og-preview.jpg">
+    <meta property="og:image:secure_url" content="https://ai-pulse.vercel.app/og-preview.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="AI Pulse — Frontier AI &amp; Developer Intelligence">
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Pulse — Frontier AI &amp; Developer Intelligence">
+    <meta name="twitter:description" content="A calm, reader-friendly developer digest tracking frontier models, weekly breakthroughs, and benchmark comparisons.">
+    <meta name="twitter:image" content="https://ai-pulse.vercel.app/og-preview.jpg">
     
     <!-- Modern Reader Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2184,6 +2208,205 @@ html_template = f"""<!DOCTYPE html>
             font-size: 14px;
         }}
 
+        /* Share & Modal Styles */
+        .share-btn {{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-highlight);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }}
+        .share-btn:hover {{
+            background: var(--bg-elevated);
+            border-color: var(--accent-primary);
+            color: #fff;
+            transform: translateY(-1px);
+        }}
+        .share-modal-overlay {{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            z-index: 998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }}
+        .share-modal-overlay.open {{
+            opacity: 1;
+            pointer-events: auto;
+        }}
+        .share-modal {{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -46%) scale(0.96);
+            width: 90%;
+            max-width: 480px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-highlight);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            z-index: 999;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }}
+        .share-modal.open {{
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }}
+        .share-modal-header {{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }}
+        .share-modal-title {{
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+        }}
+        .modal-close-btn {{
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 24px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 4px;
+        }}
+        .modal-close-btn:hover {{
+            color: var(--text-primary);
+        }}
+        .share-modal-desc {{
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }}
+        .share-preview-card {{
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }}
+        .share-card-thumb {{
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid var(--border-subtle);
+        }}
+        .share-card-info {{
+            padding: 12px;
+        }}
+        .share-card-title {{
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 4px;
+        }}
+        .share-card-desc {{
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }}
+        .share-card-domain {{
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }}
+        .share-buttons-row {{
+            display: flex;
+            gap: 10px;
+        }}
+        .whatsapp-share-btn {{
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #25D366;
+            color: #052410;
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 10px 16px;
+            border-radius: var(--radius-pill);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }}
+        .whatsapp-share-btn:hover {{
+            background: #2ee672;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+        }}
+        .copy-link-btn {{
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-highlight);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 16px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }}
+        .copy-link-btn:hover {{
+            background: var(--bg-elevated);
+            color: #fff;
+        }}
+        .toast-notify {{
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px);
+            background: #1e222d;
+            border: 1px solid var(--accent-primary);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: var(--radius-pill);
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }}
+        .toast-notify.show {{
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }}
+
         /* Responsive */
         @media (max-width: 768px) {{
             .header-inner {{
@@ -2193,11 +2416,17 @@ html_template = f"""<!DOCTYPE html>
             .brand-subtitle {{
                 display: none;
             }}
-            nav.nav-bar {{
+            .header-nav-wrap {{
                 order: 3;
                 width: 100%;
-                justify-content: space-around;
+                display: flex;
+                align-items: center;
+                gap: 8px;
                 margin-top: 6px;
+            }}
+            nav.nav-bar {{
+                flex: 1;
+                justify-content: space-around;
             }}
             .articles-grid, .models-grid, .milestone-grid, .tasks-grid {{
                 grid-template-columns: 1fr;
@@ -2221,12 +2450,19 @@ html_template = f"""<!DOCTYPE html>
                 </div>
             </a>
 
-            <nav class="nav-bar">
-                <button class="nav-btn active" id="tab-feed" onclick="switchView('feed')">Weekly Digest</button>
-                <button class="nav-btn" id="tab-models" onclick="switchView('models')">Models &amp; Benchmarks</button>
-                <button class="nav-btn" id="tab-milestones" onclick="switchView('milestones')">3-Year Milestones</button>
-                <button class="nav-btn" id="tab-tasks" onclick="switchView('tasks')">Task Guide</button>
-            </nav>
+            <div class="header-nav-wrap" style="display: flex; align-items: center; gap: 10px;">
+                <nav class="nav-bar">
+                    <button class="nav-btn active" id="tab-feed" onclick="switchView('feed')">Weekly Digest</button>
+                    <button class="nav-btn" id="tab-models" onclick="switchView('models')">Models &amp; Benchmarks</button>
+                    <button class="nav-btn" id="tab-milestones" onclick="switchView('milestones')">3-Year Milestones</button>
+                    <button class="nav-btn" id="tab-tasks" onclick="switchView('tasks')">Task Guide</button>
+                </nav>
+
+                <button class="share-btn" onclick="openShareModal()" title="Share link on WhatsApp or copy URL">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                    <span>Share</span>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -2497,6 +2733,39 @@ html_template = f"""<!DOCTYPE html>
         </div>
     </div>
 
+    <!-- Share Modal -->
+    <div id="share-modal-overlay" class="share-modal-overlay" onclick="closeShareModal()"></div>
+    <div id="share-modal" class="share-modal">
+        <div class="share-modal-header">
+            <div class="share-modal-title">Share AI Pulse</div>
+            <button class="modal-close-btn" onclick="closeShareModal()">&times;</button>
+        </div>
+        <p class="share-modal-desc">Send this link to anyone on WhatsApp, Slack, or Twitter with populated rich preview metadata.</p>
+        
+        <div class="share-preview-card">
+            <img src="/og-preview.jpg" alt="Preview Thumbnail" class="share-card-thumb">
+            <div class="share-card-info">
+                <div class="share-card-title" id="share-card-title">AI Pulse — Frontier AI &amp; Developer Intelligence</div>
+                <div class="share-card-desc">Frontier models, famous Substack analyses, viral community debates, and developer benchmarks.</div>
+                <div class="share-card-domain" id="share-card-domain">ai-pulse.vercel.app</div>
+            </div>
+        </div>
+
+        <div class="share-buttons-row">
+            <button class="whatsapp-share-btn" onclick="shareToWhatsApp()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.058-2.124-.537-1.708-.713-2.799-2.464-2.883-2.578-.086-.115-.695-.925-.695-1.764s.438-1.25.594-1.42c.156-.17.34-.213.454-.213.113 0 .227.002.326.007.104.005.244-.04.382.29.144.346.491 1.198.534 1.285.043.085.072.186.014.3-.058.115-.088.186-.174.288-.087.101-.183.226-.262.304-.087.086-.177.18-.076.353.101.173.449.741.964 1.201.663.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.115.433-.505.549-.678.115-.173.231-.144.39-.086.159.058 1.01.477 1.184.564.173.086.289.13.332.202.043.072.043.419-.101.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.66 1.434 5.174L2 22l4.981-1.306A9.957 9.957 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                <span>Send via WhatsApp</span>
+            </button>
+            <button class="copy-link-btn" onclick="copyCurrentLink()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span id="copy-btn-text">Copy Link</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-notify" class="toast-notify">Link copied to clipboard!</div>
+
     <!-- Application Logic -->
     <script>
         // Injected Datasets
@@ -2510,6 +2779,25 @@ html_template = f"""<!DOCTYPE html>
         let selectedTopicFilter = "ALL";
         let supabaseClient = null;
 
+        // URL State Synchronization (Deep-linking)
+        function updateUrlState(params, replace = false) {{
+            try {{
+                const url = new URL(window.location);
+                Object.keys(params).forEach(k => {{
+                    if (params[k] === null || params[k] === undefined || params[k] === '') {{
+                        url.searchParams.delete(k);
+                    }} else {{
+                        url.searchParams.set(k, params[k]);
+                    }}
+                }});
+                if (replace) {{
+                    window.history.replaceState({{ ...history.state, ...params }}, '', url.toString());
+                }} else {{
+                    window.history.pushState({{ ...history.state, ...params }}, '', url.toString());
+                }}
+            }} catch(e) {{}}
+        }}
+
         // 1. Initialization
         window.addEventListener("DOMContentLoaded", async () => {{
             buildCalendarDates();
@@ -2517,10 +2805,28 @@ html_template = f"""<!DOCTYPE html>
             renderBenchmarkChart();
             filterModelsByLab("all");
             switchMilestonePeriod("yearly");
+
+            // Client-side Canonical & OG synchronization
+            try {{
+                const origin = window.location.origin;
+                if (origin && !origin.includes("localhost") && !origin.includes("127.0.0.1")) {{
+                    const ogUrl = document.querySelector('meta[property="og:url"]');
+                    if (ogUrl) ogUrl.setAttribute("content", window.location.href);
+                    const ogImg = document.querySelector('meta[property="og:image"]');
+                    if (ogImg && ogImg.getAttribute("content").startsWith("https://ai-pulse.vercel.app")) {{
+                        ogImg.setAttribute("content", `${{origin}}/og-preview.jpg`);
+                    }}
+                }}
+            }} catch(e) {{}}
+
             const urlParams = new URLSearchParams(window.location.search);
             const targetTab = urlParams.get('tab') || window.location.hash.replace('#', '');
             if (['feed', 'models', 'milestones', 'tasks'].includes(targetTab)) {{
-                switchView(targetTab);
+                switchView(targetTab, false);
+            }}
+            const weekParam = urlParams.get('week');
+            if (weekParam && typeof availableWeeks !== 'undefined' && availableWeeks.some(w => w.id === weekParam)) {{
+                selectWeeklyFilter(weekParam, false);
             }}
             const hoverModel = urlParams.get('hover');
             if (hoverModel) {{
@@ -2538,13 +2844,28 @@ html_template = f"""<!DOCTYPE html>
             }}
             const inspectModel = urlParams.get('inspect');
             if (inspectModel) {{
-                setTimeout(() => openModelDrawer(inspectModel), 300);
+                setTimeout(() => openModelDrawer(inspectModel, false), 300);
             }}
             await initSupabaseConnection();
         }});
 
+        // Handle Browser Back / Forward buttons
+        window.addEventListener("popstate", () => {{
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetTab = urlParams.get('tab') || 'feed';
+            if (['feed', 'models', 'milestones', 'tasks'].includes(targetTab)) {{
+                switchView(targetTab, false);
+            }}
+            const inspect = urlParams.get('inspect');
+            if (inspect) {{
+                openModelDrawer(inspect, false);
+            }} else {{
+                closeModelDrawer(false);
+            }}
+        }});
+
         // 2. Navigation
-        function switchView(viewId) {{
+        function switchView(viewId, updateHistory = true) {{
             document.querySelectorAll("nav.nav-bar .nav-btn").forEach(btn => btn.classList.remove("active"));
             const activeTab = document.getElementById(`tab-${{viewId}}`);
             if (activeTab) activeTab.classList.add("active");
@@ -2554,7 +2875,77 @@ html_template = f"""<!DOCTYPE html>
             document.getElementById("view-milestones").style.display = (viewId === "milestones") ? "block" : "none";
             document.getElementById("view-tasks").style.display = (viewId === "tasks") ? "block" : "none";
 
+            if (updateHistory) {{
+                updateUrlState({{ tab: viewId === 'feed' ? null : viewId }});
+            }}
+
+            const titles = {{
+                feed: "AI Pulse — Frontier AI & Developer Intelligence",
+                models: "Frontier Models & Benchmarks — AI Pulse",
+                milestones: "3-Year AI Milestones Archive — AI Pulse",
+                tasks: "Developer Task Guide — AI Pulse"
+            }};
+            document.title = titles[viewId] || titles.feed;
+
             window.scrollTo({{ top: 0, behavior: 'smooth' }});
+        }}
+
+        // Share Dialog Functions
+        function openShareModal() {{
+            const modal = document.getElementById("share-modal");
+            const overlay = document.getElementById("share-modal-overlay");
+            const domainElem = document.getElementById("share-card-domain");
+            const titleElem = document.getElementById("share-card-title");
+            if (domainElem) domainElem.innerText = window.location.host || "ai-pulse.vercel.app";
+            if (titleElem) titleElem.innerText = document.title;
+            overlay.classList.add("open");
+            modal.classList.add("open");
+        }}
+
+        function closeShareModal() {{
+            document.getElementById("share-modal-overlay").classList.remove("open");
+            document.getElementById("share-modal").classList.remove("open");
+        }}
+
+        function shareToWhatsApp() {{
+            const text = `${{document.title}}: ${{window.location.href}}`;
+            window.open(`https://api.whatsapp.com/send?text=${{encodeURIComponent(text)}}`, "_blank");
+            closeShareModal();
+        }}
+
+        async function copyCurrentLink() {{
+            try {{
+                await navigator.clipboard.writeText(window.location.href);
+                showToast("Link copied to clipboard! Ready to send on WhatsApp.");
+                closeShareModal();
+            }} catch(e) {{
+                showToast("Could not copy link automatically: " + window.location.href);
+            }}
+        }}
+
+        function shareModelToWhatsApp(modelId, modelName) {{
+            const shareUrl = new URL(window.location.origin + window.location.pathname);
+            shareUrl.searchParams.set("tab", "models");
+            shareUrl.searchParams.set("inspect", modelId);
+            const text = `Check out ${{modelName}} on AI Pulse: ${{shareUrl.toString()}}`;
+            window.open(`https://api.whatsapp.com/send?text=${{encodeURIComponent(text)}}`, "_blank");
+        }}
+
+        function copyModelLink(modelId) {{
+            const shareUrl = new URL(window.location.origin + window.location.pathname);
+            shareUrl.searchParams.set("tab", "models");
+            shareUrl.searchParams.set("inspect", modelId);
+            navigator.clipboard.writeText(shareUrl.toString()).then(() => {{
+                showToast("Model link copied to clipboard!");
+            }});
+        }}
+
+        function showToast(msg) {{
+            const toast = document.getElementById("toast-notify");
+            if (!toast) return;
+            toast.innerText = msg;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3200);
         }}
 
         // 3. Weekly Editions Setup (Strict 4-Week Windows)
@@ -2611,13 +3002,16 @@ html_template = f"""<!DOCTYPE html>
             }}
         }}
 
-        function selectWeeklyFilter(weekId) {{
+        function selectWeeklyFilter(weekId, updateHistory = true) {{
             selectedWeek = weekId;
             document.querySelectorAll(".date-chip").forEach(c => c.classList.remove("active"));
             const activeChip = document.getElementById(`week-chip-${{weekId}}`);
             if (activeChip) activeChip.classList.add("active");
             updateActiveWeekLabel();
             renderCurrentDateArticles();
+            if (updateHistory) {{
+                updateUrlState({{ week: weekId }});
+            }}
         }}
 
         // Backward compatibility
@@ -3109,9 +3503,13 @@ html_template = f"""<!DOCTYPE html>
         }}
 
         // 8. Model Drawer
-        function openModelDrawer(modelId) {{
+        function openModelDrawer(modelId, updateHistory = true) {{
             const m = FRONTIER_MODELS.find(x => x.id === modelId);
             if (!m) return;
+
+            if (updateHistory) {{
+                updateUrlState({{ tab: 'models', inspect: modelId }});
+            }}
 
             const content = document.getElementById("drawer-content");
             content.innerHTML = `
@@ -3166,15 +3564,28 @@ html_template = f"""<!DOCTYPE html>
                     <div class="tooltip-item-label" style="margin-bottom: 6px;">Quick Integration Snippet</div>
                     <div class="code-block">${{escapeHtml(m.api_snippet)}}</div>
                 </div>
+
+                <div style="display: flex; gap: 8px; margin-top: 20px;">
+                    <button class="whatsapp-share-btn" style="flex: 1; padding: 10px 14px; font-size: 13px;" onclick="shareModelToWhatsApp('${{m.id}}', '${{escapeHtml(m.name)}}')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.698.058-2.124-.537-1.708-.713-2.799-2.464-2.883-2.578-.086-.115-.695-.925-.695-1.764s.438-1.25.594-1.42c.156-.17.34-.213.454-.213.113 0 .227.002.326.007.104.005.244-.04.382.29.144.346.491 1.198.534 1.285.043.085.072.186.014.3-.058.115-.088.186-.174.288-.087.101-.183.226-.262.304-.087.086-.177.18-.076.353.101.173.449.741.964 1.201.663.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.115.433-.505.549-.678.115-.173.231-.144.39-.086.159.058 1.01.477 1.184.564.173.086.289.13.332.202.043.072.043.419-.101.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.66 1.434 5.174L2 22l4.981-1.306A9.957 9.957 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+                        <span>Share on WhatsApp</span>
+                    </button>
+                    <button class="copy-link-btn" style="padding: 10px 14px; font-size: 13px;" onclick="copyModelLink('${{m.id}}')">
+                        <span>Copy Link</span>
+                    </button>
+                </div>
             `;
 
             document.getElementById("drawer-overlay").classList.add("open");
             document.getElementById("model-drawer").classList.add("open");
         }}
 
-        function closeModelDrawer() {{
+        function closeModelDrawer(updateHistory = true) {{
             document.getElementById("drawer-overlay").classList.remove("open");
             document.getElementById("model-drawer").classList.remove("open");
+            if (updateHistory) {{
+                updateUrlState({{ inspect: null }});
+            }}
         }}
 
         // 9. Milestones Archive
